@@ -2,9 +2,9 @@
   "name": "rtd-bot",
   "version": "0.2.0",
   "description": "An unofficial GitHub Probot that helps reveiwing on Read The Docs",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
-    "start": "probot run ./index.js",
+    "start": "probot run ./src/index.js",
     "travis-deploy-once": "travis-deploy-once --pro",
     "semantic-release": "semantic-release"
   },
