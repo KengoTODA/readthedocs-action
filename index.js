@@ -17,7 +17,11 @@ module.exports = app => {
       return;
     }
 
-    // TODO Check if head repo is same with base repo
+    // Check if head repo is same with base repo
+    if (context.payload.pull_request.base.repo.full_name !== context.payload.pull_request.head.repo.full_name) {
+      console.debug('PR made from another Git repo is not supported.');
+      return;
+    }
 
     // Check if /docs is updated
     // https://octokit.github.io/rest.js/#api-PullRequests-getFiles
