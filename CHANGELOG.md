@@ -1,3 +1,10 @@
+## [0.2.1](https://github.com/KengoTODA/rtd-bot/compare/v0.2.0...v0.2.1) (2018-09-04)
+
+
+### Bug Fixes
+
+* **index.js:** fix ReferenceError ([ba267ab](https://github.com/KengoTODA/rtd-bot/commit/ba267ab))
+
 # [0.2.0](https://github.com/KengoTODA/rtd-bot/compare/v0.1.0...v0.2.0) (2018-09-04)
 
 
