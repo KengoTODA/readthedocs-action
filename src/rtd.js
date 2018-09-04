@@ -26,7 +26,6 @@ module.exports = {
         if (!checked) {
           await page.click('input#id_active');
           await page.click("form[action='.'] input[type=submit]");
-          // TODO consider to set privacy level as 'public'
           log.info(`enabled RTD build for the branch ${branch} in ${project}.`);
           resolve(true);
         } else {
