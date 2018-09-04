@@ -12,3 +12,5 @@ rtd:
 ```
 
 ## Deployment
+
+To run this bot on Heroku, you need to add a buildpack. See [puppeteer document](https://github.com/GoogleChrome/puppeteer/blob/master/docs/troubleshooting.md#running-puppeteer-on-heroku) for detail.
