@@ -14,6 +14,7 @@
 # sample .github/config.yml
 rtd:
   project: your-read-the-docs-project
+  language: en
 ```
 
 ## Deployment

@@ -5,7 +5,11 @@ const isDevelopment = process.env.NODE_ENV === 'development';
 module.exports = app => {
   app.on('pull_request', async context => {
     // enable RTD build on the target branch
-    const config = await context.config('config.yml');
+    const config = await context.config('config.yml', {
+      rtd: {
+        language: 'en'
+      }
+    });
     if (!config.rtd || !config.rtd.project) {
       context.github.issues.createComment(context.issue({
         body: 'rtd-bot is activated, but .github/rtd.yml does not have necessary configuration.',
@@ -28,8 +32,7 @@ module.exports = app => {
 
     if (enabled) {
       // report build result with its URL
-      // TODO support other language
-      const url = `https://${config.rtd.project}.readthedocs.io/en/${branch}/`;
+      const url = `https://${config.rtd.project}.readthedocs.io/${config.rtd.language}/${branch}/`;
       context.github.issues.createComment(context.issue({
         body: `RTD build has been started. Check generated document at ${url} later`,
       }));
