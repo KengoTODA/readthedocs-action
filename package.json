@@ -25,6 +25,9 @@
     "node": "^8.11",
     "npm": "^5.6"
   },
+  "files": [
+    "src"
+  ],
   "devDependencies": {
     "@semantic-release/changelog": "^3.0.0",
     "@semantic-release/git": "^7.0.3",
@@ -58,6 +61,12 @@
       },
       "@semantic-release/npm",
       "@semantic-release/git"
+    ],
+    "publish": [
+      "@semantic-release/npm"
     ]
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
