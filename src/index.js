@@ -7,8 +7,8 @@ module.exports = app => {
       name: 'rtd-bot',
       event: context.event.event,
       action: context.payload.action,
-      account: repo.owner.id,
-      repo: repo.id
+      account: context.payload.repository.owner.id,
+      repo: context.payload.repository.id
     });
 
     // enable RTD build on the target branch
