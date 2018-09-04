@@ -1,11 +1,13 @@
 {
   "name": "rtd-bot",
-  "version": "0.1.0",
+  "version": "0.0.0-development",
   "description": "An unofficial GitHub Probot that helps reveiwing on Read The Docs",
   "main": "index.js",
   "scripts": {
     "start": "probot run ./index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "travis-deploy-once": "travis-deploy-once",
+    "semantic-release": "semantic-release"
   },
   "keywords": [
     "probot",
@@ -22,5 +24,20 @@
   "engines": {
     "node": "^8.11",
     "npm": "^5.6"
+  },
+  "devDependencies": {
+    "commitizen": "^2.10.1",
+    "cz-conventional-changelog": "^2.1.0",
+    "semantic-release": "^15.9.12",
+    "travis-deploy-once": "^5.0.7"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/KengoTODA/rtd-bot.git"
   }
 }
