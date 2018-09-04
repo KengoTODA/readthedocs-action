@@ -25,6 +25,8 @@
     "npm": "^5.6"
   },
   "devDependencies": {
+    "@semantic-release/changelog": "^3.0.0",
+    "@semantic-release/git": "^7.0.3",
     "commitizen": "^2.10.1",
     "cz-conventional-changelog": "^2.1.0",
     "semantic-release": "^15.9.12",
@@ -38,5 +40,14 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/KengoTODA/rtd-bot.git"
+  },
+  "release": {
+    "prepare": [
+      {
+        "path": "@semantic-release/changelog",
+        "changelogFile": "CHANGELOG.md"
+      },
+      "@semantic-release/git"
+    ]
   }
 }
