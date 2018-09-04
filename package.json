@@ -5,6 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "start": "probot run ./src/index.js",
+    "test": "mocha",
     "travis-deploy-once": "travis-deploy-once --pro",
     "semantic-release": "semantic-release"
   },
@@ -30,6 +31,8 @@
     "@semantic-release/npm": "^5.0.4",
     "commitizen": "^2.10.1",
     "cz-conventional-changelog": "^2.1.0",
+    "mocha": "^5.2.0",
+    "mocha-assume": "^1.0.0",
     "semantic-release": "^15.9.12",
     "travis-deploy-once": "^5.0.7"
   },
