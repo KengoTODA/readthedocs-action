@@ -8,3 +8,4 @@ ROADMAP
 - [ ] use GitHub Check to mark PR failed iff build on RTD failed
 - [ ] set privacy level as 'public' at when enable RTD build
 - [ ] edit the original pull request body at the very bottom and add the link there
+- [ ] unpublish document when merge request is merged/closed
