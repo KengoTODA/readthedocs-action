@@ -41,14 +41,18 @@ module.exports = (app: Application) => {
     }
 
     const branch = context.payload.pull_request.head.ref;
+    log.debug(`Confirned configuration of ${branch} branch in ${project}: ${config}`);
+
     const enabled = await rtd.enableBuild(project, branch);
 
     if (enabled) {
-      // report build result with its URL
+      log.debug(`Reporting document URL to GitHub PR page of ${branch} branch in ${project}.`);
       const url = `https://${project}.readthedocs.io/${config.rtd.language}/${branch}/`;
       context.github.issues.createComment(context.issue({
         body: `RTD build has been started. Check generated document at ${url} later`,
       }));
+    } else {
+      log.debug(`RTD build for ${branch} branch in ${project} is already activated.`);
     }
   });
 };
