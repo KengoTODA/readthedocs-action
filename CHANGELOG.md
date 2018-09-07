@@ -1,3 +1,11 @@
+## [0.2.2](https://github.com/KengoTODA/rtd-bot/compare/v0.2.1...v0.2.2) (2018-09-07)
+
+
+### Bug Fixes
+
+* Add more log around GitHub collaboration for debugging ([2407248](https://github.com/KengoTODA/rtd-bot/commit/2407248))
+* **src/rtd.ts:** Wait until navigation is finished ([a791ace](https://github.com/KengoTODA/rtd-bot/commit/a791ace))
+
 ## [0.2.1](https://github.com/KengoTODA/rtd-bot/compare/v0.2.0...v0.2.1) (2018-09-04)
 
 
