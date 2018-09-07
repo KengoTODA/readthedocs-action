@@ -26,12 +26,20 @@ export default class RTD {
         await page.goto("https://readthedocs.org/accounts/login/");
         await page.type("#id_login", username);
         await page.type("#id_password", password);
-        await page.click("button[type=submit]");
         if (isDevelopment) {
           await page.screenshot({
             path: "login-page.png",
           });
         }
+        const navigationPromise = page.waitForNavigation();
+        await page.click("button[type=submit]");
+        await navigationPromise;
+        if (isDevelopment) {
+          await page.screenshot({
+            path: "after-login-page.png",
+          });
+        }
+
         await page.goto(`https://readthedocs.org/dashboard/${project}/version/${branch}/`); // TODO escape?
         const checkbox = await page.$("input#id_active");
         if (isDevelopment) {
