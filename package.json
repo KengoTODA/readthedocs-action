@@ -6,7 +6,7 @@
   "types": "lib/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "start": "probot run ./src/index.js",
+    "start": "probot run ./lib/index.js",
     "pretest": "tslint -p tsconfig.json",
     "test": "mocha",
     "postinstall": "npm run build",
