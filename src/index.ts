@@ -49,7 +49,7 @@ module.exports = (app: Application) => {
       log.debug(`Reporting document URL to GitHub PR page of ${branch} branch in ${project}.`);
       const language = config.rtd.language || "en";
       const url = `https://${project}.readthedocs.io/${language}/${branch}/`;
-      const body = context.payload.issue.body + `\n\nURL of RTD document: ${url}`;
+      const body = context.payload.issue.body + `\n\n<!-- updated by rtd-bot -->\nURL of RTD document: ${url}`;
       context.github.issues.edit(context.issue({
         body,
       }));
