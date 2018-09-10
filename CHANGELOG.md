@@ -1,3 +1,16 @@
+# [0.3.0](https://github.com/KengoTODA/rtd-bot/compare/v0.2.2...v0.3.0) (2018-09-10)
+
+
+### Bug Fixes
+
+* Escape branch name that contains / in its name ([9373657](https://github.com/KengoTODA/rtd-bot/commit/9373657))
+* language should not be undefined ([a2dc7c2](https://github.com/KengoTODA/rtd-bot/commit/a2dc7c2))
+
+
+### Features
+
+* Add RTD URL into not comment but the PR body ([c205693](https://github.com/KengoTODA/rtd-bot/commit/c205693))
+
 ## [0.2.2](https://github.com/KengoTODA/rtd-bot/compare/v0.2.1...v0.2.2) (2018-09-07)
 
 
