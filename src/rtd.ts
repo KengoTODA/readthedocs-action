@@ -1,5 +1,5 @@
 import { Logger } from "probot";
-import { Browser, launch } from "puppeteer";
+import { Browser, launch, Page } from "puppeteer";
 const isDevelopment = process.env.NODE_ENV === "development";
 
 export default class RTD {
@@ -24,32 +24,10 @@ export default class RTD {
   }
 
   public enableBuild(project: string, branch: string): Promise<boolean> {
-    const username = process.env.RTD_USERNAME;
-    const password = process.env.RTD_PASSWORD;
-    if (username === undefined || password === undefined) {
-      throw new Error("set RTD username and password via environment variable");
-    }
-
     return this.browser.then(async (browser) => {
       const page = await browser.newPage();
       try {
-        await page.goto("https://readthedocs.org/accounts/login/");
-        await page.type("#id_login", username);
-        await page.type("#id_password", password);
-        if (isDevelopment) {
-          await page.screenshot({
-            path: "login-page.png",
-          });
-        }
-        const navigationPromise = page.waitForNavigation();
-        await page.click("button[type=submit]");
-        await navigationPromise;
-        if (isDevelopment) {
-          await page.screenshot({
-            path: "after-login-page.png",
-          });
-        }
-
+        await this.logIn(page);
         await page.goto(`https://readthedocs.org/dashboard/${escape(project)}/version/${escape(branch)}/`);
         const checkbox = await page.$("input#id_active");
         if (isDevelopment) {
@@ -75,5 +53,30 @@ export default class RTD {
         page.close();
       }
     });
+  }
+
+  private async logIn(page: Page) {
+    const username = process.env.RTD_USERNAME;
+    const password = process.env.RTD_PASSWORD;
+    if (username === undefined || password === undefined) {
+      throw new Error("set RTD username and password via environment variable");
+    }
+
+    await page.goto("https://readthedocs.org/accounts/login/");
+    await page.type("#id_login", username);
+    await page.type("#id_password", password);
+    if (isDevelopment) {
+      await page.screenshot({
+        path: "login-page.png",
+      });
+    }
+    const navigationPromise = page.waitForNavigation();
+    await page.click("button[type=submit]");
+    await navigationPromise;
+    if (isDevelopment) {
+      await page.screenshot({
+        path: "after-login-page.png",
+      });
+    }
   }
 }
