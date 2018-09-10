@@ -49,8 +49,9 @@ module.exports = (app: Application) => {
       log.debug(`Reporting document URL to GitHub PR page of ${branch} branch in ${project}.`);
       const language = config.rtd.language || "en";
       const url = `https://${project}.readthedocs.io/${language}/${branch}/`;
-      context.github.issues.createComment(context.issue({
-        body: `RTD build has been started. Check generated document at ${url} later`,
+      const body = context.payload.issues.body + `\n\nURL of RTD document: ${url}`;
+      context.github.issues.edit(context.issue({
+        body,
       }));
     } else {
       log.debug(`RTD build for ${branch} branch in ${project} is already activated.`);
