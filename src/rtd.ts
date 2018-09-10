@@ -3,6 +3,16 @@ import { Browser, launch } from "puppeteer";
 const isDevelopment = process.env.NODE_ENV === "development";
 
 export default class RTD {
+  /**
+   * RTD replaces '/' with '-' in the branch name.
+   */
+  protected static escape(name: string): string {
+    if (name.indexOf("?") >= 0) {
+      throw new Error(`name should not contains ? mark, but it was "${name}"`);
+    }
+    return name.replace(/\//g, "-");
+  }
+
   private browser: Promise<Browser>;
   private log: Logger;
 
@@ -40,7 +50,7 @@ export default class RTD {
           });
         }
 
-        await page.goto(`https://readthedocs.org/dashboard/${project}/version/${branch}/`); // TODO escape?
+        await page.goto(`https://readthedocs.org/dashboard/${escape(project)}/version/${escape(branch)}/`);
         const checkbox = await page.$("input#id_active");
         if (isDevelopment) {
           await page.screenshot({
