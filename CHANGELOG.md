@@ -1,3 +1,11 @@
+## [0.3.1](https://github.com/KengoTODA/rtd-bot/compare/v0.3.0...v0.3.1) (2018-09-10)
+
+
+### Bug Fixes
+
+* Fix a typo ([b0e8782](https://github.com/KengoTODA/rtd-bot/commit/b0e8782))
+* make edited commit intuitive, by adding a HTML comment ([1f56216](https://github.com/KengoTODA/rtd-bot/commit/1f56216))
+
 # [0.3.0](https://github.com/KengoTODA/rtd-bot/compare/v0.2.2...v0.3.0) (2018-09-10)
 
 
