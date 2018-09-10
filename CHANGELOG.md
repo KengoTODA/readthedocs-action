@@ -1,3 +1,10 @@
+## [0.3.2](https://github.com/KengoTODA/rtd-bot/compare/v0.3.1...v0.3.2) (2018-09-10)
+
+
+### Bug Fixes
+
+* use proper payload instead of missing issue payload ([a7dfb6b](https://github.com/KengoTODA/rtd-bot/commit/a7dfb6b))
+
 ## [0.3.1](https://github.com/KengoTODA/rtd-bot/compare/v0.3.0...v0.3.1) (2018-09-10)
 
 
