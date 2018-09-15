@@ -1,8 +1,17 @@
-# A GitHub Probot for Read The Docs (RTD) users
+# Get URL of staging document, when you review changes.
 
 [![Build Status](https://travis-ci.com/KengoTODA/rtd-bot.svg?branch=master)](https://travis-ci.com/KengoTODA/rtd-bot)
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
+
+Work with Read The Docs, then you'll find that PR for documentation needs additional steps like:
+
+* running RTD build for your branch manually, to use its result as staging site [like this](https://github.com/spotbugs/spotbugs/pull/697#issue-201455071), or
+* sharing screenshot to share the updated document [like this](https://github.com/spotbugs/spotbugs/pull/718#issue-205904835).
+
+This bot automates the first approach; activate RTD build automatically when you made PR that updates `docs/` directory.
+
+![screenshot](screenshot.png)
 
 ## Installation
 
