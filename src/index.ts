@@ -58,8 +58,8 @@ module.exports = (app: Application) => {
     }
   });
 
-  const router = app.route('/welcome');
-  router.get('/', (_, res) => {
-    res.sendFile(__dirname + '/welcome.html');
+  const router = app.route("/welcome");
+  router.get("/", (_, res) => {
+    res.sendFile(__dirname + "/welcome.html");
   });
 };
