@@ -57,4 +57,9 @@ module.exports = (app: Application) => {
       log.debug(`RTD build for ${branch} branch in ${project} is already activated.`);
     }
   });
+
+  const router = app.route('/welcome');
+  router.get('/', (_, res) => {
+    res.sendFile(__dirname + '/welcome.html');
+  });
 };
