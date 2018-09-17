@@ -1,5 +1,6 @@
 .env
-lib
+lib/*.ts
+lib/*.js
 *-page.png
 
 # Created by https://www.gitignore.io/api/node,linux,macos,windows

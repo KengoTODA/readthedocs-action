@@ -9,4 +9,4 @@ ROADMAP
 - [ ] set privacy level as 'public' at when enable RTD build
 - [ ] edit the original pull request body at the very bottom and add the link there
 - [ ] unpublish document when merge request is merged/closed
-- [ ] [host welcome page by bot](https://probot.github.io/docs/http/), to guide users to configure their RTD and GitHub project properly
+- [x] [host welcome page by bot](https://probot.github.io/docs/http/), to guide users to configure their RTD and GitHub project properly
