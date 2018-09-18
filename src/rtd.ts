@@ -57,7 +57,6 @@ export default class RTD {
   }
 
   public enableBuild(project: string, branch: string): Promise<boolean> {
-    // TODO: enable build in translations
     return this.browser.then(async (browser) => {
       const page = await browser.newPage();
       try {
