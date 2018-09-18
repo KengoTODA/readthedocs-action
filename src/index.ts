@@ -27,11 +27,7 @@ module.exports = (app: Application) => {
     const rtd = new RTD(log);
 
     // enable RTD build on the target branch
-    const config = await context.config("config.yml", {
-      rtd: {
-        project: "",
-      },
-    });
+    const config = await context.config("config.yml");
     if (config === null) {
       context.github.issues.createComment(context.issue({
         body: "rtd-bot is activated, but no .github/config.yml found in this repository.",
