@@ -36,7 +36,9 @@ module.exports = (app: Application) => {
     }
     if (config.rtd.project === "") {
       context.github.issues.createComment(context.issue({
-        body: "rtd-bot is activated, but .github/config.yml does not have necessary configuration.",
+        body:
+          "rtd-bot is activated, but .github/config.yml does not have necessary configuration: "
+          + JSON.stringify(config),
       }));
       return;
     }
