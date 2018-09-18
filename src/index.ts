@@ -3,6 +3,21 @@ dotenv.config();
 
 import { Application, Context } from "probot";
 import RTD from "./rtd";
+const escape = RTD.escape;
+
+function buildBody(context: Context, project: string, branch: string, languages: string[]): string {
+  let body = context.payload.pull_request.body + "\n\n<!-- updated by rtd-bot -->\n";
+  if (languages.length === 1) {
+    const url = `https://${escape(project)}.readthedocs.io/${languages[0]}/${escape(branch)}/`;
+    body += `URL of RTD document: ${url}\n`;
+  } else {
+    body += "URL of RTD documents:\n";
+    languages.forEach((language) => {
+      body += `${language}: https://${escape(project)}.readthedocs.io/${language}/${escape(branch)}/\n`;
+    });
+  }
+  return body;
+}
 
 module.exports = (app: Application) => {
   app.on("pull_request", async (context: Context) => {
@@ -14,7 +29,6 @@ module.exports = (app: Application) => {
     // enable RTD build on the target branch
     const config = await context.config("config.yml", {
       rtd: {
-        language: "en",
         project: undefined,
       },
     });
@@ -47,9 +61,8 @@ module.exports = (app: Application) => {
 
     if (enabled) {
       log.debug(`Reporting document URL to GitHub PR page of ${branch} branch in ${project}.`);
-      const language = config.rtd.language || "en";
-      const url = `https://${project}.readthedocs.io/${language}/${branch}/`;
-      const body = context.payload.pull_request.body + `\n\n<!-- updated by rtd-bot -->\nURL of RTD document: ${url}`;
+      const languages = await RTD.getLanguages(project);
+      const body = buildBody(context, project, branch, languages);
       context.github.issues.edit(context.issue({
         body,
       }));
