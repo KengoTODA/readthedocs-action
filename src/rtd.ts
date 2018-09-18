@@ -1,7 +1,13 @@
 import { Logger } from "probot";
 import { Browser, launch, Page } from "puppeteer";
 const isDevelopment = process.env.NODE_ENV === "development";
+import fetch from "node-fetch";
 import promiseRetry from "promise-retry";
+
+interface IProject {
+  id: number;
+  language: string;
+}
 
 export default class RTD {
   /**
@@ -12,6 +18,20 @@ export default class RTD {
       throw new Error(`name should not contains ? mark, but it was "${name}"`);
     }
     return name.replace(/\//g, "-");
+  }
+
+  protected static async getProject(project: string): Promise<IProject> {
+    return fetch(`https://readthedocs.org/api/v2/project/?slug=${project}`)
+      .then((res) => res.json())
+      .then((json) => {
+        if (json.count === 0) {
+          throw Error(`Not Found RTD project with given slug: ${project}`);
+        }
+        return {
+          id: json.results[0].id,
+          language: json.results[0].language,
+        };
+      });
   }
 
   private browser: Promise<Browser>;
