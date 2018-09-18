@@ -61,12 +61,16 @@ module.exports = (app: Application) => {
     const branch = context.payload.pull_request.head.ref;
     log.debug(`Confirmed configuration of ${branch} branch in ${project}: ${config}`);
 
-    const enabled = await rtd.enableBuild(project, branch);
+    const translates = await RTD.getTranslates(project);
+    const enabled = await Promise.all(translates.map((p) => p.slug).map((slug) => {
+      return rtd.enableBuild(slug, branch);
+    })).then((allResult: boolean[]) => {
+      return allResult.reduce((l, r) => l || r);
+    });
 
     if (enabled) {
       log.debug(`Reporting document URL to GitHub PR page of ${branch} branch in ${project}.`);
-      const languages = await RTD.getLanguages(project);
-      const body = buildBody(context, project, branch, languages);
+      const body = buildBody(context, project, branch, translates.map((t) => t.language));
       context.github.issues.edit(context.issue({
         body,
       }));
