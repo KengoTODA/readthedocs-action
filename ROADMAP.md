@@ -1,8 +1,7 @@
 ROADMAP
 -------
 
-- [ ] support multiple languages
-    - accept array as `rtd.project`
+- [x] support multiple languages
     - consider that the URL of translated project uses id of parent project (e.g. `spotbugs` for `spotbugs-ja`)
 - [x] post URL of RTD page _after_ RTD build has successfully finished
 - [ ] use GitHub Check to mark PR failed iff RTD build failed

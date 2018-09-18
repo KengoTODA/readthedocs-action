@@ -13,15 +13,15 @@ export default class RTD {
   /**
    * RTD replaces '/' with '-' in the branch name.
    */
-  protected static escape(name: string): string {
+  public static escape(name: string): string {
     if (name.indexOf("?") >= 0) {
       throw new Error(`name should not contains ? mark, but it was "${name}"`);
     }
     return name.replace(/\//g, "-");
   }
 
-  protected static async getProject(project: string): Promise<IProject> {
-    return fetch(`https://readthedocs.org/api/v2/project/?slug=${project}`)
+  public static async getProject(project: string): Promise<IProject> {
+    return fetch(`https://readthedocs.org/api/v2/project/?slug=${escape(project)}`)
       .then((res) => res.json())
       .then((json) => {
         if (json.count === 0) {
@@ -34,15 +34,18 @@ export default class RTD {
       });
   }
 
-  protected static async getLanguages(project: IProject): Promise<string[]> {
-    return fetch(`https://readthedocs.org/api/v2/project/${project.id}/translations/`)
+  public static async getLanguages(project: IProject | string): Promise<string[]> {
+    const projectInfo = (typeof project === "string")
+        ? await RTD.getProject(project)
+        : project;
+    return fetch(`https://readthedocs.org/api/v2/project/${projectInfo.id}/translations/`)
       .then((res) => res.json())
       .then((json) => {
         const translations: IProject[] = json.translations;
         return translations.reduce((accumulator, currentValue) => {
           accumulator.push(currentValue.language);
           return accumulator;
-        }, [project.language]);
+        }, [projectInfo.language]);
       });
   }
 
