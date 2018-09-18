@@ -38,4 +38,18 @@ describe('rtd', function() {
       assert.equal(result, "branch-name");
     });
   });
+
+  describe('#getProject()', () => {
+    it('returns correct ID', async () => {
+      const result = await RTD.getProject('your-read-the-docs-project');
+      assert.equal(result.id, 235403);
+      assert.equal(result.language, 'en');
+    });
+    it('returns rejected promise for not existing project', async () => {
+      return RTD.getProject('not-existing').then(
+        () => Promise.reject(new Error('Expected method to reject.')),
+        err => assert(err instanceof Error)
+      );
+    });
+  });
 });
