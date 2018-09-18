@@ -7,6 +7,7 @@ import promiseRetry from "promise-retry";
 interface IProject {
   id: number;
   language: string;
+  slug: string;
 }
 
 export default class RTD {
@@ -20,21 +21,22 @@ export default class RTD {
     return name.replace(/\//g, "-");
   }
 
-  public static async getProject(project: string): Promise<IProject> {
-    return fetch(`https://readthedocs.org/api/v2/project/?slug=${escape(project)}`)
+  public static async getProject(slug: string): Promise<IProject> {
+    return fetch(`https://readthedocs.org/api/v2/project/?slug=${escape(slug)}`)
       .then((res) => res.json())
       .then((json) => {
         if (json.count === 0) {
-          throw Error(`Not Found RTD project with given slug: ${project}`);
+          throw Error(`Not Found RTD project with given slug: ${slug}`);
         }
         return {
           id: json.results[0].id,
           language: json.results[0].language,
+          slug,
         };
       });
   }
 
-  public static async getLanguages(project: IProject | string): Promise<string[]> {
+  public static async getTranslates(project: IProject | string): Promise<IProject[]> {
     const projectInfo = (typeof project === "string")
         ? await RTD.getProject(project)
         : project;
@@ -43,9 +45,13 @@ export default class RTD {
       .then((json) => {
         const translations: IProject[] = json.translations;
         return translations.reduce((accumulator, currentValue) => {
-          accumulator.push(currentValue.language);
+          accumulator.push({
+            id: currentValue.id,
+            language: currentValue.language,
+            slug: currentValue.slug,
+          });
           return accumulator;
-        }, [projectInfo.language]);
+        }, [projectInfo]);
       });
   }
 
@@ -60,6 +66,7 @@ export default class RTD {
   }
 
   public enableBuild(project: string, branch: string): Promise<boolean> {
+    // TODO: enable build in translations
     return this.browser.then(async (browser) => {
       const page = await browser.newPage();
       try {

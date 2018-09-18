@@ -53,20 +53,34 @@ describe('rtd', function() {
     });
   });
 
-  describe('#getLanguages()', () => {
-    it('returns single language', async () => {
-      const result = await RTD.getLanguages({
+  describe('#getTranslates()', () => {
+    it('returns single translate', async () => {
+      const result = await RTD.getTranslates({
         id: 235403,
         language: 'en',
+        slug: 'your-read-the-docs-project'
       });
-      assert.deepEqual(result, ['en']);
-    });
-    it('returns multiple languages', async () => {
-      const result = await RTD.getLanguages({
-        id: 79934, // spotbugs-in-kengo-toda
+      assert.deepEqual(result, [{
+        id: 235403,
         language: 'en',
+        slug: 'your-read-the-docs-project'
+      }]);
+    });
+    it('returns multiple translates', async () => {
+      const result = await RTD.getTranslates({
+        id: 79934,
+        language: 'en',
+        slug: 'spotbugs-in-kengo-toda'
       });
-      assert.deepEqual(result, ['en', 'ja']);
+      assert.deepEqual(result, [{
+        id: 79934,
+        language: 'en',
+        slug: 'spotbugs-in-kengo-toda'
+      },{
+        id: 79941,
+        language: 'ja',
+        slug: 'spotbugs-in-kengo-toda-ja'
+      }]);
     });
   });
 });
