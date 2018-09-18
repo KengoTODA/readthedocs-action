@@ -24,9 +24,11 @@
     "@types/bunyan": "^1.8.4",
     "@types/dotenv": "^4.0.3",
     "@types/express": "^4.16.0",
+    "@types/promise-retry": "^1.1.2",
     "@types/puppeteer": "^1.6.2",
     "dotenv": "^6.0.0",
     "probot": "^7.1.0",
+    "promise-retry": "^1.1.1",
     "puppeteer": "^1.7.0",
     "typescript": "^3.0.3"
   },

@@ -1,6 +1,7 @@
 import { Logger } from "probot";
 import { Browser, launch, Page } from "puppeteer";
 const isDevelopment = process.env.NODE_ENV === "development";
+import promiseRetry from "promise-retry";
 
 export default class RTD {
   /**
@@ -28,21 +29,14 @@ export default class RTD {
       const page = await browser.newPage();
       try {
         await this.logIn(page);
-        await page.goto(`https://readthedocs.org/dashboard/${escape(project)}/version/${escape(branch)}/`);
-        const checkbox = await page.$("input#id_active");
-        if (isDevelopment) {
-          await page.screenshot({
-            path: "version-page.png",
-          });
-        }
-        if (checkbox == null) {
-          throw new Error("failed to visit version page");
-        }
+        // version page could be not-ready just after creating branch, so retry sometimes
+        const checked = await promiseRetry((retry, num) => {
+          this.log.debug(`visiting version page (#${num} trial)...`);
+          return this.visitVersionPage(page, project, branch).catch(retry);
+        });
 
-        const checked = await (await checkbox.getProperty("checked")).jsonValue();
         if (!checked) {
-          await page.click("input#id_active");
-          await page.click("form[action='.'] input[type=submit]");
+          await this.toggleBuildActivity(page, project, branch);
           this.log.info(`enabled RTD build for the branch ${branch} in ${project}.`);
           return true;
         } else {
@@ -78,5 +72,26 @@ export default class RTD {
         path: "after-login-page.png",
       });
     }
+  }
+
+  private async visitVersionPage(page: Page, project: string, branch: string): Promise<boolean> {
+    await page.goto(`https://readthedocs.org/dashboard/${escape(project)}/version/${escape(branch)}/`);
+    const checkbox = await page.$("input#id_active");
+    if (isDevelopment) {
+      await page.screenshot({
+        path: "version-page.png",
+      });
+    }
+    if (checkbox == null) {
+      throw new Error("failed to visit version page");
+    }
+    const checked = await (await checkbox.getProperty("checked")).jsonValue();
+    return checked;
+  }
+
+  private async toggleBuildActivity(page: Page, project: string, branch: string) {
+    await page.goto(`https://readthedocs.org/dashboard/${escape(project)}/version/${escape(branch)}/`);
+    await page.click("input#id_active");
+    await page.click("form[action='.'] input[type=submit]");
   }
 }
