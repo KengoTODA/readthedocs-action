@@ -30,15 +30,17 @@ module.exports = (app: Application) => {
     const config = await context.config("config.yml");
     if (config === null) {
       context.github.issues.createComment(context.issue({
-        body: "rtd-bot is activated, but no .github/config.yml found in this repository.",
+        body:
+          "The rtd-bot is activated, but no .github/config.yml found in this repository.\n"
+          + "Make sure that you have it in your default branch.",
       }));
       return;
     }
     if (config.rtd.project === "") {
       context.github.issues.createComment(context.issue({
         body:
-          "rtd-bot is activated, but .github/config.yml does not have necessary configuration: "
-          + JSON.stringify(config),
+          "The rtd-bot is activated, but .github/config.yml does not have necessary configuration.\n"
+          + "Make sure that you have it in your default branch.",
       }));
       return;
     }
