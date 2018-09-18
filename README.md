@@ -4,7 +4,7 @@
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 
-Work with Read The Docs, then you'll find that PR for documentation needs additional steps like:
+Work with Read the Docs, then you'll find that PR for documentation needs additional steps like:
 
 * running RTD build for your branch manually, to use its result as staging site [like this](https://github.com/spotbugs/spotbugs/pull/697#issue-201455071), or
 * sharing screenshot to share the updated document [like this](https://github.com/spotbugs/spotbugs/pull/718#issue-205904835).
@@ -37,13 +37,13 @@ In `.github/config.yml` file, set the project slug of the root RTD project.
 
 ## Deployment
 
-In Read The Docs, __inviting maintainer means you give admin access__ to target account.
+In Read the Docs, __inviting maintainer means you give admin access__ to target account.
 So if you do not want to invite `rtd-bot` as maintainer, you can host this Probot app by own.
 
 To host this bot by own, you need to set following environment variables:
 
-1. `RTD_USERNAME` that is same with user name of [Read The Docs](https://readthedocs.org/)
-2. `RTD_PASSWORD` that is same with password of [Read The Docs](https://readthedocs.org/)
+1. `RTD_USERNAME` that is same with user name of [Read the Docs](https://readthedocs.org/)
+2. `RTD_PASSWORD` that is same with password of [Read the Docs](https://readthedocs.org/)
 3. `WEBHOOK_SECRET` and `APP_ID` that is described at [Probot document](https://probot.github.io/docs/deployment/#deploy-the-app).
 4. One of `PRIVATE_KEY_PATH` or `PRIVATE_KEY` that is described at [Probot document](https://probot.github.io/docs/deployment/#deploy-the-app).
 
