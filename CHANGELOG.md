@@ -1,3 +1,20 @@
+# [0.4.0](https://github.com/KengoTODA/rtd-bot/compare/v0.3.2...v0.4.0) (2018-09-18)
+
+
+### Bug Fixes
+
+* make error message around config more intuitive ([88195f3](https://github.com/KengoTODA/rtd-bot/commit/88195f3))
+
+
+### Features
+
+* add a method to get numeric project ID via official WebAPI ([ec3d3db](https://github.com/KengoTODA/rtd-bot/commit/ec3d3db))
+* Add a method to load all configured languages ([56f74f4](https://github.com/KengoTODA/rtd-bot/commit/56f74f4))
+* add current config into report to end users ([f234f98](https://github.com/KengoTODA/rtd-bot/commit/f234f98))
+* display multiple URLs when project uses translations ([dc6a004](https://github.com/KengoTODA/rtd-bot/commit/dc6a004))
+* enable build for all translations at once ([9eaf4a0](https://github.com/KengoTODA/rtd-bot/commit/9eaf4a0))
+* introduce retry ([992be29](https://github.com/KengoTODA/rtd-bot/commit/992be29))
+
 ## [0.3.2](https://github.com/KengoTODA/rtd-bot/compare/v0.3.1...v0.3.2) (2018-09-10)
 
 
