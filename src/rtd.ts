@@ -3,6 +3,7 @@ import { Browser, launch, Page } from "puppeteer";
 const isDevelopment = process.env.NODE_ENV === "development";
 import fetch from "node-fetch";
 import promiseRetry from "promise-retry";
+import escape from "./escape";
 
 interface IProject {
   id: number;
@@ -11,16 +12,6 @@ interface IProject {
 }
 
 export default class RTD {
-  /**
-   * RTD replaces '/' with '-' in the branch name.
-   */
-  public static escape(name: string): string {
-    if (name.indexOf("?") >= 0) {
-      throw new Error(`name should not contains ? mark, but it was "${name}"`);
-    }
-    return name.replace(/\//g, "-");
-  }
-
   public static async getProject(slug: string): Promise<IProject> {
     return fetch(`https://readthedocs.org/api/v2/project/?slug=${escape(slug)}`)
       .then((res) => res.json())
