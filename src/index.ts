@@ -29,16 +29,22 @@ module.exports = (app: Application) => {
     // enable RTD build on the target branch
     const config = await context.config("config.yml", {
       rtd: {
-        project: undefined,
+        project: "",
       },
     });
-    if (!config || !config.rtd || !config.rtd.project) {
+    if (config === null) {
+      context.github.issues.createComment(context.issue({
+        body: "rtd-bot is activated, but no .github/config.yml found in this repository.",
+      }));
+      return;
+    }
+    if (config.rtd.project === "") {
       context.github.issues.createComment(context.issue({
         body: "rtd-bot is activated, but .github/config.yml does not have necessary configuration.",
       }));
       return;
     }
-    const project = config.rtd.project + "";
+    const project = config.rtd.project;
 
     // Check if head repo is same with base repo
     if (context.payload.pull_request.base.repo.full_name !== context.payload.pull_request.head.repo.full_name) {
