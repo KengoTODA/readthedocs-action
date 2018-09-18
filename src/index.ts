@@ -2,8 +2,8 @@ import * as dotenv from "dotenv";
 dotenv.config();
 
 import { Application, Context } from "probot";
+import escape from "./escape";
 import RTD from "./rtd";
-const escape = RTD.escape;
 
 function buildBody(context: Context, project: string, branch: string, languages: string[]): string {
   let body = context.payload.pull_request.body + "\n\n<!-- updated by rtd-bot -->\n";
