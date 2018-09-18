@@ -34,6 +34,18 @@ export default class RTD {
       });
   }
 
+  protected static async getLanguages(project: IProject): Promise<string[]> {
+    return fetch(`https://readthedocs.org/api/v2/project/${project.id}/translations/`)
+      .then((res) => res.json())
+      .then((json) => {
+        const translations: IProject[] = json.translations;
+        return translations.reduce((accumulator, currentValue) => {
+          accumulator.push(currentValue.language);
+          return accumulator;
+        }, [project.language]);
+      });
+  }
+
   private browser: Promise<Browser>;
   private log: Logger;
 

@@ -52,4 +52,21 @@ describe('rtd', function() {
       );
     });
   });
+
+  describe('#getLanguages()', () => {
+    it('returns single language', async () => {
+      const result = await RTD.getLanguages({
+        id: 235403,
+        language: 'en',
+      });
+      assert.deepEqual(result, ['en']);
+    });
+    it('returns multiple languages', async () => {
+      const result = await RTD.getLanguages({
+        id: 79934, // spotbugs-in-kengo-toda
+        language: 'en',
+      });
+      assert.deepEqual(result, ['en', 'ja']);
+    });
+  });
 });
