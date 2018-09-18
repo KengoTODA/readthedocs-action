@@ -15,6 +15,8 @@ This bot automates the first approach; activate RTD build automatically when you
 
 ## Installation
 
+To install rtd-bot to your GitHub repository, follow these interactions:
+
 0. Make sure that your RTD project has been [connected with GitHub repository](https://docs.readthedocs.io/en/latest/getting_started.html#sign-up-and-connect-an-external-account), or [integrated via GitHub webhook](https://docs.readthedocs.io/en/latest/webhooks.html#github).
 1. Invite `rtd-bot` user to your RTD project as maintainer.
 2. Add `rtd.project` config to `.github/config.yml` file in your repo.
@@ -26,6 +28,12 @@ Here is a sample `.github/config.yml`:
 rtd:
   project: your-read-the-docs-project
 ```
+
+### Configuration for the project with translations
+
+If you use [translations feature](https://docs.readthedocs.io/en/latest/localization.html#project-with-multiple-translations), make sure you've configured all your RTD projects including translations.
+
+In `.github/config.yml` file, set the project slug of the root RTD project.
 
 ## Deployment
 
