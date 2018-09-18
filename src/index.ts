@@ -61,7 +61,7 @@ module.exports = (app: Application) => {
     }
 
     const branch = context.payload.pull_request.head.ref;
-    log.debug(`Confirned configuration of ${branch} branch in ${project}: ${config}`);
+    log.debug(`Confirmed configuration of ${branch} branch in ${project}: ${config}`);
 
     const enabled = await rtd.enableBuild(project, branch);
 
