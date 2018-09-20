@@ -20,7 +20,7 @@ To install rtd-bot to your GitHub repository, follow these interactions:
 0. Make sure that your RTD project has been [connected with GitHub repository](https://docs.readthedocs.io/en/latest/getting_started.html#sign-up-and-connect-an-external-account), or [integrated via GitHub webhook](https://docs.readthedocs.io/en/latest/webhooks.html#github).
 1. Invite `rtd-bot` user to your RTD project as maintainer.
 2. Add `rtd.project` config to `.github/config.yml` file in your repo.
-3. Enable rtd-bot in your repo from [the rtd-bot page at GitHub](https://github.com/apps/rtd-bot).
+3. Enable rtd-bot in your repo from [the rtd-bot page at GitHub](https://github.com/apps/rtd-helper).
 
 Here is a sample `.github/config.yml`:
 
