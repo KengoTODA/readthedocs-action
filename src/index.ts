@@ -27,7 +27,7 @@ module.exports = (app: Application) => {
     const rtd = new RTD(log);
 
     // enable RTD build on the target branch
-    const config = await context.config("config.yml");
+    const config = await context.config<{rtd: {project: string}}>("config.yml");
     if (config === null) {
       context.github.issues.createComment(context.issue({
         body:
