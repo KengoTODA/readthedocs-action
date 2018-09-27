@@ -1,3 +1,10 @@
+## [0.4.1](https://github.com/KengoTODA/rtd-bot/compare/v0.4.0...v0.4.1) (2018-09-27)
+
+
+### Bug Fixes
+
+* explicitly decrare the type parameter of context.config() ([56ec49a](https://github.com/KengoTODA/rtd-bot/commit/56ec49a))
+
 # [0.4.0](https://github.com/KengoTODA/rtd-bot/compare/v0.3.2...v0.4.0) (2018-09-18)
 
 
