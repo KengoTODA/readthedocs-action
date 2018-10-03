@@ -45,7 +45,7 @@
     "@semantic-release/changelog": "^3.0.0",
     "@semantic-release/git": "^7.0.3",
     "@semantic-release/npm": "^5.0.4",
-    "commitizen": "^2.10.1",
+    "commitizen": "^3.0.2",
     "cz-conventional-changelog": "^2.1.0",
     "mocha": "^5.2.0",
     "mocha-assume": "^1.0.0",
