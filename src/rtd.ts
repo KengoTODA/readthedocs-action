@@ -17,7 +17,7 @@ export default class RTD {
       .then((res) => res.json())
       .then((json) => {
         if (json.count === 0) {
-          throw Error(`Not Found RTD project with given slug: ${slug}`);
+          throw Error(`:sob: No RTD project found with given slug: ${slug}`);
         }
         return {
           id: json.results[0].id,
@@ -88,7 +88,7 @@ export default class RTD {
     const username = process.env.RTD_USERNAME;
     const password = process.env.RTD_PASSWORD;
     if (username === undefined || password === undefined) {
-      throw new Error("set RTD username and password via environment variable");
+      throw new Error(":sob: Please ask admin of your bot to set RTD username and password via environment variable.");
     }
 
     await page.goto("https://readthedocs.org/accounts/login/");
@@ -110,7 +110,8 @@ export default class RTD {
   }
 
   private async visitVersionPage(page: Page, project: string, branch: string): Promise<boolean> {
-    await page.goto(`https://readthedocs.org/dashboard/${escape(project)}/version/${escape(branch)}/`);
+    const url = `https://readthedocs.org/dashboard/${escape(project)}/version/${escape(branch)}/`;
+    await page.goto(url);
     const checkbox = await page.$("input#id_active");
     if (isDevelopment) {
       await page.screenshot({
@@ -118,7 +119,8 @@ export default class RTD {
       });
     }
     if (checkbox == null) {
-      throw new Error("failed to visit version page");
+      throw new Error(`:sob: Failed to visit version page at ${url}. ` +
+        "Please make sure you have enabled GitHub integration in your RTD project.");
     }
     const checked = await (await checkbox.getProperty("checked")).jsonValue();
     return checked;
