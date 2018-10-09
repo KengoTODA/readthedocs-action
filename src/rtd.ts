@@ -61,7 +61,9 @@ export default class RTD {
 
   public enableBuild(project: string, branch: string): Promise<boolean> {
     return this.browser.then(async (browser) => {
-      const page = await browser.newPage();
+      const page = await promiseRetry((retry, num) => {
+        return browser.newPage().catch(retry);
+      });
       try {
         await this.logIn(page);
         // version page could be not-ready just after creating branch, so retry sometimes
