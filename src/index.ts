@@ -68,6 +68,11 @@ module.exports = (app: Application) => {
       return rtd.enableBuild(slug, branch);
     })).then((allResult: boolean[]) => {
       return allResult.reduce((l, r) => l || r);
+    }).catch((e) => {
+      context.github.issues.createComment(context.issue({
+        body: e.message,
+      }));
+      throw e;
     });
 
     if (enabled) {
