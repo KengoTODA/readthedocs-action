@@ -1,3 +1,16 @@
+# [0.5.0](https://github.com/KengoTODA/rtd-bot/compare/v0.4.1...v0.5.0) (2018-10-09)
+
+
+### Bug Fixes
+
+* Introduce retry to avoid "WebSocket is not open: readyState 3 (CLOSED)" error ([19f75bf](https://github.com/KengoTODA/rtd-bot/commit/19f75bf))
+* retry launching browser several times ([da97395](https://github.com/KengoTODA/rtd-bot/commit/da97395))
+
+
+### Features
+
+* let rtd-bot reports problems at the target PR ([7a1195b](https://github.com/KengoTODA/rtd-bot/commit/7a1195b))
+
 ## [0.4.1](https://github.com/KengoTODA/rtd-bot/compare/v0.4.0...v0.4.1) (2018-09-27)
 
 
