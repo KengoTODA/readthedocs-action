@@ -1,3 +1,10 @@
+## [0.5.1](https://github.com/KengoTODA/rtd-bot/compare/v0.5.0...v0.5.1) (2018-10-16)
+
+
+### Bug Fixes
+
+* remove needless flag to launch Chrome ([1851061](https://github.com/KengoTODA/rtd-bot/commit/1851061)), closes [jontewks/puppeteer-heroku-buildpack#15](https://github.com/jontewks/puppeteer-heroku-buildpack/issues/15)
+
 # [0.5.0](https://github.com/KengoTODA/rtd-bot/compare/v0.4.1...v0.5.0) (2018-10-09)
 
 
