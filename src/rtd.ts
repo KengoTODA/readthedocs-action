@@ -53,7 +53,7 @@ export default class RTD {
     this.browser = promiseRetry((retry, num) => {
       this.log.debug(`launching chrome (#${num} trial)...`);
       return launch({
-        args: ["--no-sandbox", "--disable-setuid-sandbox"],
+        args: ["--no-sandbox"],
       }).catch(retry);
     });
     this.log = log;
