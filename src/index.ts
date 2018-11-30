@@ -39,8 +39,8 @@ module.exports = (app: Application) => {
     }
 
     // Check if /docs is updated
-    // https://octokit.github.io/rest.js/#api-PullRequests-getFiles
-    const files = await context.github.pullRequests.getFiles(context.issue({}));
+    // https://octokit.github.io/rest.js/#api-Pulls-listFiles
+    const files = await context.github.pullRequests.listFiles(context.issue({}));
     if (undefined === files.data.find((file: {filename: string}) => file.filename.startsWith("docs/"))) {
       log.debug("no need to build RTD document.");
       return;
@@ -64,7 +64,7 @@ module.exports = (app: Application) => {
     if (enabled) {
       log.debug(`Reporting document URL to GitHub PR page of ${branch} branch in ${project}.`);
       const body = buildBody(context.payload.pull_request.body, project, branch, translates.map((t) => t.language));
-      context.github.issues.edit(context.issue({
+      context.github.issues.update(context.issue({
         body,
       }));
     } else {
