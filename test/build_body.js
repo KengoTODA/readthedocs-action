@@ -4,7 +4,9 @@ const buildBody = require('../lib/build_body.js').default;
 describe('#buildBody()', () => {
   it('adds single URL for project without treanslation', () => {
     const result = buildBody("body", "project", "branch", ["en"]);
-    assert.equal(result, "body\n\n[//]: # (rtdbot-start)\n\nURL of RTD document: https://project.readthedocs.io/en/branch/\n\n[//]: # (rtdbot-end)\n");
+    assert.equal(result, "body\n\n[//]: # (rtdbot-start)\n\n" +
+        "URL of RTD document: https://project.readthedocs.io/en/branch/ ![Documentation Status](https://readthedocs.org/projects/project/badge/?version=branch)\n\n" +
+        "[//]: # (rtdbot-end)\n");
   });
   it('adds multiple URLs for project with treanslation', () => {
     const result = buildBody("body", "project", "branch", ["en", "ja"]);
@@ -13,6 +15,8 @@ describe('#buildBody()', () => {
   it('does not add URL if given body already contains it', () => {
     let result = buildBody("body", "project", "branch", ["en"]);
     result = buildBody(result, "project", "branch", ["en"]);
-    assert.equal(result, "body\n\n[//]: # (rtdbot-start)\n\nURL of RTD document: https://project.readthedocs.io/en/branch/\n\n[//]: # (rtdbot-end)\n");
+    assert.equal(result, "body\n\n[//]: # (rtdbot-start)\n\n" +
+        "URL of RTD document: https://project.readthedocs.io/en/branch/ ![Documentation Status](https://readthedocs.org/projects/project/badge/?version=branch)\n\n" +
+        "[//]: # (rtdbot-end)\n");
   });
 });
