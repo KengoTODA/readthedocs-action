@@ -1,3 +1,10 @@
+# [0.6.0](https://github.com/KengoTODA/rtd-bot/compare/v0.5.3...v0.6.0) (2018-12-03)
+
+
+### Features
+
+* disable RTD build when PR is closed/merged ([04c15bc](https://github.com/KengoTODA/rtd-bot/commit/04c15bc))
+
 ## [0.5.3](https://github.com/KengoTODA/rtd-bot/compare/v0.5.2...v0.5.3) (2018-12-03)
 
 
