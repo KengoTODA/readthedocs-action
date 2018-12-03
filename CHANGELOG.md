@@ -1,3 +1,10 @@
+## [0.5.3](https://github.com/KengoTODA/rtd-bot/compare/v0.5.2...v0.5.3) (2018-12-03)
+
+
+### Bug Fixes
+
+* Add a RTD badge to make build progress visual in PR page ([9ac6b0b](https://github.com/KengoTODA/rtd-bot/commit/9ac6b0b))
+
 ## [0.5.2](https://github.com/KengoTODA/rtd-bot/compare/v0.5.1...v0.5.2) (2018-10-19)
 
 
