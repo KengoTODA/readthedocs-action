@@ -50,25 +50,44 @@ module.exports = (app: Application) => {
     log.debug(`Confirmed configuration of ${branch} branch in ${project}: ${config}`);
 
     const translates = await RTD.getTranslates(project);
-    const enabled = await Promise.all(translates.map((p) => p.slug).map((slug) => {
-      return rtd.enableBuild(slug, branch);
-    })).then((allResult: boolean[]) => {
-      return allResult.reduce((l, r) => l || r);
-    }).catch((e) => {
-      context.github.issues.createComment(context.issue({
-        body: e.message,
-      }));
-      throw e;
-    });
 
-    if (enabled) {
-      log.debug(`Reporting document URL to GitHub PR page of ${branch} branch in ${project}.`);
-      const body = buildBody(context.payload.pull_request.body, project, branch, translates.map((t) => t.language));
-      context.github.issues.update(context.issue({
-        body,
-      }));
+    if (context.payload.action === "closed") {
+      const disabled = await Promise.all(translates.map((p) => p.slug).map((slug) => {
+        return rtd.disableBuild(slug, branch);
+      })).then((allResult: boolean[]) => {
+        return allResult.reduce((l, r) => l || r);
+      }).catch((e) => {
+        context.github.issues.createComment(context.issue({
+          body: e.message,
+        }));
+        throw e;
+      });
+      if (disabled) {
+        log.debug(`Disabled RTD build for ${branch} branch in ${project}.`);
+      } else {
+        log.debug(`RTD build for ${branch} branch in ${project} is already disabled.`);
+      }
     } else {
-      log.debug(`RTD build for ${branch} branch in ${project} is already activated.`);
+      const enabled = await Promise.all(translates.map((p) => p.slug).map((slug) => {
+        return rtd.enableBuild(slug, branch);
+      })).then((allResult: boolean[]) => {
+        return allResult.reduce((l, r) => l || r);
+      }).catch((e) => {
+        context.github.issues.createComment(context.issue({
+          body: e.message,
+        }));
+        throw e;
+      });
+
+      if (enabled) {
+        log.debug(`Reporting document URL to GitHub PR page of ${branch} branch in ${project}.`);
+        const body = buildBody(context.payload.pull_request.body, project, branch, translates.map((t) => t.language));
+        context.github.issues.update(context.issue({
+          body,
+        }));
+      } else {
+        log.debug(`RTD build for ${branch} branch in ${project} is already activated.`);
+      }
     }
   });
 

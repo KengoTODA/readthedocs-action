@@ -86,6 +86,33 @@ export default class RTD {
     });
   }
 
+  public disableBuild(project: string, branch: string): Promise<boolean> {
+    return this.browser.then(async (browser) => {
+      const page = await promiseRetry((retry, num) => {
+        return browser.newPage().catch(retry);
+      });
+      try {
+        await this.logIn(page);
+        // version page could be not-ready just after creating branch, so retry sometimes
+        const checked = await promiseRetry((retry, num) => {
+          this.log.debug(`visiting version page (#${num} trial)...`);
+          return this.visitVersionPage(page, project, branch).catch(retry);
+        });
+
+        if (checked) {
+          await this.toggleBuildActivity(page, project, branch);
+          this.log.info(`disabled RTD build for the branch ${branch} in ${project}.`);
+          return true;
+        } else {
+          this.log.debug(`RTD build for the branch ${branch} is already disabled.`);
+          return false;
+        }
+      } finally {
+        page.close();
+      }
+    });
+  }
+
   private async logIn(page: Page) {
     const username = process.env.RTD_USERNAME;
     const password = process.env.RTD_PASSWORD;

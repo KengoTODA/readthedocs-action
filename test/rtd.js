@@ -23,6 +23,19 @@ describe('rtd', function() {
     });
   });
 
+  describe('#disabledBuild()', () => {
+    const configured = !!process.env.RTD_USERNAME && !!process.env.RTD_PASSWORD;
+    assuming(configured).it('should return true if branch is already disabled', done => {
+      const rtd = new RTD(bunyan.createLogger({name: "test"}));
+      rtd.disableBuild('your-read-the-docs-project', 'v0.1.0')
+         .then(enabled => {
+           assert.ok(!enabled);
+           done();
+         })
+         .catch(done);
+    });
+  });
+
   describe('#getProject()', () => {
     it('returns correct ID', async () => {
       const result = await RTD.getProject('your-read-the-docs-project');
