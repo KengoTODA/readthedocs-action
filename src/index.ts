@@ -67,6 +67,9 @@ module.exports = (app: Application) => {
       } else {
         log.debug(`RTD build for ${branch} branch in ${project} is already disabled.`);
       }
+    } else if (context.payload.pull_request.state === "closed") {
+      log.debug("The target pull request is already closed, no reaction needed.");
+      return;
     } else {
       const enabled = await Promise.all(translates.map((p) => p.slug).map((slug) => {
         return rtd.enableBuild(slug, branch);
