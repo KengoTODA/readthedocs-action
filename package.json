@@ -35,8 +35,8 @@
     "typescript": "^3.0.3"
   },
   "engines": {
-    "node": "^8.11",
-    "npm": "^5.6"
+    "node": "^10.15",
+    "npm": "^6.4"
   },
   "files": [
     "lib"
