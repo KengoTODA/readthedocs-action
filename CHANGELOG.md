@@ -1,3 +1,10 @@
+## [0.6.1](https://github.com/KengoTODA/rtd-bot/compare/v0.6.0...v0.6.1) (2019-01-14)
+
+
+### Bug Fixes
+
+* Skip operation if the target PR is already closed ([2601e02](https://github.com/KengoTODA/rtd-bot/commit/2601e02)), closes [#107](https://github.com/KengoTODA/rtd-bot/issues/107)
+
 # [0.6.0](https://github.com/KengoTODA/rtd-bot/compare/v0.5.3...v0.6.0) (2018-12-03)
 
 
