@@ -1,3 +1,10 @@
+## [0.6.2](https://github.com/KengoTODA/rtd-bot/compare/v0.6.1...v0.6.2) (2019-01-14)
+
+
+### Bug Fixes
+
+* Consider null-ability of HEAD branch ([b44b8b5](https://github.com/KengoTODA/rtd-bot/commit/b44b8b5)), closes [#78](https://github.com/KengoTODA/rtd-bot/issues/78)
+
 ## [0.6.1](https://github.com/KengoTODA/rtd-bot/compare/v0.6.0...v0.6.1) (2019-01-14)
 
 
