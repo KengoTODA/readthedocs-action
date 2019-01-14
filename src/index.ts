@@ -33,7 +33,10 @@ module.exports = (app: Application) => {
     const project = config.rtd.project;
 
     // Check if head repo is same with base repo
-    if (context.payload.pull_request.base.repo.full_name !== context.payload.pull_request.head.repo.full_name) {
+    const head = context.payload.pull_request.head;
+    if (head.repo === null) {
+      log.debug("HEAD branch not found.");
+    } else if (context.payload.pull_request.base.repo.full_name !== head.repo.full_name) {
       log.debug("PR made from another Git repo is not supported.");
       return;
     }
@@ -46,12 +49,16 @@ module.exports = (app: Application) => {
       return;
     }
 
-    const branch = context.payload.pull_request.head.ref;
+    const branch = head.ref;
     log.debug(`Confirmed configuration of ${branch} branch in ${project}: ${config}`);
 
     const translates = await RTD.getTranslates(project);
 
     if (context.payload.action === "closed") {
+      if (!branch) {
+        log.debug("HEAD branch not found, impossible to specify which RTD build should be disabled.");
+        return;
+      }
       const disabled = await Promise.all(translates.map((p) => p.slug).map((slug) => {
         return rtd.disableBuild(slug, branch);
       })).then((allResult: boolean[]) => {
