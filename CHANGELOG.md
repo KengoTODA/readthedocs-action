@@ -1,3 +1,10 @@
+# [0.7.0](https://github.com/KengoTODA/rtd-bot/compare/v0.6.2...v0.7.0) (2019-02-01)
+
+
+### Features
+
+* add an avatar designed by MAM2 ([de96544](https://github.com/KengoTODA/rtd-bot/commit/de96544))
+
 ## [0.6.2](https://github.com/KengoTODA/rtd-bot/compare/v0.6.1...v0.6.2) (2019-01-14)
 
 
