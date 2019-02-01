@@ -1,9 +1,9 @@
 import * as dotenv from "dotenv";
 dotenv.config();
 
+import express from "express";
 import { Application, Context } from "probot";
 import buildBody from "./build_body";
-import express from "express";
 import RTD from "./rtd";
 
 module.exports = (app: Application) => {
@@ -107,5 +107,5 @@ module.exports = (app: Application) => {
     res.sendFile(__dirname + "/welcome.html");
   });
 
-  app.route("/static").use(express.static('asset'))
+  app.route("/static").use(express.static("asset"));
 };
