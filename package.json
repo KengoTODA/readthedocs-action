@@ -9,7 +9,6 @@
     "start": "probot run ./lib/index.js",
     "pretest": "tslint -p tsconfig.json",
     "test": "mocha",
-    "postinstall": "npm run build",
     "travis-deploy-once": "travis-deploy-once --pro",
     "semantic-release": "semantic-release"
   },
@@ -82,5 +81,6 @@
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "heroku-run-build-script": true
 }
