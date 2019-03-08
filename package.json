@@ -28,7 +28,7 @@
     "@types/puppeteer": "^1.6.2",
     "dotenv": "^6.0.0",
     "node-fetch": "^2.2.0",
-    "probot": "^7.1.0",
+    "probot": "^9.0.0",
     "promise-retry": "^1.1.1",
     "puppeteer": "^1.7.0",
     "typescript": "^3.0.3"
