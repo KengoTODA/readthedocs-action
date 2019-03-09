@@ -44,8 +44,9 @@ module.exports = (app: Application) => {
 
     // Check if /docs is updated
     // https://octokit.github.io/rest.js/#api-Pulls-listFiles
-    const files = await context.github.pullRequests.listFiles(context.issue({}));
-    if (undefined === files.data.find((file: {filename: string}) => file.filename.startsWith("docs/"))) {
+    const options = context.github.pulls.listFiles.endpoint.merge(context.issue({}));
+    const files = await context.github.paginate(options);
+    if (undefined === files.find((file: {filename: string}) => file.filename.startsWith("docs/"))) {
       log.debug("no need to build RTD document.");
       return;
     }
