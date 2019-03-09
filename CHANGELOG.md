@@ -1,3 +1,10 @@
+## [0.7.1](https://github.com/KengoTODA/rtd-bot/compare/v0.7.0...v0.7.1) (2019-03-09)
+
+
+### Bug Fixes
+
+* replace old API with new pagenation API ([df0bc49](https://github.com/KengoTODA/rtd-bot/commit/df0bc49))
+
 # [0.7.0](https://github.com/KengoTODA/rtd-bot/compare/v0.6.2...v0.7.0) (2019-02-01)
 
 
