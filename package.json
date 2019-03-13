@@ -1,6 +1,6 @@
 {
   "name": "rtd-bot",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "description": "An unofficial GitHub Probot that helps reveiwing on Read the Docs",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",

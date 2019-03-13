@@ -1,3 +1,10 @@
+## [0.7.2](https://github.com/KengoTODA/rtd-bot/compare/v0.7.1...v0.7.2) (2019-03-13)
+
+
+### Bug Fixes
+
+* Solve probot issue 888 ([#145](https://github.com/KengoTODA/rtd-bot/issues/145)) ([a0afc71](https://github.com/KengoTODA/rtd-bot/commit/a0afc71))
+
 ## [0.7.1](https://github.com/KengoTODA/rtd-bot/compare/v0.7.0...v0.7.1) (2019-03-09)
 
 
