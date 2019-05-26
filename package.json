@@ -63,21 +63,11 @@
     "url": "https://github.com/KengoTODA/rtd-bot.git"
   },
   "release": {
-    "verifyConditions": [
+    "plugins": [
+      "@semantic-release/commit-analyzer",
       "@semantic-release/changelog",
       "@semantic-release/npm",
       "@semantic-release/git"
-    ],
-    "prepare": [
-      {
-        "path": "@semantic-release/changelog",
-        "changelogFile": "CHANGELOG.md"
-      },
-      "@semantic-release/npm",
-      "@semantic-release/git"
-    ],
-    "publish": [
-      "@semantic-release/npm"
     ]
   },
   "publishConfig": {
