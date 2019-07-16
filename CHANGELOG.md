@@ -1,3 +1,10 @@
+## [0.7.3](https://github.com/KengoTODA/rtd-bot/compare/v0.7.2...v0.7.3) (2019-07-16)
+
+
+### Bug Fixes
+
+* upgrade lodash to fix CVE-2019-10744 ([59ec914](https://github.com/KengoTODA/rtd-bot/commit/59ec914))
+
 ## [0.7.2](https://github.com/KengoTODA/rtd-bot/compare/v0.7.1...v0.7.2) (2019-03-13)
 
 
