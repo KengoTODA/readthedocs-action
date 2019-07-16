@@ -4,10 +4,11 @@ cache:
   directories:
     - ~/.npm
 script:
-    - npm run build
-    - npm test
+    - yarn
+    - yarn build
+    - yarn test
 after_success:
-  - npm run semantic-release
+  - yarn semantic-release
 branches:
   except:
     - /^v\d+\.\d+\.\d+$/
