@@ -6,6 +6,14 @@ import { Application, Context } from "probot";
 import buildBody from "./build_body";
 import RTD from "./rtd";
 
+interface IRootConfig {
+  rtd: IRtdConfig;
+}
+
+interface IRtdConfig {
+  project: string;
+}
+
 module.exports = (app: Application) => {
   app.on("pull_request", async (context: Context) => {
     const log = context.log.child({
@@ -14,7 +22,7 @@ module.exports = (app: Application) => {
     const rtd = new RTD(log);
 
     // enable RTD build on the target branch
-    const config = await context.config<{rtd: {project: string}}>("config.yml");
+    const config: IRootConfig | null = await context.config<IRootConfig>("config.yml") as IRootConfig;
     if (config === null) {
       context.github.issues.createComment(context.issue({
         body:
