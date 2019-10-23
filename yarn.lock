@@ -2392,15 +2392,10 @@ dotenv@^5.0.1:
   resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-5.0.1.tgz#a5317459bd3d79ab88cff6e44057a6a3fbb1fcef"
   integrity sha512-4As8uPrjfwb7VXC+WnLCbXK7y+Ueb2B3zgNCePYfhxS1PYeaO1YTeplffTEcbfLhvFNGLAz90VvJs9yomG7bow==
 
-dotenv@^8.0.0:
+dotenv@^8.0.0, dotenv@~8.2.0:
   version "8.2.0"
   resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-8.2.0.tgz#97e619259ada750eea3e4ea3e26bceea5424b16a"
   integrity sha512-8sJ78ElpbDJBHNeBzUbUVLsqKdccaa/BXF1uPTw3GrvQTBgrQrtObr2mUrE38vzYd8cEv+m/JBfDLioYcfXoaw==
-
-dotenv@~8.1.0:
-  version "8.1.0"
-  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-8.1.0.tgz#d811e178652bfb8a1e593c6dd704ec7e90d85ea2"
-  integrity sha512-GUE3gqcDCaMltj2++g6bRQ5rBJWtkWTmqmD0fo1RnnMuUqHNCt2oTPeDnS9n6fKYvlhn7AeBkb38lymBtWBQdA==
 
 dtrace-provider@~0.8:
   version "0.8.7"
@@ -5925,9 +5920,9 @@ private@^0.1.6:
   integrity sha512-VvivMrbvd2nKkiG38qjULzlc+4Vx4wm/whI9pQD35YrARNnhxeiRktSOhSukRLFNlzg6Br/cJPet5J/u19r/mg==
 
 probot@^9.0.0:
-  version "9.5.3"
-  resolved "https://registry.yarnpkg.com/probot/-/probot-9.5.3.tgz#7f24ca25152047710207ac2c22f7ba2ff8c467f4"
-  integrity sha512-K9jG7i2ANpVC2R+dlRoprU9pDz+mz/GXaM0i96X/tewX5SBQkFxT00AdETsi40aJXnrg6UUxpEcFBo/OeARiHA==
+  version "9.6.0"
+  resolved "https://registry.yarnpkg.com/probot/-/probot-9.6.0.tgz#727b510c5c3e8de3ea757c6b4fb01d8eb7fb50c3"
+  integrity sha512-03WBE8qcOdMjj4xNjdz4MguKPM6E9aLDM5H3NPZP3ym6hyeByCu1hf1zFyGPX01mX99J7z0vHcDAzh/C66IZ3w==
   dependencies:
     "@octokit/app" "^4.0.0"
     "@octokit/graphql" "^4.2.0"
@@ -5945,7 +5940,7 @@ probot@^9.0.0:
     cache-manager "^2.4.0"
     commander "^3.0.0"
     deepmerge "^4.1.0"
-    dotenv "~8.1.0"
+    dotenv "~8.2.0"
     eventsource "^1.0.7"
     express "^4.16.2"
     express-async-errors "^3.0.0"
