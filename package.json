@@ -49,7 +49,7 @@
     "cz-conventional-changelog": "^3.0.1",
     "mocha": "^7.0.0",
     "mocha-assume": "^1.0.0",
-    "semantic-release": "^16.0.0",
+    "semantic-release": "^17.0.1",
     "travis-deploy-once": "^5.0.7",
     "tslint": "^6.0.0"
   },
