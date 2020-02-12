@@ -30,6 +30,7 @@
     "dotenv": "^8.0.0",
     "node-fetch": "^2.2.0",
     "probot": "^9.0.0",
+    "probot-actions-adapter": "^1.0.2",
     "promise-retry": "^1.1.1",
     "puppeteer": "^2.0.0",
     "typescript": "^3.0.3"
