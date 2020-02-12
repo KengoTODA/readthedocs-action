@@ -1,5 +1,5 @@
 const assert = require('assert');
-const escape = require('../lib/escape.js').default;
+const escape = require('../src/escape').default;
 
 describe('#escape()', () => {
   it('replaces "/" with "-"', () => {

@@ -1,5 +1,5 @@
 const assert = require('assert');
-const buildBody = require('../lib/build_body.js').default;
+const buildBody = require('../src/build_body').default;
 
 describe('#buildBody()', () => {
   it('adds single URL for project without treanslation', () => {
