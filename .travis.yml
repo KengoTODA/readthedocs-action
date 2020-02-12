@@ -1,17 +1,11 @@
 dist: xenial
 language: node_js
-cache:
-  directories:
-    - ~/.npm
-before_install:
-  - npm install -g yarn
 install:
-  - yarn
+  - npm ci
 script:
-  - yarn build
-  - yarn test
+  - npm test
 after_success:
-  - yarn semantic-release
+  - npm run semantic-release
 branches:
   except:
     - /^v\d+\.\d+\.\d+$/
