@@ -112,7 +112,7 @@ module.exports = (app: Application) => {
   });
 
   const router = app.route("/welcome");
-  router.get("/", (_, res) => {
+  router.get("/", (_: any, res: any) => {
     res.sendFile(__dirname + "/welcome.html");
   });
 
