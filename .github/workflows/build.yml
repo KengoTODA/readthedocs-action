@@ -22,6 +22,7 @@ jobs:
         run: |
           npm ci
           npm test
+          npm run-script prepack
           npm run semantic-release
         env:
           CI: true
