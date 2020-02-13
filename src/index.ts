@@ -14,7 +14,7 @@ interface IRtdConfig {
   project: string;
 }
 
-module.exports = (app: Application) => {
+export = (app: Application) => {
   app.on("pull_request", async (context: Context) => {
     const log = context.log.child({
       name: "rtd-bot",
