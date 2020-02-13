@@ -1,12 +1,11 @@
 {
   "name": "rtd-bot",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "description": "An unofficial GitHub Probot that helps reveiwing on Read the Docs",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
     "start": "tsc && probot run ./lib/index.js",
-    "pretest": "tslint -p tsconfig.json",
     "travis-deploy-once": "travis-deploy-once --pro",
     "semantic-release": "semantic-release",
     "test": "TS_NODE_FILES=true nyc mocha",
@@ -51,8 +50,7 @@
     "nyc": "^15.0.0",
     "semantic-release": "^17.0.1",
     "source-map-support": "^0.5.16",
-    "ts-node": "^8.6.2",
-    "tslint": "^6.0.0"
+    "ts-node": "^8.6.2"
   },
   "config": {
     "commitizen": {

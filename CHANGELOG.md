@@ -1,3 +1,10 @@
+## [0.8.2](https://github.com/KengoTODA/rtd-bot/compare/v0.8.1...v0.8.2) (2020-02-13)
+
+
+### Bug Fixes
+
+* unexpected compilation error for GitHub Actions ([614a8e1](https://github.com/KengoTODA/rtd-bot/commit/614a8e188946a830548c825219406e83fb2fd29f))
+
 ## [0.8.1](https://github.com/KengoTODA/rtd-bot/compare/v0.8.0...v0.8.1) (2020-02-13)
 
 
