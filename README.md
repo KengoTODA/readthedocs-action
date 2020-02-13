@@ -45,7 +45,7 @@ To enable rtd-bot SaaS for your GitHub repository, follow the following interact
 1. Invite `rtd-bot` user to your RTD project as maintainer.
 2. Enable rtd-bot in your repo from [the rtd-bot page at GitHub](https://github.com/apps/rtd-helper).
 
-### 2. Use as a step in GitHub Action
+### 2. Use as a step in GitHub Action (Not ready yet)
 
 To use in GitHub Action, use the tag with `actions-` prefix. The commit includes files in `lib` and `node_modules` directories.
 
