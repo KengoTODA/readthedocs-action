@@ -3,6 +3,14 @@
 
 ### Bug Fixes
 
+* GitHub Actions should have dev-deps in node_modules ([7f22d2a](https://github.com/KengoTODA/rtd-bot/commit/7f22d2ac91711853269831c1a9cb5e9c073191d5))
+* use import instead of require() ([caefdfb](https://github.com/KengoTODA/rtd-bot/commit/caefdfb7fec19272e2317e93e5a46a273b05881b))
+
+## [0.8.3](https://github.com/KengoTODA/rtd-bot/compare/v0.8.2...v0.8.3) (2020-02-13)
+
+
+### Bug Fixes
+
 * use import instead of require() ([caefdfb](https://github.com/KengoTODA/rtd-bot/commit/caefdfb7fec19272e2317e93e5a46a273b05881b))
 
 ## [0.8.2](https://github.com/KengoTODA/rtd-bot/compare/v0.8.1...v0.8.2) (2020-02-13)
