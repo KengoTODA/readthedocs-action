@@ -1,3 +1,10 @@
+## [0.8.1](https://github.com/KengoTODA/rtd-bot/compare/v0.8.0...v0.8.1) (2020-02-13)
+
+
+### Bug Fixes
+
+* skip build by semantic-release ([7a6fb9d](https://github.com/KengoTODA/rtd-bot/commit/7a6fb9d83f4d99eb81c6bb3911527658d647cfe8))
+
 # [0.8.0](https://github.com/KengoTODA/rtd-bot/compare/v0.7.3...v0.8.0) (2020-02-13)
 
 
