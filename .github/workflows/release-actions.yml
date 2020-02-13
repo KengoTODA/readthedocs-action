@@ -3,7 +3,7 @@ name: Release for GitHub Action
 on:
   push:
     tags:
-      - 'v*'
+      - 'v*.*.*'
 
 jobs:
   build:
