@@ -30,7 +30,7 @@ jobs:
           git config --local user.name "GitHub Action"
           git checkout -b release-actions-$VERSION
 
-          npm install --production
+          npm ci
           git add --force node_modules
 
           npm pack
