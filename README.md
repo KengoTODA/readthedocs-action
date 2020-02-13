@@ -58,7 +58,7 @@ on:
 steps:
   ...
   - name: Build staging document
-    uses: KengoTODA/rtd-bot@actions-v0.8.3
+    uses: KengoTODA/rtd-bot@actions-v0.8.4
     env:
       RTD_USERNAME: your_rtd_username
       RTD_PASSWORD: ${{ secrets.RTD_PASSWORD }}
