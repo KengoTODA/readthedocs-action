@@ -71,7 +71,8 @@
       "@semantic-release/changelog",
       "@semantic-release/npm",
       "@semantic-release/git"
-    ]
+    ],
+    "message": "chore(release): ${nextRelease.version}\n\n${nextRelease.notes}"
   },
   "publishConfig": {
     "access": "public"
