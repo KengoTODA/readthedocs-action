@@ -13,14 +13,20 @@ This bot automates the first approach; activate RTD build automatically when you
 
 ![screenshot](screenshot.png)
 
-## Installation
+## How to use
 
-To install rtd-bot to your GitHub repository, follow these interactions:
+You have three ways to use this service:
+
+1. Use as a SaaS
+2. Use as a step in GitHub Action
+3. Host own service
+
+### Initial setup
+
+No matter which way you choose, follow the following interactions:
 
 0. Make sure that your RTD project has been [connected with GitHub repository](https://docs.readthedocs.io/en/latest/getting_started.html#sign-up-and-connect-an-external-account), or [integrated via GitHub webhook](https://docs.readthedocs.io/en/latest/webhooks.html#github).
-1. Invite `rtd-bot` user to your RTD project as maintainer.
-2. Add `rtd.project` config to `.github/config.yml` file in your repo.
-3. Enable rtd-bot in your repo from [the rtd-bot page at GitHub](https://github.com/apps/rtd-helper).
+1. Add `rtd.project` config to the `.github/config.yml` file in your repo.
 
 Here is a sample `.github/config.yml`:
 
@@ -29,16 +35,37 @@ rtd:
   project: your-read-the-docs-project
 ```
 
-### Configuration for the project with translations
-
-If you use [translations feature](https://docs.readthedocs.io/en/latest/localization.html#project-with-multiple-translations), make sure you've configured all your RTD projects including translations.
-
-In `.github/config.yml` file, set the project slug of the root RTD project.
-
-## Deployment
+### 1. Use as a SaaS
 
 In Read the Docs, __inviting maintainer means you give admin access__ to target account.
-So if you do not want to invite `rtd-bot` as maintainer, you can host this Probot app by own.
+So if you do not want to invite `rtd-bot` as maintainer, use other way instead of this way.
+
+To enable rtd-bot SaaS for your GitHub repository, follow the following interactions:
+
+1. Invite `rtd-bot` user to your RTD project as maintainer.
+2. Enable rtd-bot in your repo from [the rtd-bot page at GitHub](https://github.com/apps/rtd-helper).
+
+### 2. Use as a step in GitHub Action
+
+To use in GitHub Action, use the tag with `actions-` prefix. The commit includes files in `lib` and `node_modules` directories.
+
+You need to set three environment variables: `RTD_USERNAME`, `RTD_PASSWORD` and `GITHUB_TOKEN`. See the next section for detail.
+
+```yml
+on:
+  [pull_request]
+...
+steps:
+  ...
+  - name: Build staging document
+    uses: KengoTODA/rtd-bot@actions-v0.8.0
+    env:
+      RTD_USERNAME: your_rtd_username
+      RTD_PASSWORD: ${{ secrets.RTD_PASSWORD }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+```
+
+### 3. Host own service
 
 To host this bot by own, you need to set following environment variables:
 
@@ -49,9 +76,17 @@ To host this bot by own, you need to set following environment variables:
 
 To run this bot on Heroku, you need to add a buildpack. See [puppeteer document](https://github.com/GoogleChrome/puppeteer/blob/master/docs/troubleshooting.md#running-puppeteer-on-heroku) for detail.
 
+## Advanced Configuration
+
+### Configuration for the project with translations
+
+If you use [translations feature](https://docs.readthedocs.io/en/latest/localization.html#project-with-multiple-translations), make sure you've configured all your RTD projects including translations.
+
+In `.github/config.yml` file, set the project slug of the root RTD project.
+
 ## License
 
-Copyright &copy; 2018-2019 Kengo TODA
+Copyright &copy; 2018-2020 Kengo TODA
 
 ```
 Licensed under the Apache License, Version 2.0 (the "License");
