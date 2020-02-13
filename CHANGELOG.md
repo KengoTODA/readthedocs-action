@@ -1,3 +1,10 @@
+# [0.8.0](https://github.com/KengoTODA/rtd-bot/compare/v0.7.3...v0.8.0) (2020-02-13)
+
+
+### Features
+
+* support working as GitHub Actions ([a671966](https://github.com/KengoTODA/rtd-bot/commit/a671966c0ec176bda35b75f05e6aef14a4fae8d5))
+
 ## [0.7.3](https://github.com/KengoTODA/rtd-bot/compare/v0.7.2...v0.7.3) (2019-07-16)
 
 
