@@ -1,4 +1,5 @@
-const adapt = require('probot-actions-adapter')
-const probot = require('./index')
+import adapt from 'probot-actions-adapter'
+import { ApplicationFunction } from 'probot'
+import * as probot from './index'
 
-adapt(probot);
+adapt(probot as ApplicationFunction);
