@@ -1,14 +1,17 @@
-import { Logger } from "probot";
-import { Browser, launch, Page } from "puppeteer";
-const isDevelopment = process.env.NODE_ENV === "development";
 import fetch from "node-fetch";
-import promiseRetry from "promise-retry";
 import escape from "./escape";
 
 interface IProject {
   id: number;
   language: string;
   slug: string;
+}
+
+/**
+ * @see https://docs.readthedocs.io/en/stable/api/v3.html#version-detail
+ */
+interface IVersion {
+  active: boolean
 }
 
 export default class RTD {
@@ -46,118 +49,42 @@ export default class RTD {
       });
   }
 
-  private browser: Promise<Browser>;
-  private log: Logger;
+  private token: string;
 
-  constructor(log: Logger) {
-    this.browser = promiseRetry((retry, num) => {
-      this.log.debug(`launching chrome (#${num} trial)...`);
-      return launch({
-        args: ["--no-sandbox"],
-      }).catch(retry);
-    });
-    this.log = log;
+  constructor(token: string) {
+    this.token = token;
   }
 
-  public enableBuild(project: string, branch: string): Promise<boolean> {
-    return this.browser.then(async (browser) => {
-      const page = await promiseRetry((retry, num) => {
-        return browser.newPage().catch(retry);
-      });
-      try {
-        await this.logIn(page);
-        // version page could be not-ready just after creating branch, so retry sometimes
-        const checked = await promiseRetry((retry, num) => {
-          this.log.debug(`visiting version page (#${num} trial)...`);
-          return this.visitVersionPage(page, project, branch).catch(retry);
-        });
-
-        if (!checked) {
-          await this.toggleBuildActivity(page, project, branch);
-          this.log.info(`enabled RTD build for the branch ${branch} in ${project}.`);
-          return true;
-        } else {
-          this.log.debug(`RTD build for the branch ${branch} is already active.`);
-          return false;
-        }
-      } finally {
-        page.close();
+  public async getBuildActiveness(project: string, branch: string): Promise<boolean> {
+    return fetch(`https://readthedocs.org/api/v3/projects/${project}/versions/${escape(branch)}/`, {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Token ${this.token}`
       }
-    });
+    })
+      .then((res) => res.json())
+      .then((json) => json as IVersion)
+      .then((ver) => ver.active);
   }
 
-  public disableBuild(project: string, branch: string): Promise<boolean> {
-    return this.browser.then(async (browser) => {
-      const page = await promiseRetry((retry, num) => {
-        return browser.newPage().catch(retry);
-      });
-      try {
-        await this.logIn(page);
-        // version page could be not-ready just after creating branch, so retry sometimes
-        const checked = await promiseRetry((retry, num) => {
-          this.log.debug(`visiting version page (#${num} trial)...`);
-          return this.visitVersionPage(page, project, branch).catch(retry);
-        });
-
-        if (checked) {
-          await this.toggleBuildActivity(page, project, branch);
-          this.log.info(`disabled RTD build for the branch ${branch} in ${project}.`);
-          return true;
-        } else {
-          this.log.debug(`RTD build for the branch ${branch} is already disabled.`);
-          return false;
-        }
-      } finally {
-        page.close();
-      }
-    });
+  private async configureBuild(project: string, branch: string, flag: boolean): Promise<void> {
+    return fetch(`https://readthedocs.org/api/v3/projects/${project}/versions/${escape(branch)}/`, {
+      method: 'patch',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Token ${this.token}`
+      },
+      body: `{"active": ${flag}}`
+    })
+      .then((res) => res.json());
   }
 
-  private async logIn(page: Page) {
-    const username = process.env.RTD_USERNAME;
-    const password = process.env.RTD_PASSWORD;
-    if (username === undefined || password === undefined) {
-      throw new Error(":sob: Please ask admin of your bot to set RTD username and password via environment variable.");
-    }
-
-    await page.goto("https://readthedocs.org/accounts/login/");
-    await page.type("#id_login", username);
-    await page.type("#id_password", password);
-    if (isDevelopment) {
-      await page.screenshot({
-        path: "login-page.png",
-      });
-    }
-    const navigationPromise = page.waitForNavigation();
-    await page.click("button[type=submit]");
-    await navigationPromise;
-    if (isDevelopment) {
-      await page.screenshot({
-        path: "after-login-page.png",
-      });
-    }
+  public async enableBuild(project: string, branch: string): Promise<boolean> {
+    return this.configureBuild(project, branch, true).then(_ => this.getBuildActiveness(project, branch));
   }
 
-  private async visitVersionPage(page: Page, project: string, branch: string): Promise<boolean> {
-    const url = `https://readthedocs.org/dashboard/${escape(project)}/version/${escape(branch)}/`;
-    await page.goto(url);
-    const checkbox = await page.$("input#id_active");
-    if (isDevelopment) {
-      await page.screenshot({
-        path: "version-page.png",
-      });
-    }
-    if (checkbox == null) {
-      throw new Error(`:sob: Failed to visit version page at ${url}. ` +
-        "Please make sure you have enabled GitHub integration in your RTD project.");
-    }
-    const checked = await (await checkbox.getProperty("checked")).jsonValue();
-    return checked as boolean;
-  }
-
-  private async toggleBuildActivity(page: Page, project: string, branch: string) {
-    await page.goto(`https://readthedocs.org/dashboard/${escape(project)}/version/${escape(branch)}/`);
-    await page.click("input#id_active");
-    await page.click("form[action='.'] input[type=submit]");
+  public async disableBuild(project: string, branch: string): Promise<boolean> {
+    return this.configureBuild(project, branch, false).then(_ => this.getBuildActiveness(project, branch));
   }
 }
