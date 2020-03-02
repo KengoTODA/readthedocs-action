@@ -152,7 +152,7 @@ export default class RTD {
         "Please make sure you have enabled GitHub integration in your RTD project.");
     }
     const checked = await (await checkbox.getProperty("checked")).jsonValue();
-    return checked;
+    return checked as boolean;
   }
 
   private async toggleBuildActivity(page: Page, project: string, branch: string) {
