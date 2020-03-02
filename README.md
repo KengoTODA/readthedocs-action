@@ -49,7 +49,7 @@ To enable rtd-bot SaaS for your GitHub repository, follow the following interact
 
 To use in GitHub Action, use the tag with `actions-` prefix. The commit includes files in `lib` and `node_modules` directories.
 
-You need to set three environment variables: `RTD_USERNAME`, `RTD_PASSWORD` and `GITHUB_TOKEN`. See the next section for detail.
+You need to set two environment variables: `RTD_TOKEN` and `GITHUB_TOKEN`. See the next section for detail.
 
 ```yml
 on:
@@ -60,8 +60,7 @@ steps:
   - name: Build staging document
     uses: KengoTODA/rtd-bot@actions-v0.8.4
     env:
-      RTD_USERNAME: your_rtd_username
-      RTD_PASSWORD: ${{ secrets.RTD_PASSWORD }}
+      RTD_TOKEN: ${{ secrets.RTD_TOKEN }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
@@ -69,10 +68,9 @@ steps:
 
 To host this bot by own, you need to set following environment variables:
 
-1. `RTD_USERNAME` that is same with user name of [Read the Docs](https://readthedocs.org/)
-2. `RTD_PASSWORD` that is same with password of [Read the Docs](https://readthedocs.org/)
-3. `WEBHOOK_SECRET` and `APP_ID` that is described at [Probot document](https://probot.github.io/docs/deployment/#deploy-the-app).
-4. One of `PRIVATE_KEY_PATH` or `PRIVATE_KEY` that is described at [Probot document](https://probot.github.io/docs/deployment/#deploy-the-app).
+1. `RTD_TOKEN`, the token issued by [Read the Docs](https://readthedocs.org/). See [official doc](https://docs.readthedocs.io/en/stable/api/v3.html#token) for detail.
+2. `WEBHOOK_SECRET` and `APP_ID` that is described at [Probot document](https://probot.github.io/docs/deployment/#deploy-the-app).
+3. One of `PRIVATE_KEY_PATH` or `PRIVATE_KEY` that is described at [Probot document](https://probot.github.io/docs/deployment/#deploy-the-app).
 
 To run this bot on Heroku, you need to add a buildpack. See [puppeteer document](https://github.com/GoogleChrome/puppeteer/blob/master/docs/troubleshooting.md#running-puppeteer-on-heroku) for detail.
 

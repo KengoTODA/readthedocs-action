@@ -28,5 +28,4 @@ jobs:
           CI: true
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          RTD_USERNAME: ${{ secrets.RTD_USERNAME }}
-          RTD_PASSWORD: ${{ secrets.RTD_PASSWORD }}
+          RTD_TOKEN: ${{ secrets.RTD_TOKEN }}
