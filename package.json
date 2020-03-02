@@ -23,8 +23,7 @@
     "dotenv": "^8.0.0",
     "node-fetch": "^2.2.0",
     "probot": "^9.0.0",
-    "probot-actions-adapter": "^1.0.2",
-    "typescript": "^3.0.3"
+    "probot-actions-adapter": "^1.0.2"
   },
   "engines": {
     "node": "^12.12"
@@ -46,7 +45,8 @@
     "nyc": "^15.0.0",
     "semantic-release": "^17.0.1",
     "source-map-support": "^0.5.16",
-    "ts-node": "^8.6.2"
+    "ts-node": "^8.6.2",
+    "typescript": "^3.0.3"
   },
   "config": {
     "commitizen": {
