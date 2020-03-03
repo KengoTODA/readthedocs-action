@@ -72,8 +72,6 @@ To host this bot by own, you need to set following environment variables:
 2. `WEBHOOK_SECRET` and `APP_ID` that is described at [Probot document](https://probot.github.io/docs/deployment/#deploy-the-app).
 3. One of `PRIVATE_KEY_PATH` or `PRIVATE_KEY` that is described at [Probot document](https://probot.github.io/docs/deployment/#deploy-the-app).
 
-To run this bot on Heroku, you need to add a buildpack. See [puppeteer document](https://github.com/GoogleChrome/puppeteer/blob/master/docs/troubleshooting.md#running-puppeteer-on-heroku) for detail.
-
 ## Advanced Configuration
 
 ### Configuration for the project with translations
