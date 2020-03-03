@@ -66,7 +66,7 @@ export = (app: Application) => {
     const branch = head.ref;
     log.debug(`Confirmed configuration of ${branch} branch in ${project}: ${config}`);
 
-    const translates = await RTD.getTranslates(project);
+    const translates = await rtd.getTranslates(project);
 
     if (context.payload.action === "closed") {
       if (!branch) {

@@ -8,10 +8,10 @@ const RTD = require('../src/rtd').default;
 const timeout = 15 * 1000;
 
 describe('rtd', function() {
+  const configured = !!process.env.RTD_TOKEN;
   this.timeout(timeout);
 
   describe('#enableBuild()', () => {
-    const configured = !!process.env.RTD_TOKEN;
     assuming(configured).it('should return false if branch is already activated', async () => {
       const rtd = new RTD(process.env.RTD_TOKEN);
       return rtd.enableBuild('your-read-the-docs-project', 'master')
@@ -22,7 +22,6 @@ describe('rtd', function() {
   });
 
   describe('#disabledBuild()', () => {
-    const configured = !!process.env.RTD_TOKEN;
     assuming(configured).it('should return false if branch is already disabled', async () => {
       const rtd = new RTD(process.env.RTD_TOKEN);
       return rtd.disableBuild('your-read-the-docs-project', 'v0.1.0')
@@ -33,13 +32,15 @@ describe('rtd', function() {
   });
 
   describe('#getProject()', () => {
-    it('returns correct ID', async () => {
-      const result = await RTD.getProject('your-read-the-docs-project');
+    assuming(configured).it('returns correct ID', async () => {
+      const rtd = new RTD(process.env.RTD_TOKEN);
+      const result = await rtd.getProject('your-read-the-docs-project');
       assert.equal(result.id, 235403);
       assert.equal(result.language, 'en');
     });
-    it('returns rejected promise for not existing project', async () => {
-      return RTD.getProject('not-existing').then(
+    assuming(configured).it('returns rejected promise for not existing project', async () => {
+      const rtd = new RTD(process.env.RTD_TOKEN);
+      return rtd.getProject('not-existing').then(
         () => Promise.reject(new Error('Expected method to reject.')),
         err => assert(err instanceof Error)
       );
@@ -48,7 +49,8 @@ describe('rtd', function() {
 
   describe('#getTranslates()', () => {
     it('returns single translate', async () => {
-      const result = await RTD.getTranslates({
+      const rtd = new RTD(process.env.RTD_TOKEN);
+      const result = await rtd.getTranslates({
         id: 235403,
         language: 'en',
         slug: 'your-read-the-docs-project'
@@ -60,7 +62,8 @@ describe('rtd', function() {
       }]);
     });
     it('returns multiple translates', async () => {
-      const result = await RTD.getTranslates({
+      const rtd = new RTD(process.env.RTD_TOKEN);
+      const result = await rtd.getTranslates({
         id: 79934,
         language: 'en',
         slug: 'spotbugs-in-kengo-toda'
