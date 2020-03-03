@@ -1,6 +1,6 @@
 {
   "name": "rtd-bot",
-  "version": "1.0.0",
+  "version": "0.0.0-development",
   "description": "An unofficial GitHub Probot that helps reveiwing on Read the Docs",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -55,14 +55,6 @@
     "url": "https://github.com/KengoTODA/rtd-bot.git"
   },
   "release": {
-    "plugins": [
-      "@semantic-release/commit-analyzer",
-      "@semantic-release/release-notes-generator",
-      "@semantic-release/github",
-      "@semantic-release/npm",
-      "@semantic-release/git"
-    ],
-    "message": "chore(release): ${nextRelease.version}\n\n${nextRelease.notes}"
   },
   "publishConfig": {
     "access": "public"
