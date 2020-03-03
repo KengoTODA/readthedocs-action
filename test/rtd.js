@@ -11,28 +11,24 @@ describe('rtd', function() {
   this.timeout(timeout);
 
   describe('#enableBuild()', () => {
-    const configured = !!process.env.RTD_USERNAME && !!process.env.RTD_PASSWORD;
-    assuming(configured).it('should return true if branch is already activated', done => {
-      const rtd = new RTD(bunyan.createLogger({name: "test"}));
-      rtd.enableBuild('your-read-the-docs-project', 'master')
+    const configured = !!process.env.RTD_TOKEN;
+    assuming(configured).it('should return false if branch is already activated', async () => {
+      const rtd = new RTD(process.env.RTD_TOKEN);
+      return rtd.enableBuild('your-read-the-docs-project', 'master')
          .then(enabled => {
            assert.ok(!enabled);
-           done();
-         })
-         .catch(done);
+         });
     });
   });
 
   describe('#disabledBuild()', () => {
-    const configured = !!process.env.RTD_USERNAME && !!process.env.RTD_PASSWORD;
-    assuming(configured).it('should return true if branch is already disabled', done => {
-      const rtd = new RTD(bunyan.createLogger({name: "test"}));
-      rtd.disableBuild('your-read-the-docs-project', 'v0.1.0')
+    const configured = !!process.env.RTD_TOKEN;
+    assuming(configured).it('should return false if branch is already disabled', async () => {
+      const rtd = new RTD(process.env.RTD_TOKEN);
+      return rtd.disableBuild('your-read-the-docs-project', 'v0.1.0')
          .then(enabled => {
            assert.ok(!enabled);
-           done();
-         })
-         .catch(done);
+         });
     });
   });
 

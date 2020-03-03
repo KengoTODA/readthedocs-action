@@ -8,7 +8,7 @@
     "start": "tsc && probot run ./lib/index.js",
     "travis-deploy-once": "travis-deploy-once --pro",
     "semantic-release": "semantic-release",
-    "test": "TS_NODE_FILES=true nyc mocha",
+    "test": "cross-env TS_NODE_FILES=true nyc mocha",
     "prepack": "tsc"
   },
   "keywords": [
@@ -23,10 +23,7 @@
     "dotenv": "^8.0.0",
     "node-fetch": "^2.2.0",
     "probot": "^9.0.0",
-    "probot-actions-adapter": "^1.0.2",
-    "promise-retry": "^1.1.1",
-    "puppeteer": "^2.0.0",
-    "typescript": "^3.0.3"
+    "probot-actions-adapter": "^1.0.2"
   },
   "engines": {
     "node": "^12.12"
@@ -41,16 +38,16 @@
     "@types/bunyan": "^1.8.4",
     "@types/express": "^4.16.0",
     "@types/node-fetch": "^2.1.2",
-    "@types/promise-retry": "^1.1.2",
-    "@types/puppeteer": "^2.0.1",
     "commitizen": "^4.0.0",
+    "cross-env": "^7.0.0",
     "cz-conventional-changelog": "^3.0.1",
     "mocha": "^7.0.0",
     "mocha-assume": "^1.0.0",
     "nyc": "^15.0.0",
     "semantic-release": "^17.0.1",
     "source-map-support": "^0.5.16",
-    "ts-node": "^8.6.2"
+    "ts-node": "^8.6.2",
+    "typescript": "^3.0.3"
   },
   "config": {
     "commitizen": {

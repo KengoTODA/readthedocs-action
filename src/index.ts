@@ -19,7 +19,11 @@ export = (app: Application) => {
     const log = context.log.child({
       name: "rtd-bot",
     });
-    const rtd = new RTD(log);
+    const token = process.env.RTD_TOKEN;
+    if (token == undefined) {
+      throw new Error('RTD_TOKEN is not set');
+    }
+    const rtd = new RTD(token);
 
     // enable RTD build on the target branch
     const config: IRootConfig | null = await context.config<IRootConfig>("config.yml") as IRootConfig;
