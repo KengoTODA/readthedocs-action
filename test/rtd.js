@@ -12,8 +12,8 @@ describe('rtd', function() {
 
   describe('#enableBuild()', () => {
     const configured = !!process.env.RTD_TOKEN;
-    assuming(configured).it('should return true if branch is already activated', async () => {
-      const rtd = new RTD(bunyan.createLogger({name: "test"}));
+    assuming(configured).it('should return false if branch is already activated', async () => {
+      const rtd = new RTD(process.env.RTD_TOKEN);
       return rtd.enableBuild('your-read-the-docs-project', 'master')
          .then(enabled => {
            assert.ok(!enabled);
@@ -23,8 +23,8 @@ describe('rtd', function() {
 
   describe('#disabledBuild()', () => {
     const configured = !!process.env.RTD_TOKEN;
-    assuming(configured).it('should return true if branch is already disabled', async () => {
-      const rtd = new RTD(bunyan.createLogger({name: "test"}));
+    assuming(configured).it('should return false if branch is already disabled', async () => {
+      const rtd = new RTD(process.env.RTD_TOKEN);
       return rtd.disableBuild('your-read-the-docs-project', 'v0.1.0')
          .then(enabled => {
            assert.ok(!enabled);

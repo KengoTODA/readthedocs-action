@@ -55,6 +55,9 @@ export default class RTD {
     this.token = token;
   }
 
+  /**
+   * @see https://docs.readthedocs.io/en/stable/api/v3.html#version-detail
+   */
   public async getBuildActiveness(project: string, branch: string): Promise<boolean> {
     return fetch(`https://readthedocs.org/api/v3/projects/${project}/versions/${escape(branch)}/`, {
       method: 'get',
@@ -63,12 +66,30 @@ export default class RTD {
         'Authorization': `Token ${this.token}`
       }
     })
-      .then((res) => res.json())
-      .then((json) => json as IVersion)
+      .then((res) => {
+        return Promise.all([res.status, res.json()])
+      })
+      .then(([status, json]) => {
+        if (status != 200) {
+          throw new Error(`Unexpected status code ${status} with body: ${JSON.stringify(json)}`);
+        }
+        return json as IVersion;
+      })
       .then((ver) => ver.active);
   }
 
-  private async configureBuild(project: string, branch: string, flag: boolean): Promise<void> {
+  /**
+   * @see https://docs.readthedocs.io/en/stable/api/v3.html#version-update
+   */
+  private async configureBuild(project: string, branch: string, flag: boolean): Promise<boolean> {
+    const currentFlag = await this.getBuildActiveness(project, branch);
+    if (currentFlag === flag) {
+      // no need to ask for update
+      return false;
+    }
+    // this implementation doesn't care the transaction, so
+    // the returned value could be different with expected one
+    // if we run two procedures at the same time
     return fetch(`https://readthedocs.org/api/v3/projects/${project}/versions/${escape(branch)}/`, {
       method: 'patch',
       headers: {
@@ -77,14 +98,22 @@ export default class RTD {
       },
       body: `{"active": ${flag}}`
     })
-      .then((res) => res.json());
-  }
+    .then((res) => {
+      return Promise.all([res.status, res.json()])
+    })
+    .then(([status, json]) => {
+      if (status != 200) {
+        throw new Error(`Unexpected status code ${status} with body: ${JSON.stringify(json)}`);
+      }
+      return true;
+    });
+}
 
   public async enableBuild(project: string, branch: string): Promise<boolean> {
-    return this.configureBuild(project, branch, true).then(_ => this.getBuildActiveness(project, branch));
+    return this.configureBuild(project, branch, true);
   }
 
   public async disableBuild(project: string, branch: string): Promise<boolean> {
-    return this.configureBuild(project, branch, false).then(_ => this.getBuildActiveness(project, branch));
+    return this.configureBuild(project, branch, false);
   }
 }
