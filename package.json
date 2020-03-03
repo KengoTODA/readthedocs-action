@@ -37,7 +37,7 @@
     "@types/node-fetch": "^2.1.2",
     "cross-env": "^7.0.0",
     "cz-conventional-changelog": "^3.0.1",
-    "mocha": "^7.0.0",
+    "mocha": "^7.1.0",
     "mocha-assume": "^1.0.0",
     "nyc": "^15.0.0",
     "semantic-release": "^17.0.1",
