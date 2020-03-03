@@ -1,3 +1,22 @@
+# [1.0.0](https://github.com/KengoTODA/rtd-bot/compare/v0.8.3...v1.0.0) (2020-03-03)
+
+
+### Bug Fixes
+
+* handle 204 which does not return json ([5a08932](https://github.com/KengoTODA/rtd-bot/commit/5a08932fffc3a9b90dc75651ec8951315d8b7abc))
+* replace puppeteer to make the artifact smaller ([29e4fa6](https://github.com/KengoTODA/rtd-bot/commit/29e4fa65d6d01a79264db2cbd43141e455829abe))
+* wrong returned value of enableBuild() and disableBuild() ([f03a9ec](https://github.com/KengoTODA/rtd-bot/commit/f03a9ec5ab885170b1ded241f5c39588aa2e8450))
+
+
+### Features
+
+* replace puppeteer with WebAPI ([#400](https://github.com/KengoTODA/rtd-bot/issues/400)) ([b680dc7](https://github.com/KengoTODA/rtd-bot/commit/b680dc750cd3d83f715b4955ee1d116b370303f7))
+
+
+### BREAKING CHANGES
+
+* To host this bot by own, set `RTD_TOKEN` environment variable instead of username and password.
+
 ## [0.8.3](https://github.com/KengoTODA/rtd-bot/compare/v0.8.2...v0.8.3) (2020-02-13)
 
 
