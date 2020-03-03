@@ -99,10 +99,15 @@ export default class RTD {
       body: `{"active": ${flag}}`
     })
     .then((res) => {
-      return Promise.all([res.status, res.json()])
+      if (res.status != 204) {
+        return Promise.all([res.status, res.json()])
+      } else {
+        // 204 responses empty text, so json() doesn't work
+        return Promise.all([res.status, res.text()])
+      }
     })
     .then(([status, json]) => {
-      if (status != 200) {
+      if (status != 204) {
         throw new Error(`Unexpected status code ${status} with body: ${JSON.stringify(json)}`);
       }
       return true;
