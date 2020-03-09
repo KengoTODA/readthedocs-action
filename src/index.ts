@@ -64,7 +64,7 @@ export = (app: Application) => {
     }
 
     const branch = head.ref;
-    log.debug(`Confirmed configuration of ${branch} branch in ${project}: ${config}`);
+    log.debug(`Confirmed configuration of %s branch in %s: %s`, branch, project, config);
 
     const translates = await rtd.getTranslates(project);
 
