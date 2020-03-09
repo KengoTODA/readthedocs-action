@@ -48,7 +48,7 @@ describe('rtd', function() {
   });
 
   describe('#getTranslates()', () => {
-    it('returns single translate', async () => {
+    assuming(configured).it('returns single translate', async () => {
       const rtd = new RTD(process.env.RTD_TOKEN);
       const result = await rtd.getTranslates({
         id: 235403,
@@ -61,7 +61,7 @@ describe('rtd', function() {
         slug: 'your-read-the-docs-project'
       }]);
     });
-    it('returns multiple translates', async () => {
+    assuming(configured).it('returns multiple translates', async () => {
       const rtd = new RTD(process.env.RTD_TOKEN);
       const result = await rtd.getTranslates({
         id: 79934,
