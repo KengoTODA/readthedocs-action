@@ -8,6 +8,27 @@ interface IProject {
 }
 
 /**
+ * The project data returned by the V3 API
+ * @see https://docs.readthedocs.io/en/stable/api/v3.html#project-details
+ */
+interface IRawProject {
+  id: number;
+  language: {
+    code: string,
+    name: string
+  };
+  slug: string;
+}
+
+function convertProject(raw: IRawProject): IProject {
+  return {
+    id: raw.id,
+    slug: raw.slug,
+    language: raw.language.code
+  };
+}
+
+/**
  * @see https://docs.readthedocs.io/en/stable/api/v3.html#version-detail
  */
 interface IVersion {
@@ -28,14 +49,7 @@ export default class RTD {
         if (status != 200) {
           throw new Error(`Unexpected status code ${status} with body: ${JSON.stringify(json)}`);
         }
-        if (json.count === 0) {
-          throw Error(`:sob: No RTD project found with given slug: ${slug}`);
-        }
-        return {
-          id: json.id,
-          language: json.language.code,
-          slug,
-        };
+        return convertProject(json);
       });
   }
 
@@ -43,22 +57,25 @@ export default class RTD {
     const projectInfo = (typeof project === "string")
         ? await this.getProject(project)
         : project;
-    return fetch(`https://readthedocs.org/api/v2/project/${projectInfo.id}/translations/`, {
+    return fetch(`https://readthedocs.org/api/v3/projects/${escape(projectInfo.slug)}/translations/`, {
       method: 'get',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Token ${this.token}`
       }
     })
-      .then((res) => res.json())
-      .then((json) => {
-        const translations: IProject[] = json.translations;
+      .then((res) => {
+        return Promise.all([res.status, res.json()])
+      })
+      .then(([status, json]) => {
+        if (status !== 200) {
+          throw new Error(`Unexpected status code ${status} with body: ${JSON.stringify(json)}`);
+        }
+        return json['results'] as IRawProject[];
+      })
+      .then((translations) => {
         return translations.reduce((accumulator, currentValue) => {
-          accumulator.push({
-            id: currentValue.id,
-            language: currentValue.language,
-            slug: currentValue.slug,
-          });
+          accumulator.push(convertProject(currentValue));
           return accumulator;
         }, [projectInfo]);
       });
