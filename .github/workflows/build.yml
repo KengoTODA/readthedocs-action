@@ -21,7 +21,7 @@ jobs:
       - name: Build
         run: |
           npm ci
-          npm test
+          npm test -- --forbid-only --forbid-pending
           npm run-script prepack
           npm run semantic-release
         env:
