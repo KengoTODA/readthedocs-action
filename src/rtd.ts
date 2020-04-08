@@ -131,12 +131,7 @@ export default class RTD {
       body: `{"active": ${flag}}`
     })
     .then((res) => {
-      if (res.status != 204) {
-        return Promise.all([res.status, res.json()])
-      } else {
-        // 204 responses empty text, so json() doesn't work
-        return Promise.all([res.status, res.text()])
-      }
+      return Promise.all([res.status, res.json()])
     })
     .then(([status, json]) => {
       if (status != 204) {
