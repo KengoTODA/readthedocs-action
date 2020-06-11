@@ -20,7 +20,7 @@
   "author": "Kengo TODA",
   "license": "Apache-2.0",
   "dependencies": {
-    "@octokit/rest": "^17.0.0",
+    "@octokit/rest": "^18.0.0",
     "dotenv": "^8.0.0",
     "node-fetch": "^2.2.0",
     "probot": "^9.0.0",
