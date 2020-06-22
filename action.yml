@@ -2,4 +2,4 @@ name: 'Read The Docs Helper'
 description: 'Assists reviewing using Read The Docs (RTD)'
 runs:
   using: 'node12'
-  main: 'lib/action.js'
+  main: 'action/index.js'
