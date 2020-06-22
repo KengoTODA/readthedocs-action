@@ -40,6 +40,7 @@
     "@zeit/ncc": "^0.22.3",
     "cross-env": "^7.0.0",
     "cz-conventional-changelog": "^3.0.1",
+    "husky": "^4.2.5",
     "mocha": "^8.0.0",
     "mocha-assume": "^1.0.0",
     "nyc": "^15.0.0",
@@ -81,5 +82,10 @@
     ],
     "all": true
   },
-  "heroku-run-build-script": true
+  "heroku-run-build-script": true,
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run build:action && git add action"
+    }
+  }
 }
