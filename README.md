@@ -47,8 +47,6 @@ To enable rtd-bot SaaS for your GitHub repository, follow the following interact
 
 ### 2. Use as a step in GitHub Action (Not ready yet)
 
-To use in GitHub Action, use the tag with `actions-` prefix. The commit includes files in `lib` and `node_modules` directories.
-
 You need to set two environment variables: `RTD_TOKEN` and `GITHUB_TOKEN`. See the next section for detail.
 
 ```yml
@@ -58,7 +56,7 @@ on:
 steps:
   ...
   - name: Build staging document
-    uses: KengoTODA/rtd-bot@actions-v0.8.4
+    uses: KengoTODA/rtd-bot@v1.0.3
     env:
       RTD_TOKEN: ${{ secrets.RTD_TOKEN }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
