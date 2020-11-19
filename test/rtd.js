@@ -2,7 +2,6 @@ require('dotenv').config()
 
 const assert = require('assert');
 const assuming = require('mocha-assume').assuming;
-const bunyan = require('bunyan');
 const RTD = require('../src/rtd').default;
 
 const timeout = 15 * 1000;

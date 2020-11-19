@@ -33,7 +33,6 @@
     "lib"
   ],
   "devDependencies": {
-    "@types/bunyan": "^1.8.4",
     "@types/express": "^4.16.0",
     "@types/node-fetch": "^2.1.2",
     "@zeit/ncc": "^0.22.3",
