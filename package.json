@@ -23,7 +23,7 @@
     "@octokit/rest": "^18.0.0",
     "dotenv": "^8.0.0",
     "node-fetch": "^2.2.0",
-    "probot": "^10.7.1",
+    "probot": "^11.0.0",
     "probot-actions-adapter": "^2.0.0"
   },
   "engines": {
