@@ -1,3 +1,3 @@
-import { Application } from "probot";
-declare const _default: (app: Application) => void;
+import { ApplicationFunctionOptions, Probot } from "probot";
+declare const _default: (app: Probot, { getRouter }: ApplicationFunctionOptions) => void;
 export = _default;
