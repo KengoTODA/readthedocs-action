@@ -21753,7 +21753,11 @@ dotenv.config();
 var express_1 = __importDefault(__webpack_require__(754));
 var build_body_1 = __importDefault(__webpack_require__(735));
 var rtd_1 = __importDefault(__webpack_require__(272));
-module.exports = function (app) {
+module.exports = function (app, _a) {
+    var getRouter = _a.getRouter;
+    if (!getRouter) {
+        throw new Error("getRouter is required to use the rtd-bot app");
+    }
     app.on("pull_request", function (context) { return __awaiter(void 0, void 0, void 0, function () {
         var log, token, rtd, config, project, head, files, branch, translates, disabled, enabled, body;
         return __generator(this, function (_a) {
@@ -21771,14 +21775,14 @@ module.exports = function (app) {
                 case 1:
                     config = _a.sent();
                     if (config === null) {
-                        context.github.issues.createComment(context.issue({
+                        context.octokit.issues.createComment(context.issue({
                             body: "The rtd-bot is activated, but no .github/config.yml found in this repository.\n"
                                 + "Make sure that you have it in your default branch.",
                         }));
                         return [2 /*return*/];
                     }
                     if (config.rtd.project === "") {
-                        context.github.issues.createComment(context.issue({
+                        context.octokit.issues.createComment(context.issue({
                             body: "The rtd-bot is activated, but .github/config.yml does not have necessary configuration.\n"
                                 + "Make sure that you have it in your default branch.",
                         }));
@@ -21793,7 +21797,7 @@ module.exports = function (app) {
                         log.debug("PR made from another Git repo is not supported.");
                         return [2 /*return*/];
                     }
-                    return [4 /*yield*/, context.github.paginate(context.github.pulls.listFiles, context.pullRequest({}))];
+                    return [4 /*yield*/, context.octokit.paginate(context.octokit.pulls.listFiles, context.pullRequest({}))];
                 case 2:
                     files = _a.sent();
                     if (undefined === files.find(function (file) { return file.filename.startsWith('docs/'); })) {
@@ -21815,7 +21819,7 @@ module.exports = function (app) {
                         })).then(function (allResult) {
                             return allResult.reduce(function (l, r) { return l || r; });
                         }).catch(function (e) {
-                            context.github.issues.createComment(context.issue({
+                            context.octokit.issues.createComment(context.issue({
                                 body: e.message,
                             }));
                             throw e;
@@ -21838,7 +21842,7 @@ module.exports = function (app) {
                     })).then(function (allResult) {
                         return allResult.reduce(function (l, r) { return l || r; });
                     }).catch(function (e) {
-                        context.github.issues.createComment(context.issue({
+                        context.octokit.issues.createComment(context.issue({
                             body: e.message,
                         }));
                         throw e;
@@ -21848,7 +21852,7 @@ module.exports = function (app) {
                     if (enabled) {
                         log.debug("Reporting document URL to GitHub PR page of " + branch + " branch in " + project + ".");
                         body = build_body_1.default(context.payload.pull_request.body, project, branch, translates.map(function (t) { return t.language; }));
-                        context.github.issues.update(context.issue({
+                        context.octokit.issues.update(context.issue({
                             body: body,
                         }));
                     }
@@ -21860,11 +21864,10 @@ module.exports = function (app) {
             }
         });
     }); });
-    var router = app.route("/welcome");
-    router.get("/", function (req, res) {
+    getRouter("/welcome").get("/", function (req, res) {
         res.sendFile(__dirname + "/welcome.html");
     });
-    app.route("/static").use(express_1.default.static("asset"));
+    getRouter("/static").use(express_1.default.static("asset"));
 };
 
 

@@ -2,7 +2,7 @@ import * as dotenv from "dotenv";
 dotenv.config();
 
 import express from "express";
-import { Application, Context } from "probot";
+import { ApplicationFunctionOptions, Probot, Context } from "probot";
 import buildBody from "./build_body";
 import RTD from "./rtd";
 
@@ -14,7 +14,10 @@ interface IRtdConfig {
   project: string;
 }
 
-export = (app: Application) => {
+export = (app: Probot, { getRouter }: ApplicationFunctionOptions) => {
+  if ( !getRouter ) {
+    throw new Error("getRouter is required to use the rtd-bot app");
+  }
   app.on("pull_request", async (context: Context) => {
     const log = context.log.child({
       name: "rtd-bot",
@@ -28,7 +31,7 @@ export = (app: Application) => {
     // enable RTD build on the target branch
     const config: IRootConfig | null = await context.config<IRootConfig>("config.yml") as IRootConfig;
     if (config === null) {
-      context.github.issues.createComment(context.issue({
+      context.octokit.issues.createComment(context.issue({
         body:
           "The rtd-bot is activated, but no .github/config.yml found in this repository.\n"
           + "Make sure that you have it in your default branch.",
@@ -36,7 +39,7 @@ export = (app: Application) => {
       return;
     }
     if (config.rtd.project === "") {
-      context.github.issues.createComment(context.issue({
+      context.octokit.issues.createComment(context.issue({
         body:
           "The rtd-bot is activated, but .github/config.yml does not have necessary configuration.\n"
           + "Make sure that you have it in your default branch.",
@@ -56,7 +59,7 @@ export = (app: Application) => {
 
     // Check if /docs is updated
     // https://octokit.github.io/rest.js/v18#pagination
-    const files = await context.github.paginate(context.github.pulls.listFiles, context.pullRequest({}))
+    const files = await context.octokit.paginate(context.octokit.pulls.listFiles, context.pullRequest({}))
     if (undefined === files.find(file => file.filename.startsWith('docs/'))) {
       log.debug("no need to build RTD document.");
       return;
@@ -77,7 +80,7 @@ export = (app: Application) => {
       })).then((allResult: boolean[]) => {
         return allResult.reduce((l, r) => l || r);
       }).catch((e) => {
-        context.github.issues.createComment(context.issue({
+        context.octokit.issues.createComment(context.issue({
           body: e.message,
         }));
         throw e;
@@ -96,7 +99,7 @@ export = (app: Application) => {
       })).then((allResult: boolean[]) => {
         return allResult.reduce((l, r) => l || r);
       }).catch((e) => {
-        context.github.issues.createComment(context.issue({
+        context.octokit.issues.createComment(context.issue({
           body: e.message,
         }));
         throw e;
@@ -105,7 +108,7 @@ export = (app: Application) => {
       if (enabled) {
         log.debug(`Reporting document URL to GitHub PR page of ${branch} branch in ${project}.`);
         const body = buildBody(context.payload.pull_request.body, project, branch, translates.map((t) => t.language));
-        context.github.issues.update(context.issue({
+        context.octokit.issues.update(context.issue({
           body,
         }));
       } else {
@@ -114,10 +117,9 @@ export = (app: Application) => {
     }
   });
 
-  const router = app.route("/welcome");
-  router.get("/", (req: express.Request, res: express.Response) => {
+  getRouter("/welcome").get("/", (req: express.Request, res: express.Response) => {
     res.sendFile(__dirname + "/welcome.html");
   });
 
-  app.route("/static").use(express.static("asset"));
+  getRouter("/static").use(express.static("asset"));
 };
