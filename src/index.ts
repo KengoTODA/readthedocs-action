@@ -66,7 +66,7 @@ export = (app: Probot, { getRouter }: ApplicationFunctionOptions) => {
     }
 
     const branch = head.ref;
-    log.debug(`Confirmed configuration of %s branch in %s: %s`, branch, project, config);
+    log.debug(`Confirmed configuration of %s branch in %s: %s`, branch, project, JSON.stringify(config));
 
     const translates = await rtd.getTranslates(project);
 

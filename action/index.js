@@ -21805,7 +21805,7 @@ module.exports = function (app, _a) {
                         return [2 /*return*/];
                     }
                     branch = head.ref;
-                    log.debug("Confirmed configuration of %s branch in %s: %s", branch, project, config);
+                    log.debug("Confirmed configuration of %s branch in %s: %s", branch, project, JSON.stringify(config));
                     return [4 /*yield*/, rtd.getTranslates(project)];
                 case 3:
                     translates = _a.sent();
