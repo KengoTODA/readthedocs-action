@@ -787,7 +787,7 @@ function convertProject(raw) {
     return {
         id: raw.id,
         slug: raw.slug,
-        language: raw.language.code
+        language: raw.language.code,
     };
 }
 var RTD = /** @class */ (function () {
@@ -798,11 +798,11 @@ var RTD = /** @class */ (function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 return [2 /*return*/, fetch("https://readthedocs.org/api/v3/projects/" + escape_1.default(slug) + "/", {
-                        method: 'get',
+                        method: "get",
                         headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': "Token " + this.token
-                        }
+                            "Content-Type": "application/json",
+                            Authorization: "Token " + this.token,
+                        },
                     })
                         .then(function (res) { return Promise.all([res.status, res.json()]); })
                         .then(function (_a) {
@@ -832,11 +832,11 @@ var RTD = /** @class */ (function () {
                     case 3:
                         projectInfo = _a;
                         return [2 /*return*/, fetch("https://readthedocs.org/api/v3/projects/" + escape_1.default(projectInfo.slug) + "/translations/", {
-                                method: 'get',
+                                method: "get",
                                 headers: {
-                                    'Content-Type': 'application/json',
-                                    'Authorization': "Token " + this.token
-                                }
+                                    "Content-Type": "application/json",
+                                    Authorization: "Token " + this.token,
+                                },
                             })
                                 .then(function (res) {
                                 return Promise.all([res.status, res.json()]);
@@ -846,7 +846,7 @@ var RTD = /** @class */ (function () {
                                 if (status !== 200) {
                                     throw new Error("Unexpected status code " + status + " with body: " + JSON.stringify(json));
                                 }
-                                return json['results'];
+                                return json["results"];
                             })
                                 .then(function (translations) {
                                 return translations.reduce(function (accumulator, currentValue) {
@@ -865,12 +865,12 @@ var RTD = /** @class */ (function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 return [2 /*return*/, fetch("https://readthedocs.org/api/v3/projects/" + project + "/versions/" + escape_1.default(branch) + "/", {
-                        method: 'get',
+                        method: "get",
                         headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': "Token " + this.token
+                            "Content-Type": "application/json",
+                            Authorization: "Token " + this.token,
                         },
-                        retryOn: [400]
+                        retryOn: [400],
                     })
                         .then(function (res) {
                         return Promise.all([res.status, res.json()]);
@@ -905,12 +905,12 @@ var RTD = /** @class */ (function () {
                         // the returned value could be different with expected one
                         // if we run two procedures at the same time
                         return [2 /*return*/, fetch("https://readthedocs.org/api/v3/projects/" + project + "/versions/" + escape_1.default(branch) + "/", {
-                                method: 'patch',
+                                method: "patch",
                                 headers: {
-                                    'Content-Type': 'application/json',
-                                    'Authorization': "Token " + this.token
+                                    "Content-Type": "application/json",
+                                    Authorization: "Token " + this.token,
                                 },
-                                body: "{\"active\": " + flag + "}"
+                                body: "{\"active\": " + flag + "}",
                             })
                                 .then(function (res) {
                                 if (res.status != 204) {
@@ -1203,9 +1203,9 @@ function run() {
         return __generator(this, function (_e) {
             switch (_e.label) {
                 case 0:
-                    rtdToken = core.getInput('rtd-token', { required: true });
-                    project = core.getInput('rtd-project', { required: true });
-                    githubToken = core.getInput('github-token', { required: true });
+                    rtdToken = core.getInput("rtd-token", { required: true });
+                    project = core.getInput("rtd-project", { required: true });
+                    githubToken = core.getInput("github-token", { required: true });
                     rtd = new rtd_1.default(rtdToken);
                     context = github.context;
                     head = (_a = context.payload.pull_request) === null || _a === void 0 ? void 0 : _a.head;
@@ -1224,7 +1224,7 @@ function run() {
                         })];
                 case 1:
                     files = _e.sent();
-                    if (undefined === files.find(function (file) { return file.filename.startsWith('docs/'); })) {
+                    if (undefined === files.find(function (file) { return file.filename.startsWith("docs/"); })) {
                         core.info("no need to build RTD document.");
                         return [2 /*return*/];
                     }
@@ -1237,11 +1237,15 @@ function run() {
                         core.warning("HEAD branch not found, impossible to specify which RTD build should be disabled.");
                         return [2 /*return*/];
                     }
-                    return [4 /*yield*/, Promise.all(translates.map(function (p) { return p.slug; }).map(function (slug) {
+                    return [4 /*yield*/, Promise.all(translates
+                            .map(function (p) { return p.slug; })
+                            .map(function (slug) {
                             return rtd.disableBuild(slug, branch);
-                        })).then(function (allResult) {
+                        }))
+                            .then(function (allResult) {
                             return allResult.reduce(function (l, r) { return l || r; });
-                        }).catch(function (e) {
+                        })
+                            .catch(function (e) {
                             octokit.issues.createComment({
                                 owner: context.issue.owner,
                                 repo: context.issue.repo,
@@ -1263,11 +1267,15 @@ function run() {
                     if (!(((_c = context.payload.pull_request) === null || _c === void 0 ? void 0 : _c.state) === "closed")) return [3 /*break*/, 5];
                     core.info("The target pull request is already closed, no reaction needed.");
                     return [2 /*return*/];
-                case 5: return [4 /*yield*/, Promise.all(translates.map(function (p) { return p.slug; }).map(function (slug) {
+                case 5: return [4 /*yield*/, Promise.all(translates
+                        .map(function (p) { return p.slug; })
+                        .map(function (slug) {
                         return rtd.enableBuild(slug, branch);
-                    })).then(function (allResult) {
+                    }))
+                        .then(function (allResult) {
                         return allResult.reduce(function (l, r) { return l || r; });
-                    }).catch(function (e) {
+                    })
+                        .catch(function (e) {
                         octokit.issues.createComment({
                             owner: context.issue.owner,
                             repo: context.issue.repo,
@@ -1280,7 +1288,7 @@ function run() {
                     enabled = _e.sent();
                     if (enabled) {
                         core.info("Reporting document URL to GitHub PR page of " + branch + " branch in " + project + ".");
-                        body = build_body_1.default(((_d = context.payload.pull_request) === null || _d === void 0 ? void 0 : _d.body) || '', project, branch, translates.map(function (t) { return t.language; }));
+                        body = build_body_1.default(((_d = context.payload.pull_request) === null || _d === void 0 ? void 0 : _d.body) || "", project, branch, translates.map(function (t) { return t.language; }));
                         octokit.issues.update({
                             owner: context.issue.owner,
                             repo: context.issue.repo,

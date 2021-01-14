@@ -38,10 +38,12 @@
     "cross-env": "^7.0.0",
     "cz-conventional-changelog": "^3.0.1",
     "dotenv": "^8.2.0",
-    "husky": "^4.2.5",
+    "husky": "^4.3.7",
     "mocha": "^8.0.0",
     "mocha-assume": "^1.0.0",
     "nyc": "^15.0.0",
+    "prettier": "^2.2.1",
+    "pretty-quick": "^3.1.0",
     "semantic-release": "^17.0.1",
     "source-map-support": "^0.5.16",
     "ts-node": "^9.0.0",
@@ -83,7 +85,7 @@
   "heroku-run-build-script": true,
   "husky": {
     "hooks": {
-      "pre-commit": "npm run build:action && git add dist"
+      "pre-commit": "pretty-quick --staged && npm run build:action && git add dist"
     }
   }
 }

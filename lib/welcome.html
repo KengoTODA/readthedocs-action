@@ -1,44 +1,98 @@
 <!DOCTYPE html>
 <html lang="en" class="height-full">
   <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>rtd-bot | welcome page</title>
-    <link rel="icon" href="/static/icon.svg">
-    <link rel="stylesheet" href="/probot/static/primer.css">
+    <link rel="icon" href="/static/icon.svg" />
+    <link rel="stylesheet" href="/probot/static/primer.css" />
   </head>
   <body class="height-full bg-gray-light">
-    <div class="d-flex flex-column flex-justify-center flex-items-center text-center height-full">
-      <img src="/static/icon.svg" alt="RTD Helper Avatar" width="100" height="100" class="mb-6">
+    <div
+      class="d-flex flex-column flex-justify-center flex-items-center text-center height-full"
+    >
+      <img
+        src="/static/icon.svg"
+        alt="RTD Helper Avatar"
+        width="100"
+        height="100"
+        class="mb-6"
+      />
       <div class="box-shadow rounded-2 border p-6 bg-white">
-        <h1>
-          Welcome to rtd-bot!
-        </h1>
+        <h1>Welcome to rtd-bot!</h1>
 
-        <p>An unofficial GitHub Probot that helps reveiwing on Read the Docs (RTD)</p>
+        <p>
+          An unofficial GitHub Probot that helps reveiwing on Read the Docs
+          (RTD)
+        </p>
       </div>
 
       <div class="mt-4 markdown-body">
-        <p>Thanks for installation! Before you enjoy our bot, please make sure followings:</p>
+        <p>
+          Thanks for installation! Before you enjoy our bot, please make sure
+          followings:
+        </p>
         <ol class="text-left">
-          <li>Your RTD project has been <a href="https://docs.readthedocs.io/en/latest/getting_started.html#sign-up-and-connect-an-external-account">connected with GitHub repository</a>,
-          or <a href="https://docs.readthedocs.io/en/latest/webhooks.html#github">integrated via GitHub webhook</a>.</li>
-          <li>Invite <code>rtd-bot</code> user to your RTD project as maintainer.</li>
-          <li>Add <code>rtd.project</code> config to <code>.github/config.yml</code> file in your repo. See <a href="https://github.com/KengoTODA/rtd-bot#installation">example</a> for detail.</li>
-          <li>Enable rtd-bot in your repo from <a href="https://github.com/apps/rtd-bot">the rtd-bot page at GitHub</a>.</li>
+          <li>
+            Your RTD project has been
+            <a
+              href="https://docs.readthedocs.io/en/latest/getting_started.html#sign-up-and-connect-an-external-account"
+              >connected with GitHub repository</a
+            >, or
+            <a href="https://docs.readthedocs.io/en/latest/webhooks.html#github"
+              >integrated via GitHub webhook</a
+            >.
+          </li>
+          <li>
+            Invite <code>rtd-bot</code> user to your RTD project as maintainer.
+          </li>
+          <li>
+            Add <code>rtd.project</code> config to
+            <code>.github/config.yml</code> file in your repo. See
+            <a href="https://github.com/KengoTODA/rtd-bot#installation"
+              >example</a
+            >
+            for detail.
+          </li>
+          <li>
+            Enable rtd-bot in your repo from
+            <a href="https://github.com/apps/rtd-bot"
+              >the rtd-bot page at GitHub</a
+            >.
+          </li>
         </ol>
-        <p>If you use <a href="https://docs.readthedocs.io/en/latest/localization.html#project-with-multiple-translations">translations feature</a>,
-        make sure you've configured all your RTD projects including translations.</p>
+        <p>
+          If you use
+          <a
+            href="https://docs.readthedocs.io/en/latest/localization.html#project-with-multiple-translations"
+            >translations feature</a
+          >, make sure you've configured all your RTD projects including
+          translations.
+        </p>
 
-        <p>In <code>.github/config.yml</code> file, set the project slug of the root RTD project.</p>
-        <p>Enjoy hacking with <a href="https://readthedocs.org/">Read the Docs</a>!</p>
+        <p>
+          In <code>.github/config.yml</code> file, set the project slug of the
+          root RTD project.
+        </p>
+        <p>
+          Enjoy hacking with
+          <a href="https://readthedocs.org/">Read the Docs</a>!
+        </p>
       </div>
 
       <div class="mt-4">
         <div class="d-flex flex-justify-center mt-2">
-          <a href="https://github.com/KengoTODA/rtd-bot" class="btn btn-outline mr-2">GitHub Project</a>
-          <a href="https://github.com/apps/rtd-helper" class="btn btn-outline mr-2">Probot Page</a>
+          <a
+            href="https://github.com/KengoTODA/rtd-bot"
+            class="btn btn-outline mr-2"
+            >GitHub Project</a
+          >
+          <a
+            href="https://github.com/apps/rtd-helper"
+            class="btn btn-outline mr-2"
+            >Probot Page</a
+          >
         </div>
       </div>
     </div>
