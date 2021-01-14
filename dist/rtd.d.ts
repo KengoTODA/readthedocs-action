@@ -1,4 +1,4 @@
-interface IProject {
+export interface IProject {
     id: number;
     language: string;
     slug: string;
@@ -19,4 +19,3 @@ export default class RTD {
     enableBuild(project: string, branch: string): Promise<boolean>;
     disableBuild(project: string, branch: string): Promise<boolean>;
 }
-export {};

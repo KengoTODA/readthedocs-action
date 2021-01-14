@@ -3,7 +3,7 @@ import fetchBuilder from "fetch-retry";
 const fetch = fetchBuilder(originalFetch);
 import escape from "./escape";
 
-interface IProject {
+export interface IProject {
   id: number;
   language: string;
   slug: string;

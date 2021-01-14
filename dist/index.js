@@ -1196,12 +1196,96 @@ var core = __importStar(__webpack_require__(470));
 var github = __importStar(__webpack_require__(469));
 var build_body_1 = __importDefault(__webpack_require__(777));
 var rtd_1 = __importDefault(__webpack_require__(272));
-function run() {
-    var _a, _b, _c, _d;
+function deactivateProject(translates, rtd, branch, githubToken, project) {
     return __awaiter(this, void 0, void 0, function () {
-        var rtdToken, project, githubToken, rtd, context, head, octokit, files, branch, translates, disabled, enabled, body;
-        return __generator(this, function (_e) {
-            switch (_e.label) {
+        var context, octokit, disabled;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    context = github.context;
+                    octokit = github.getOctokit(githubToken);
+                    return [4 /*yield*/, Promise.all(translates
+                            .map(function (p) { return p.slug; })
+                            .map(function (slug) {
+                            return rtd.disableBuild(slug, branch);
+                        }))
+                            .then(function (allResult) {
+                            return allResult.reduce(function (l, r) { return l || r; });
+                        })
+                            .catch(function (e) {
+                            octokit.issues.createComment({
+                                owner: context.issue.owner,
+                                repo: context.issue.repo,
+                                issue_number: context.issue.number,
+                                body: e.message,
+                            });
+                            throw e;
+                        })];
+                case 1:
+                    disabled = _a.sent();
+                    if (disabled) {
+                        core.info("Successfully disabled RTD build for " + branch + " branch in " + project + ".");
+                    }
+                    else {
+                        core.info("RTD build for " + branch + " branch in " + project + " is already disabled, so no reaction needed.");
+                    }
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+function activateProject(translates, rtd, branch, githubToken, project) {
+    var _a;
+    return __awaiter(this, void 0, void 0, function () {
+        var context, octokit, enabled, body;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
+                case 0:
+                    context = github.context;
+                    octokit = github.getOctokit(githubToken);
+                    return [4 /*yield*/, Promise.all(translates
+                            .map(function (p) { return p.slug; })
+                            .map(function (slug) {
+                            return rtd.enableBuild(slug, branch);
+                        }))
+                            .then(function (allResult) {
+                            return allResult.reduce(function (l, r) { return l || r; });
+                        })
+                            .catch(function (e) {
+                            octokit.issues.createComment({
+                                owner: context.issue.owner,
+                                repo: context.issue.repo,
+                                issue_number: context.issue.number,
+                                body: e.message,
+                            });
+                            throw e;
+                        })];
+                case 1:
+                    enabled = _b.sent();
+                    if (enabled) {
+                        core.info("Reporting document URL to GitHub PR page of " + branch + " branch in " + project + ".");
+                        body = build_body_1.default(((_a = context.payload.pull_request) === null || _a === void 0 ? void 0 : _a.body) || "", project, branch, translates.map(function (t) { return t.language; }));
+                        octokit.issues.update({
+                            owner: context.issue.owner,
+                            repo: context.issue.repo,
+                            issue_number: context.issue.number,
+                            body: body,
+                        });
+                    }
+                    else {
+                        core.info("RTD build for " + branch + " branch in " + project + " is already activated, so no reaction needed.");
+                    }
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+function run() {
+    var _a, _b, _c;
+    return __awaiter(this, void 0, void 0, function () {
+        var rtdToken, project, githubToken, rtd, context, head, octokit, filenames, branch, translates;
+        return __generator(this, function (_d) {
+            switch (_d.label) {
                 case 0:
                     rtdToken = core.getInput("rtd-token", { required: true });
                     project = core.getInput("rtd-project", { required: true });
@@ -1225,85 +1309,42 @@ function run() {
                             owner: context.issue.owner,
                             repo: context.issue.repo,
                             pull_number: context.issue.number,
+                        }, function (resp, done) {
+                            var filenames = resp.data
+                                .map(function (file) { return file.filename; })
+                                .filter(function (filename) { return filename.startsWith("docs/"); });
+                            if (filenames.length > 0 && done) {
+                                done();
+                            }
+                            return filenames;
                         })];
                 case 1:
-                    files = _e.sent();
-                    if (undefined === files.find(function (file) { return file.filename.startsWith("docs/"); })) {
-                        core.info("No change found in the docs/ dire, skip building the RTD document.");
+                    filenames = _d.sent();
+                    if (filenames.length === 0) {
+                        core.info("No change found in the docs/ dir, skip building the RTD document.");
                         return [2 /*return*/];
                     }
                     branch = head.ref;
                     return [4 /*yield*/, rtd.getTranslates(project)];
                 case 2:
-                    translates = _e.sent();
+                    translates = _d.sent();
                     if (!(context.payload.action === "closed")) return [3 /*break*/, 4];
                     if (!branch) {
                         core.warning("HEAD branch not found, impossible to specify which RTD build should be disabled.");
                         return [2 /*return*/];
                     }
-                    return [4 /*yield*/, Promise.all(translates
-                            .map(function (p) { return p.slug; })
-                            .map(function (slug) {
-                            return rtd.disableBuild(slug, branch);
-                        }))
-                            .then(function (allResult) {
-                            return allResult.reduce(function (l, r) { return l || r; });
-                        })
-                            .catch(function (e) {
-                            octokit.issues.createComment({
-                                owner: context.issue.owner,
-                                repo: context.issue.repo,
-                                issue_number: context.issue.number,
-                                body: e.message,
-                            });
-                            throw e;
-                        })];
+                    return [4 /*yield*/, deactivateProject(translates, rtd, branch, githubToken, project)];
                 case 3:
-                    disabled = _e.sent();
-                    if (disabled) {
-                        core.info("Successfully disabled RTD build for " + branch + " branch in " + project + ".");
-                    }
-                    else {
-                        core.info("RTD build for " + branch + " branch in " + project + " is already disabled, so no reaction needed.");
-                    }
+                    _d.sent();
                     return [3 /*break*/, 7];
                 case 4:
                     if (!(((_c = context.payload.pull_request) === null || _c === void 0 ? void 0 : _c.state) === "closed")) return [3 /*break*/, 5];
                     core.info("The target pull request is already closed, no reaction needed.");
                     return [2 /*return*/];
-                case 5: return [4 /*yield*/, Promise.all(translates
-                        .map(function (p) { return p.slug; })
-                        .map(function (slug) {
-                        return rtd.enableBuild(slug, branch);
-                    }))
-                        .then(function (allResult) {
-                        return allResult.reduce(function (l, r) { return l || r; });
-                    })
-                        .catch(function (e) {
-                        octokit.issues.createComment({
-                            owner: context.issue.owner,
-                            repo: context.issue.repo,
-                            issue_number: context.issue.number,
-                            body: e.message,
-                        });
-                        throw e;
-                    })];
+                case 5: return [4 /*yield*/, activateProject(translates, rtd, branch, githubToken, project)];
                 case 6:
-                    enabled = _e.sent();
-                    if (enabled) {
-                        core.info("Reporting document URL to GitHub PR page of " + branch + " branch in " + project + ".");
-                        body = build_body_1.default(((_d = context.payload.pull_request) === null || _d === void 0 ? void 0 : _d.body) || "", project, branch, translates.map(function (t) { return t.language; }));
-                        octokit.issues.update({
-                            owner: context.issue.owner,
-                            repo: context.issue.repo,
-                            issue_number: context.issue.number,
-                            body: body,
-                        });
-                    }
-                    else {
-                        core.info("RTD build for " + branch + " branch in " + project + " is already activated, so no reaction needed.");
-                    }
-                    _e.label = 7;
+                    _d.sent();
+                    _d.label = 7;
                 case 7: return [2 /*return*/];
             }
         });
