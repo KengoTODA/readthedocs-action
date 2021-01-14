@@ -5,17 +5,10 @@ import express from "express";
 import { ApplicationFunctionOptions, Probot, Context } from "probot";
 import buildBody from "./build_body";
 import RTD from "./rtd";
-
-interface IRootConfig {
-  rtd: IRtdConfig;
-}
-
-interface IRtdConfig {
-  project: string;
-}
+import { IRootConfig, loadProject } from "./config"
 
 export = (app: Probot, { getRouter }: ApplicationFunctionOptions) => {
-  if ( !getRouter ) {
+  if (!getRouter) {
     throw new Error("getRouter is required to use the rtd-bot app");
   }
   app.on("pull_request", async (context: Context) => {
@@ -27,26 +20,17 @@ export = (app: Probot, { getRouter }: ApplicationFunctionOptions) => {
       throw new Error('RTD_TOKEN is not set');
     }
     const rtd = new RTD(token);
+    let project: string
 
-    // enable RTD build on the target branch
-    const config: IRootConfig | null = await context.config<IRootConfig>("config.yml") as IRootConfig;
-    if (config === null) {
+    try {
+      const config: IRootConfig | null = await context.config<IRootConfig>("config.yml") as IRootConfig;
+      project = await loadProject(config)
+    } catch (e) {
       context.octokit.issues.createComment(context.issue({
-        body:
-          "The rtd-bot is activated, but no .github/config.yml found in this repository.\n"
-          + "Make sure that you have it in your default branch.",
+        body: e.message,
       }));
       return;
     }
-    if (config.rtd.project === "") {
-      context.octokit.issues.createComment(context.issue({
-        body:
-          "The rtd-bot is activated, but .github/config.yml does not have necessary configuration.\n"
-          + "Make sure that you have it in your default branch.",
-      }));
-      return;
-    }
-    const project = config.rtd.project;
 
     // Check if head repo is same with base repo
     const head = context.payload.pull_request.head;
@@ -66,8 +50,6 @@ export = (app: Probot, { getRouter }: ApplicationFunctionOptions) => {
     }
 
     const branch = head.ref;
-    log.debug(`Confirmed configuration of %s branch in %s: %s`, branch, project, JSON.stringify(config));
-
     const translates = await rtd.getTranslates(project);
 
     if (context.payload.action === "closed") {

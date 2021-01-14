@@ -667,77 +667,9 @@ module.exports = osName;
 
 /***/ }),
 /* 3 */
-/***/ (function(__unusedmodule, exports, __webpack_require__) {
+/***/ (function(module) {
 
-Object.defineProperty(exports, "__esModule", { value: true });
-var hub_1 = __webpack_require__(698);
-exports.TRACEPARENT_REGEXP = new RegExp('^[ \\t]*' + // whitespace
-    '([0-9a-f]{32})?' + // trace_id
-    '-?([0-9a-f]{16})?' + // span_id
-    '-?([01])?' + // sampled
-    '[ \\t]*$');
-/**
- * Determines if tracing is currently enabled.
- *
- * Tracing is enabled when at least one of `tracesSampleRate` and `tracesSampler` is defined in the SDK config.
- */
-function hasTracingEnabled(options) {
-    return 'tracesSampleRate' in options || 'tracesSampler' in options;
-}
-exports.hasTracingEnabled = hasTracingEnabled;
-/**
- * Extract transaction context data from a `sentry-trace` header.
- *
- * @param traceparent Traceparent string
- *
- * @returns Object containing data from the header, or undefined if traceparent string is malformed
- */
-function extractTraceparentData(traceparent) {
-    var matches = traceparent.match(exports.TRACEPARENT_REGEXP);
-    if (matches) {
-        var parentSampled = void 0;
-        if (matches[3] === '1') {
-            parentSampled = true;
-        }
-        else if (matches[3] === '0') {
-            parentSampled = false;
-        }
-        return {
-            traceId: matches[1],
-            parentSampled: parentSampled,
-            parentSpanId: matches[2],
-        };
-    }
-    return undefined;
-}
-exports.extractTraceparentData = extractTraceparentData;
-/** Grabs active transaction off scope, if any */
-function getActiveTransaction(hub) {
-    if (hub === void 0) { hub = hub_1.getCurrentHub(); }
-    var _a, _b;
-    return (_b = (_a = hub) === null || _a === void 0 ? void 0 : _a.getScope()) === null || _b === void 0 ? void 0 : _b.getTransaction();
-}
-exports.getActiveTransaction = getActiveTransaction;
-/**
- * Converts from milliseconds to seconds
- * @param time time in ms
- */
-function msToSec(time) {
-    return time / 1000;
-}
-exports.msToSec = msToSec;
-/**
- * Converts from seconds to milliseconds
- * @param time time in seconds
- */
-function secToMs(time) {
-    return time * 1000;
-}
-exports.secToMs = secToMs;
-// so it can be used in manual instrumentation without necessitating a hard dependency on @sentry/utils
-var utils_1 = __webpack_require__(657);
-exports.stripUrlQueryAndFragment = utils_1.stripUrlQueryAndFragment;
-//# sourceMappingURL=utils.js.map
+module.exports = require("console");
 
 /***/ }),
 /* 4 */
@@ -4962,7 +4894,7 @@ bufferEq.restore = function() {
 Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = __webpack_require__(422);
 var utils_1 = __webpack_require__(657);
-var utils_2 = __webpack_require__(3);
+var utils_2 = __webpack_require__(950);
 exports.DEFAULT_TRACING_ORIGINS = ['localhost', /^\//];
 exports.defaultRequestInstrumentionOptions = {
     traceFetch: true,
@@ -5382,9 +5314,28 @@ formatters.O = function (v) {
 
 /***/ }),
 /* 82 */
-/***/ (function(module) {
+/***/ (function(__unusedmodule, exports) {
 
-module.exports = require("console");
+"use strict";
+
+// We use any as a valid input type
+/* eslint-disable @typescript-eslint/no-explicit-any */
+Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * Sanitizes an input into a string so it can be passed into issueCommand safely
+ * @param input input to sanitize into a string
+ */
+function toCommandValue(input) {
+    if (input === null || input === undefined) {
+        return '';
+    }
+    else if (typeof input === 'string' || input instanceof String) {
+        return input;
+    }
+    return JSON.stringify(input);
+}
+exports.toCommandValue = toCommandValue;
+//# sourceMappingURL=utils.js.map
 
 /***/ }),
 /* 83 */,
@@ -6663,7 +6614,41 @@ module.exports = new Type('tag:yaml.org,2002:set', {
 
 /***/ }),
 /* 101 */,
-/* 102 */,
+/* 102 */
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
+
+"use strict";
+
+// For internal use, subject to change.
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+// We use any as a valid input type
+/* eslint-disable @typescript-eslint/no-explicit-any */
+const fs = __importStar(__webpack_require__(747));
+const os = __importStar(__webpack_require__(87));
+const utils_1 = __webpack_require__(82);
+function issueCommand(command, message) {
+    const filePath = process.env[`GITHUB_${command}`];
+    if (!filePath) {
+        throw new Error(`Unable to find environment variable for file command ${command}`);
+    }
+    if (!fs.existsSync(filePath)) {
+        throw new Error(`Missing file at path: ${filePath}`);
+    }
+    fs.appendFileSync(filePath, `${utils_1.toCommandValue(message)}${os.EOL}`, {
+        encoding: 'utf8'
+    });
+}
+exports.issueCommand = issueCommand;
+//# sourceMappingURL=file-command.js.map
+
+/***/ }),
 /* 103 */
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
@@ -21753,13 +21738,14 @@ dotenv.config();
 var express_1 = __importDefault(__webpack_require__(754));
 var build_body_1 = __importDefault(__webpack_require__(735));
 var rtd_1 = __importDefault(__webpack_require__(272));
+var config_1 = __webpack_require__(731);
 module.exports = function (app, _a) {
     var getRouter = _a.getRouter;
     if (!getRouter) {
         throw new Error("getRouter is required to use the rtd-bot app");
     }
     app.on("pull_request", function (context) { return __awaiter(void 0, void 0, void 0, function () {
-        var log, token, rtd, config, project, head, files, branch, translates, disabled, enabled, body;
+        var log, token, rtd, project, config, e_1, head, files, branch, translates, disabled, enabled, body;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -21771,24 +21757,23 @@ module.exports = function (app, _a) {
                         throw new Error('RTD_TOKEN is not set');
                     }
                     rtd = new rtd_1.default(token);
-                    return [4 /*yield*/, context.config("config.yml")];
+                    _a.label = 1;
                 case 1:
+                    _a.trys.push([1, 4, , 5]);
+                    return [4 /*yield*/, context.config("config.yml")];
+                case 2:
                     config = _a.sent();
-                    if (config === null) {
-                        context.octokit.issues.createComment(context.issue({
-                            body: "The rtd-bot is activated, but no .github/config.yml found in this repository.\n"
-                                + "Make sure that you have it in your default branch.",
-                        }));
-                        return [2 /*return*/];
-                    }
-                    if (config.rtd.project === "") {
-                        context.octokit.issues.createComment(context.issue({
-                            body: "The rtd-bot is activated, but .github/config.yml does not have necessary configuration.\n"
-                                + "Make sure that you have it in your default branch.",
-                        }));
-                        return [2 /*return*/];
-                    }
-                    project = config.rtd.project;
+                    return [4 /*yield*/, config_1.loadProject(config)];
+                case 3:
+                    project = _a.sent();
+                    return [3 /*break*/, 5];
+                case 4:
+                    e_1 = _a.sent();
+                    context.octokit.issues.createComment(context.issue({
+                        body: e_1.message,
+                    }));
+                    return [2 /*return*/];
+                case 5:
                     head = context.payload.pull_request.head;
                     if (head.repo === null) {
                         log.debug("HEAD branch not found.");
@@ -21798,18 +21783,17 @@ module.exports = function (app, _a) {
                         return [2 /*return*/];
                     }
                     return [4 /*yield*/, context.octokit.paginate(context.octokit.pulls.listFiles, context.pullRequest({}))];
-                case 2:
+                case 6:
                     files = _a.sent();
                     if (undefined === files.find(function (file) { return file.filename.startsWith('docs/'); })) {
                         log.debug("no need to build RTD document.");
                         return [2 /*return*/];
                     }
                     branch = head.ref;
-                    log.debug("Confirmed configuration of %s branch in %s: %s", branch, project, JSON.stringify(config));
                     return [4 /*yield*/, rtd.getTranslates(project)];
-                case 3:
+                case 7:
                     translates = _a.sent();
-                    if (!(context.payload.action === "closed")) return [3 /*break*/, 5];
+                    if (!(context.payload.action === "closed")) return [3 /*break*/, 9];
                     if (!branch) {
                         log.debug("HEAD branch not found, impossible to specify which RTD build should be disabled.");
                         return [2 /*return*/];
@@ -21824,7 +21808,7 @@ module.exports = function (app, _a) {
                             }));
                             throw e;
                         })];
-                case 4:
+                case 8:
                     disabled = _a.sent();
                     if (disabled) {
                         log.debug("Disabled RTD build for " + branch + " branch in " + project + ".");
@@ -21832,12 +21816,12 @@ module.exports = function (app, _a) {
                     else {
                         log.debug("RTD build for " + branch + " branch in " + project + " is already disabled.");
                     }
-                    return [3 /*break*/, 8];
-                case 5:
-                    if (!(context.payload.pull_request.state === "closed")) return [3 /*break*/, 6];
+                    return [3 /*break*/, 12];
+                case 9:
+                    if (!(context.payload.pull_request.state === "closed")) return [3 /*break*/, 10];
                     log.debug("The target pull request is already closed, no reaction needed.");
                     return [2 /*return*/];
-                case 6: return [4 /*yield*/, Promise.all(translates.map(function (p) { return p.slug; }).map(function (slug) {
+                case 10: return [4 /*yield*/, Promise.all(translates.map(function (p) { return p.slug; }).map(function (slug) {
                         return rtd.enableBuild(slug, branch);
                     })).then(function (allResult) {
                         return allResult.reduce(function (l, r) { return l || r; });
@@ -21847,7 +21831,7 @@ module.exports = function (app, _a) {
                         }));
                         throw e;
                     })];
-                case 7:
+                case 11:
                     enabled = _a.sent();
                     if (enabled) {
                         log.debug("Reporting document URL to GitHub PR page of " + branch + " branch in " + project + ".");
@@ -21859,8 +21843,8 @@ module.exports = function (app, _a) {
                     else {
                         log.debug("RTD build for " + branch + " branch in " + project + " is already activated.");
                     }
-                    _a.label = 8;
-                case 8: return [2 /*return*/];
+                    _a.label = 12;
+                case 12: return [2 /*return*/];
             }
         });
     }); });
@@ -31945,6 +31929,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const os = __importStar(__webpack_require__(87));
+const utils_1 = __webpack_require__(82);
 /**
  * Commands
  *
@@ -31998,28 +31983,14 @@ class Command {
         return cmdStr;
     }
 }
-/**
- * Sanitizes an input into a string so it can be passed into issueCommand safely
- * @param input input to sanitize into a string
- */
-function toCommandValue(input) {
-    if (input === null || input === undefined) {
-        return '';
-    }
-    else if (typeof input === 'string' || input instanceof String) {
-        return input;
-    }
-    return JSON.stringify(input);
-}
-exports.toCommandValue = toCommandValue;
 function escapeData(s) {
-    return toCommandValue(s)
+    return utils_1.toCommandValue(s)
         .replace(/%/g, '%25')
         .replace(/\r/g, '%0D')
         .replace(/\n/g, '%0A');
 }
 function escapeProperty(s) {
-    return toCommandValue(s)
+    return utils_1.toCommandValue(s)
         .replace(/%/g, '%25')
         .replace(/\r/g, '%0D')
         .replace(/\n/g, '%0A')
@@ -37781,6 +37752,8 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const command_1 = __webpack_require__(431);
+const file_command_1 = __webpack_require__(102);
+const utils_1 = __webpack_require__(82);
 const os = __importStar(__webpack_require__(87));
 const path = __importStar(__webpack_require__(622));
 /**
@@ -37807,9 +37780,17 @@ var ExitCode;
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function exportVariable(name, val) {
-    const convertedVal = command_1.toCommandValue(val);
+    const convertedVal = utils_1.toCommandValue(val);
     process.env[name] = convertedVal;
-    command_1.issueCommand('set-env', { name }, convertedVal);
+    const filePath = process.env['GITHUB_ENV'] || '';
+    if (filePath) {
+        const delimiter = '_GitHubActionsFileCommandDelimeter_';
+        const commandValue = `${name}<<${delimiter}${os.EOL}${convertedVal}${os.EOL}${delimiter}`;
+        file_command_1.issueCommand('ENV', commandValue);
+    }
+    else {
+        command_1.issueCommand('set-env', { name }, convertedVal);
+    }
 }
 exports.exportVariable = exportVariable;
 /**
@@ -37825,7 +37806,13 @@ exports.setSecret = setSecret;
  * @param inputPath
  */
 function addPath(inputPath) {
-    command_1.issueCommand('add-path', {}, inputPath);
+    const filePath = process.env['GITHUB_PATH'] || '';
+    if (filePath) {
+        file_command_1.issueCommand('PATH', inputPath);
+    }
+    else {
+        command_1.issueCommand('add-path', {}, inputPath);
+    }
     process.env['PATH'] = `${inputPath}${path.delimiter}${process.env['PATH']}`;
 }
 exports.addPath = addPath;
@@ -43906,7 +43893,7 @@ var spanstatus_1 = __webpack_require__(500);
 exports.SpanStatus = spanstatus_1.SpanStatus;
 // We are patching the global object with our hub extension methods
 hubextensions_1.addExtensionMethods();
-var utils_1 = __webpack_require__(3);
+var utils_1 = __webpack_require__(950);
 exports.extractTraceparentData = utils_1.extractTraceparentData;
 exports.getActiveTransaction = utils_1.getActiveTransaction;
 exports.hasTracingEnabled = utils_1.hasTracingEnabled;
@@ -48560,7 +48547,42 @@ LRUMap.prototype.toString = function() {
 module.exports = require("http");
 
 /***/ }),
-/* 606 */,
+/* 606 */
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var utils_1 = __webpack_require__(657);
+var spanstatus_1 = __webpack_require__(500);
+var utils_2 = __webpack_require__(950);
+var global = utils_1.getGlobalObject();
+/**
+ * Add a listener that cancels and finishes a transaction when the global
+ * document is hidden.
+ */
+function registerBackgroundTabDetection() {
+    if (global && global.document) {
+        global.document.addEventListener('visibilitychange', function () {
+            var activeTransaction = utils_2.getActiveTransaction();
+            if (global.document.hidden && activeTransaction) {
+                utils_1.logger.log("[Tracing] Transaction: " + spanstatus_1.SpanStatus.Cancelled + " -> since tab moved to the background, op: " + activeTransaction.op);
+                // We should not set status if it is already set, this prevent important statuses like
+                // error or data loss from being overwritten on transaction.
+                if (!activeTransaction.status) {
+                    activeTransaction.setStatus(spanstatus_1.SpanStatus.Cancelled);
+                }
+                activeTransaction.setTag('visibilitychange', 'document.hidden');
+                activeTransaction.finish();
+            }
+        });
+    }
+    else {
+        utils_1.logger.warn('[Tracing] Could not set up background tab detection due to lack of global document');
+    }
+}
+exports.registerBackgroundTabDetection = registerBackgroundTabDetection;
+//# sourceMappingURL=backgroundtab.js.map
+
+/***/ }),
 /* 607 */,
 /* 608 */
 /***/ (function(module, __unusedexports, __webpack_require__) {
@@ -49895,7 +49917,7 @@ module.exports = require("path");
 Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = __webpack_require__(422);
 var utils_1 = __webpack_require__(657);
-var utils_2 = __webpack_require__(3);
+var utils_2 = __webpack_require__(950);
 var global = utils_1.getGlobalObject();
 /** Class tracking metrics  */
 var MetricsInstrumentation = /** @class */ (function () {
@@ -55048,8 +55070,8 @@ var utils_1 = __webpack_require__(657);
 var hubextensions_1 = __webpack_require__(891);
 var idletransaction_1 = __webpack_require__(426);
 var spanstatus_1 = __webpack_require__(500);
-var utils_2 = __webpack_require__(3);
-var backgroundtab_1 = __webpack_require__(950);
+var utils_2 = __webpack_require__(950);
+var backgroundtab_1 = __webpack_require__(606);
 var metrics_1 = __webpack_require__(625);
 var request_1 = __webpack_require__(80);
 var router_1 = __webpack_require__(988);
@@ -58478,7 +58500,72 @@ exports.createServer = (options) => {
 /***/ }),
 /* 729 */,
 /* 730 */,
-/* 731 */,
+/* 731 */
+/***/ (function(__unusedmodule, exports) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.loadProject = void 0;
+function loadProject(config) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            if (config === null) {
+                throw new Error("The rtd-bot is activated, but no .github/config.yml found in this repository.\n"
+                    + "Make sure that you have it in your default branch.");
+            }
+            if (config.rtd === undefined) {
+                throw new Error("The rtd-bot is activated, but .github/config.yml does not have necessary configuration.\n"
+                    + "Make sure that the config file contains `rtd` config.");
+            }
+            if (config.rtd.project === undefined || config.rtd.project === "") {
+                throw new Error("The rtd-bot is activated, but .github/config.yml does not have necessary configuration.\n"
+                    + "Make sure that the config file contains `rtd.project` config.");
+            }
+            return [2 /*return*/, config.rtd.project];
+        });
+    });
+}
+exports.loadProject = loadProject;
+
+
+/***/ }),
 /* 732 */,
 /* 733 */
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
@@ -68324,7 +68411,7 @@ var Console = /** @class */ (function () {
      */
     Console.prototype.setupOnce = function () {
         var e_1, _a;
-        var consoleModule = __webpack_require__(82);
+        var consoleModule = __webpack_require__(3);
         try {
             for (var _b = tslib_1.__values(['debug', 'info', 'warn', 'error', 'log']), _c = _b.next(); !_c.done; _c = _b.next()) {
                 var level = _c.value;
@@ -74113,7 +74200,7 @@ var utils_1 = __webpack_require__(657);
 var errors_1 = __webpack_require__(976);
 var idletransaction_1 = __webpack_require__(426);
 var transaction_1 = __webpack_require__(921);
-var utils_2 = __webpack_require__(3);
+var utils_2 = __webpack_require__(950);
 /** Returns all trace headers that are currently on the top scope. */
 function traceHeaders() {
     var scope = this.getScope();
@@ -78051,36 +78138,74 @@ function restoreTmpl (resetters, paths, hasWildcards) {
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var utils_1 = __webpack_require__(657);
-var spanstatus_1 = __webpack_require__(500);
-var utils_2 = __webpack_require__(3);
-var global = utils_1.getGlobalObject();
+var hub_1 = __webpack_require__(698);
+exports.TRACEPARENT_REGEXP = new RegExp('^[ \\t]*' + // whitespace
+    '([0-9a-f]{32})?' + // trace_id
+    '-?([0-9a-f]{16})?' + // span_id
+    '-?([01])?' + // sampled
+    '[ \\t]*$');
 /**
- * Add a listener that cancels and finishes a transaction when the global
- * document is hidden.
+ * Determines if tracing is currently enabled.
+ *
+ * Tracing is enabled when at least one of `tracesSampleRate` and `tracesSampler` is defined in the SDK config.
  */
-function registerBackgroundTabDetection() {
-    if (global && global.document) {
-        global.document.addEventListener('visibilitychange', function () {
-            var activeTransaction = utils_2.getActiveTransaction();
-            if (global.document.hidden && activeTransaction) {
-                utils_1.logger.log("[Tracing] Transaction: " + spanstatus_1.SpanStatus.Cancelled + " -> since tab moved to the background, op: " + activeTransaction.op);
-                // We should not set status if it is already set, this prevent important statuses like
-                // error or data loss from being overwritten on transaction.
-                if (!activeTransaction.status) {
-                    activeTransaction.setStatus(spanstatus_1.SpanStatus.Cancelled);
-                }
-                activeTransaction.setTag('visibilitychange', 'document.hidden');
-                activeTransaction.finish();
-            }
-        });
-    }
-    else {
-        utils_1.logger.warn('[Tracing] Could not set up background tab detection due to lack of global document');
-    }
+function hasTracingEnabled(options) {
+    return 'tracesSampleRate' in options || 'tracesSampler' in options;
 }
-exports.registerBackgroundTabDetection = registerBackgroundTabDetection;
-//# sourceMappingURL=backgroundtab.js.map
+exports.hasTracingEnabled = hasTracingEnabled;
+/**
+ * Extract transaction context data from a `sentry-trace` header.
+ *
+ * @param traceparent Traceparent string
+ *
+ * @returns Object containing data from the header, or undefined if traceparent string is malformed
+ */
+function extractTraceparentData(traceparent) {
+    var matches = traceparent.match(exports.TRACEPARENT_REGEXP);
+    if (matches) {
+        var parentSampled = void 0;
+        if (matches[3] === '1') {
+            parentSampled = true;
+        }
+        else if (matches[3] === '0') {
+            parentSampled = false;
+        }
+        return {
+            traceId: matches[1],
+            parentSampled: parentSampled,
+            parentSpanId: matches[2],
+        };
+    }
+    return undefined;
+}
+exports.extractTraceparentData = extractTraceparentData;
+/** Grabs active transaction off scope, if any */
+function getActiveTransaction(hub) {
+    if (hub === void 0) { hub = hub_1.getCurrentHub(); }
+    var _a, _b;
+    return (_b = (_a = hub) === null || _a === void 0 ? void 0 : _a.getScope()) === null || _b === void 0 ? void 0 : _b.getTransaction();
+}
+exports.getActiveTransaction = getActiveTransaction;
+/**
+ * Converts from milliseconds to seconds
+ * @param time time in ms
+ */
+function msToSec(time) {
+    return time / 1000;
+}
+exports.msToSec = msToSec;
+/**
+ * Converts from seconds to milliseconds
+ * @param time time in seconds
+ */
+function secToMs(time) {
+    return time * 1000;
+}
+exports.secToMs = secToMs;
+// so it can be used in manual instrumentation without necessitating a hard dependency on @sentry/utils
+var utils_1 = __webpack_require__(657);
+exports.stripUrlQueryAndFragment = utils_1.stripUrlQueryAndFragment;
+//# sourceMappingURL=utils.js.map
 
 /***/ }),
 /* 951 */,
@@ -80999,7 +81124,7 @@ module.exports = function toString(obj) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var utils_1 = __webpack_require__(657);
 var spanstatus_1 = __webpack_require__(500);
-var utils_2 = __webpack_require__(3);
+var utils_2 = __webpack_require__(950);
 /**
  * Configures global error listeners
  */
