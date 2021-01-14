@@ -1,16 +1,16 @@
 {
   "name": "rtd-bot",
   "version": "0.0.0-development",
-  "description": "An unofficial GitHub Probot that helps reveiwing on Read the Docs",
+  "description": "An unofficial GitHub Action that helps reveiwing on Read the Docs",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
-    "build:action": "ncc build src/action.ts --out action",
-    "start": "probot run ./lib/index.js",
+    "build:action": "ncc build src/index.ts --source-map",
     "semantic-release": "semantic-release",
     "test": "cross-env TS_NODE_FILES=true nyc mocha",
     "postinstall": "npm run-script prepack",
-    "prepack": "tsc"
+    "prepack": "tsc",
+    "all": "npm run build:action && npm test"
   },
   "keywords": [
     "probot",
@@ -20,12 +20,10 @@
   "author": "Kengo TODA",
   "license": "Apache-2.0",
   "dependencies": {
-    "@octokit/rest": "^18.0.0",
-    "dotenv": "^8.0.0",
+    "@actions/core": "^1.2.6",
+    "@actions/github": "^4.0.0",
     "fetch-retry": "^4.0.1",
-    "isomorphic-fetch": "^3.0.0",
-    "probot": "^11.0.1",
-    "probot-actions-adapter": "^2.0.0"
+    "isomorphic-fetch": "^3.0.0"
   },
   "engines": {
     "node": "^12.12"
@@ -34,12 +32,12 @@
     "lib"
   ],
   "devDependencies": {
-    "@types/express": "^4.16.0",
     "@types/isomorphic-fetch": "0.0.35",
     "@types/node-fetch": "^2.1.2",
     "@zeit/ncc": "^0.22.3",
     "cross-env": "^7.0.0",
     "cz-conventional-changelog": "^3.0.1",
+    "dotenv": "^8.2.0",
     "husky": "^4.2.5",
     "mocha": "^8.0.0",
     "mocha-assume": "^1.0.0",
@@ -85,7 +83,7 @@
   "heroku-run-build-script": true,
   "husky": {
     "hooks": {
-      "pre-commit": "npm run build:action && git add action"
+      "pre-commit": "npm run build:action && git add dist"
     }
   }
 }

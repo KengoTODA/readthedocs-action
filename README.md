@@ -9,66 +9,43 @@ Work with Read the Docs, then you'll find that PR for documentation needs additi
 * running RTD build for your branch manually, to use its result as staging site [like this](https://github.com/spotbugs/spotbugs/pull/697#issue-201455071), or
 * sharing screenshot to share the updated document [like this](https://github.com/spotbugs/spotbugs/pull/718#issue-205904835).
 
-This bot automates the first approach; activate RTD build automatically when you made PR that updates `docs/` directory.
+This GitHub Action automates the first approach; activate RTD build automatically when you made PR that updates `docs/` directory.
 
 ![screenshot](screenshot.png)
 
 ## How to use
 
-You have three ways to use this service:
-
-1. Use as a SaaS
-2. Use as a step in GitHub Action
-3. Host own service
+From v2, this system works as a GitHub Action only. v1 worked as a service (GitHub Probot) too.
 
 ### Initial setup
 
-No matter which way you choose, follow the following interactions:
-
 0. Make sure that your RTD project has been [connected with GitHub repository](https://docs.readthedocs.io/en/latest/getting_started.html#sign-up-and-connect-an-external-account), or [integrated via GitHub webhook](https://docs.readthedocs.io/en/latest/webhooks.html#github).
-1. Add `rtd.project` config to the `.github/config.yml` file in your repo.
-
-Here is a sample `.github/config.yml`:
+1. Add a step to your GitHub Actions workflow. Here is a sample `.github/workflows/build.yml`:
 
 ```yml
-rtd:
-  project: your-read-the-docs-project
-```
-
-### 1. Use as a SaaS
-
-In Read the Docs, __inviting maintainer means you give admin access__ to target account.
-So if you do not want to invite `rtd-bot` as maintainer, use other way instead of this way.
-
-To enable rtd-bot SaaS for your GitHub repository, follow the following interactions:
-
-1. Invite `rtd-bot` user to your RTD project as maintainer.
-2. Enable rtd-bot in your repo from [the rtd-bot page at GitHub](https://github.com/apps/rtd-helper).
-
-### 2. Use as a step in GitHub Action (Not ready yet)
-
-You need to set two environment variables: `RTD_TOKEN` and `GITHUB_TOKEN`. See the next section for detail.
-
-```yml
+name: Documentation
 on:
-  [pull_request]
-...
-steps:
-  ...
-  - name: Build staging document
-    uses: KengoTODA/rtd-bot@v1.0.3
-    env:
-      RTD_TOKEN: ${{ secrets.RTD_TOKEN }}
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  pull_request:
+    paths:
+      - 'docs/**'
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - closed
+jobs:
+  staging:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to the staging site
+        uses: KengoTODA/rtd-bot@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          rtd-token: ${{ secrets.RTD_TOKEN }}
+          rtd-project: your-read-the-docs-project
 ```
 
-### 3. Host own service
-
-To host this bot by own, you need to set following environment variables:
-
-1. `RTD_TOKEN`, the token issued by [Read the Docs](https://readthedocs.org/). See [official doc](https://docs.readthedocs.io/en/stable/api/v3.html#token) for detail.
-2. `WEBHOOK_SECRET` and `APP_ID` that is described at [Probot document](https://probot.github.io/docs/deployment/#deploy-the-app).
-3. One of `PRIVATE_KEY_PATH` or `PRIVATE_KEY` that is described at [Probot document](https://probot.github.io/docs/deployment/#deploy-the-app).
+Here `secrets.RTD_TOKEN` is the token issued by [Read the Docs](https://readthedocs.org/). See [official doc](https://docs.readthedocs.io/en/stable/api/v3.html#token) for detail.
 
 ## Advanced Configuration
 
@@ -76,11 +53,15 @@ To host this bot by own, you need to set following environment variables:
 
 If you use [translations feature](https://docs.readthedocs.io/en/latest/localization.html#project-with-multiple-translations), make sure you've configured all your RTD projects including translations.
 
-In `.github/config.yml` file, set the project slug of the root RTD project.
+Set the project slug of the root RTD project to `project` config.
+
+## Migrating from v1 to v2
+
+`.github/config.yml` is no longer needed. Move the `rtd.project` config to `project` config of the step.
 
 ## License
 
-Copyright &copy; 2018-2020 Kengo TODA
+Copyright &copy; 2018-2021 Kengo TODA
 
 ```
 Licensed under the Apache License, Version 2.0 (the "License");
