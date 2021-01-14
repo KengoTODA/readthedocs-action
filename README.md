@@ -1,4 +1,4 @@
-# Get URL of staging document, when you review changes.
+# Get the staging document in PR
 
 ![](https://github.com/KengoTODA/rtd-bot/workflows/.github/workflows/build.yml/badge.svg)
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
