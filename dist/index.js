@@ -1208,6 +1208,10 @@ function run() {
                     githubToken = core.getInput("github-token", { required: true });
                     rtd = new rtd_1.default(rtdToken);
                     context = github.context;
+                    if (context.eventName !== "pull_request") {
+                        core.warning("This Action does not support the given event " + context.eventName + ".");
+                        return [2 /*return*/];
+                    }
                     head = (_a = context.payload.pull_request) === null || _a === void 0 ? void 0 : _a.head;
                     if (head.repo === null) {
                         core.info("HEAD branch not found.");
@@ -1225,7 +1229,7 @@ function run() {
                 case 1:
                     files = _e.sent();
                     if (undefined === files.find(function (file) { return file.filename.startsWith("docs/"); })) {
-                        core.info("no need to build RTD document.");
+                        core.info("No change found in the docs/ dire, skip building the RTD document.");
                         return [2 /*return*/];
                     }
                     branch = head.ref;

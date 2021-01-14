@@ -15,7 +15,7 @@ This GitHub Action automates the first approach; activate RTD build automaticall
 
 ## How to use
 
-From v2, this system works as a GitHub Action only. v1 worked as a service (GitHub Probot) too.
+From v2, this system only works as a GitHub Action. v1 worked as a service (GitHub Probot) too.
 
 ### Initial setup
 

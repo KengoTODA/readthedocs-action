@@ -11,6 +11,12 @@ async function run(): Promise<void> {
 
   // Check if head repo is same with base repo
   const context = github.context;
+  if (context.eventName !== "pull_request") {
+    core.warning(
+      `This Action does not support the given event ${context.eventName}.`
+    );
+    return;
+  }
   const head = context.payload.pull_request?.head;
   if (head.repo === null) {
     core.info("HEAD branch not found.");
@@ -30,7 +36,9 @@ async function run(): Promise<void> {
     pull_number: context.issue.number,
   });
   if (undefined === files.find((file) => file.filename.startsWith("docs/"))) {
-    core.info("no need to build RTD document.");
+    core.info(
+      "No change found in the docs/ dire, skip building the RTD document."
+    );
     return;
   }
 
