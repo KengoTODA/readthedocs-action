@@ -1,5 +1,16 @@
 name: "Read The Docs Helper"
 description: "Assists reviewing using Read The Docs (RTD)"
+author: "Kengo TODA <skypencil@gmail.com>"
+inputs:
+  github-token:
+    required: true
+    description: The access token to call GitHub API
+  rtd-token:
+    required: true
+    description: The token to call Read the Docs API
+  rtd-project:
+    required: true
+    description: The slug of target Read the Docs project
 runs:
   using: "node12"
   main: "dist/index.js"
