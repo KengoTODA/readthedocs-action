@@ -1,4 +1,6 @@
-import fetch from "node-fetch";
+import originalFetch from "isomorphic-fetch";
+import fetchBuilder from 'fetch-retry'
+const fetch = fetchBuilder(originalFetch)
 import escape from "./escape";
 
 interface IProject {
@@ -96,7 +98,8 @@ export default class RTD {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Token ${this.token}`
-      }
+      },
+      retryOn: [400]
     })
       .then((res) => {
         return Promise.all([res.status, res.json()])

@@ -13207,7 +13207,29 @@ exports.default = asCallback;
 
 
 /***/ }),
-/* 208 */,
+/* 208 */
+/***/ (function(module, __unusedexports, __webpack_require__) {
+
+"use strict";
+
+
+var realFetch = __webpack_require__(724);
+module.exports = function(url, options) {
+	if (/^\/\//.test(url)) {
+		url = 'https:' + url;
+	}
+	return realFetch.call(this, url, options);
+};
+
+if (!global.fetch) {
+	global.fetch = module.exports;
+	global.Response = realFetch.Response;
+	global.Headers = realFetch.Headers;
+	global.Request = realFetch.Request;
+}
+
+
+/***/ }),
 /* 209 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -16696,7 +16718,131 @@ class MixedBuffers {
 
 
 /***/ }),
-/* 259 */,
+/* 259 */
+/***/ (function(module) {
+
+"use strict";
+
+
+module.exports = function (fetch, defaults) {
+  defaults = defaults || {};
+  if (typeof fetch !== 'function') {
+    throw new ArgumentError('fetch must be a function');
+  }
+
+  if (typeof defaults !== 'object') {
+    throw new ArgumentError('defaults must be an object');
+  }
+
+  if (defaults.retries !== undefined && !isPositiveInteger(defaults.retries)) {
+    throw new ArgumentError('retries must be a positive integer');
+  }
+
+  if (defaults.retryDelay !== undefined && !isPositiveInteger(defaults.retryDelay) && typeof defaults.retryDelay !== 'function') {
+    throw new ArgumentError('retryDelay must be a positive integer or a function returning a positive integer');
+  }
+
+  if (defaults.retryOn !== undefined && !Array.isArray(defaults.retryOn) && typeof defaults.retryOn !== 'function') {
+    throw new ArgumentError('retryOn property expects an array or function');
+  }
+
+  var baseDefaults = {
+    retries: 3,
+    retryDelay: 1000,
+    retryOn: [],
+  };
+
+  defaults = Object.assign(baseDefaults, defaults);
+
+  return function fetchRetry(input, init) {
+    var retries = defaults.retries;
+    var retryDelay = defaults.retryDelay;
+    var retryOn = defaults.retryOn;
+
+    if (init && init.retries !== undefined) {
+      if (isPositiveInteger(init.retries)) {
+        retries = init.retries;
+      } else {
+        throw new ArgumentError('retries must be a positive integer');
+      }
+    }
+
+    if (init && init.retryDelay !== undefined) {
+      if (isPositiveInteger(init.retryDelay) || (typeof init.retryDelay === 'function')) {
+        retryDelay = init.retryDelay;
+      } else {
+        throw new ArgumentError('retryDelay must be a positive integer or a function returning a positive integer');
+      }
+    }
+
+    if (init && init.retryOn) {
+      if (Array.isArray(init.retryOn) || (typeof init.retryOn === 'function')) {
+        retryOn = init.retryOn;
+      } else {
+        throw new ArgumentError('retryOn property expects an array or function');
+      }
+    }
+
+    // eslint-disable-next-line no-undef
+    return new Promise(function (resolve, reject) {
+      var wrappedFetch = function (attempt) {
+        fetch(input, init)
+          .then(function (response) {
+            if (Array.isArray(retryOn) && retryOn.indexOf(response.status) === -1) {
+              resolve(response);
+            } else if (typeof retryOn === 'function') {
+              if (retryOn(attempt, null, response)) {
+                retry(attempt, null, response);
+              } else {
+                resolve(response);
+              }
+            } else {
+              if (attempt < retries) {
+                retry(attempt, null, response);
+              } else {
+                resolve(response);
+              }
+            }
+          })
+          .catch(function (error) {
+            if (typeof retryOn === 'function') {
+              if (retryOn(attempt, error, null)) {
+                retry(attempt, error, null);
+              } else {
+                reject(error);
+              }
+            } else if (attempt < retries) {
+              retry(attempt, error, null);
+            } else {
+              reject(error);
+            }
+          });
+      };
+
+      function retry(attempt, error, response) {
+        var delay = (typeof retryDelay === 'function') ?
+          retryDelay(attempt, error, response) : retryDelay;
+        setTimeout(function () {
+          wrappedFetch(++attempt);
+        }, delay);
+      }
+
+      wrappedFetch(0);
+    });
+  };
+};
+
+function isPositiveInteger(value) {
+  return Number.isInteger(value) && value >= 0;
+}
+
+function ArgumentError(message) {
+  this.name = 'ArgumentError';
+  this.message = message;
+}
+
+
+/***/ }),
 /* 260 */
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
@@ -17703,7 +17849,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var node_fetch_1 = __importDefault(__webpack_require__(724));
+var isomorphic_fetch_1 = __importDefault(__webpack_require__(208));
+var fetch_retry_1 = __importDefault(__webpack_require__(259));
+var fetch = fetch_retry_1.default(isomorphic_fetch_1.default);
 var escape_1 = __importDefault(__webpack_require__(644));
 function convertProject(raw) {
     return {
@@ -17719,7 +17867,7 @@ var RTD = /** @class */ (function () {
     RTD.prototype.getProject = function (slug) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                return [2 /*return*/, node_fetch_1.default("https://readthedocs.org/api/v3/projects/" + escape_1.default(slug) + "/", {
+                return [2 /*return*/, fetch("https://readthedocs.org/api/v3/projects/" + escape_1.default(slug) + "/", {
                         method: 'get',
                         headers: {
                             'Content-Type': 'application/json',
@@ -17753,7 +17901,7 @@ var RTD = /** @class */ (function () {
                         _b.label = 3;
                     case 3:
                         projectInfo = _a;
-                        return [2 /*return*/, node_fetch_1.default("https://readthedocs.org/api/v3/projects/" + escape_1.default(projectInfo.slug) + "/translations/", {
+                        return [2 /*return*/, fetch("https://readthedocs.org/api/v3/projects/" + escape_1.default(projectInfo.slug) + "/translations/", {
                                 method: 'get',
                                 headers: {
                                     'Content-Type': 'application/json',
@@ -17786,12 +17934,13 @@ var RTD = /** @class */ (function () {
     RTD.prototype.getBuildActiveness = function (project, branch) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                return [2 /*return*/, node_fetch_1.default("https://readthedocs.org/api/v3/projects/" + project + "/versions/" + escape_1.default(branch) + "/", {
+                return [2 /*return*/, fetch("https://readthedocs.org/api/v3/projects/" + project + "/versions/" + escape_1.default(branch) + "/", {
                         method: 'get',
                         headers: {
                             'Content-Type': 'application/json',
                             'Authorization': "Token " + this.token
-                        }
+                        },
+                        retryOn: [400]
                     })
                         .then(function (res) {
                         return Promise.all([res.status, res.json()]);
@@ -17825,7 +17974,7 @@ var RTD = /** @class */ (function () {
                         // this implementation doesn't care the transaction, so
                         // the returned value could be different with expected one
                         // if we run two procedures at the same time
-                        return [2 /*return*/, node_fetch_1.default("https://readthedocs.org/api/v3/projects/" + project + "/versions/" + escape_1.default(branch) + "/", {
+                        return [2 /*return*/, fetch("https://readthedocs.org/api/v3/projects/" + project + "/versions/" + escape_1.default(branch) + "/", {
                                 method: 'patch',
                                 headers: {
                                     'Content-Type': 'application/json',
