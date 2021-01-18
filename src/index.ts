@@ -138,6 +138,7 @@ async function run(): Promise<void> {
       return filenames;
     }
   );
+  core.info(`The payload is ${JSON.stringify(context.payload)}`);
   if (filenames.length === 0) {
     core.info(
       "No change found in the docs/ dir, skip building the RTD document."
@@ -145,7 +146,6 @@ async function run(): Promise<void> {
     return;
   }
 
-  core.info(`The payload is ${JSON.stringify(context.payload)}`);
   const branch = head.ref; // TODO find better way to grab the HEAD ref
   const translates = await rtd.getTranslates(project);
 
