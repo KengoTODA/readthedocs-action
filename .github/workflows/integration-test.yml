@@ -1,0 +1,20 @@
+name: Integration Test
+on:
+  pull_request:
+    paths:
+      - "docs/**"
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - closed
+jobs:
+  staging:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to the staging site
+        uses: ./
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          rtd-token: ${{ secrets.RTD_TOKEN }}
+          rtd-project: your-read-the-docs-project
