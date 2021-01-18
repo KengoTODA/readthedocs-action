@@ -57,7 +57,10 @@ Set the project slug of the root RTD project to `project` config.
 
 ## Migrating from v1 to v2
 
-`.github/config.yml` is no longer needed. Move the `rtd.project` config to `project` config of the step.
+1. Uninstall the [GitHub App](https://github.com/settings/apps/rtd-helper) from your repository.
+2. Remove the`.github/config.yml` file that is no longer needed.
+3. Set one GitHub Secrets `RTD_TOKEN`, and
+4. Create a GitHub Actions workflow file to run the Action.
 
 ## License
 
