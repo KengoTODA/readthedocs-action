@@ -1,5 +1,5 @@
 {
-  "name": "rtd-bot",
+  "name": "readthedocs-action",
   "version": "0.0.0-development",
   "description": "An unofficial GitHub Action that helps reveiwing on Read the Docs",
   "main": "lib/index.js",
@@ -13,7 +13,7 @@
     "all": "npm run build:action && npm test"
   },
   "keywords": [
-    "probot",
+    "github-actions",
     "readthedocs",
     "rtd"
   ],
@@ -56,7 +56,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/KengoTODA/rtd-bot.git"
+    "url": "https://github.com/KengoTODA/readthedocs-action.git"
   },
   "release": {
     "branches": [
