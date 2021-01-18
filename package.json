@@ -1,5 +1,5 @@
 {
-  "name": "readthedocs-action",
+  "name": "rtd-bot",
   "version": "0.0.0-development",
   "description": "An unofficial GitHub Action that helps reveiwing on Read the Docs",
   "main": "lib/index.js",
