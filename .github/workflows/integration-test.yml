@@ -12,6 +12,7 @@ jobs:
   staging:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - name: Deploy to the staging site
         uses: ./
         with:
