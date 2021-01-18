@@ -1324,6 +1324,7 @@ function run() {
                         core.info("No change found in the docs/ dir, skip building the RTD document.");
                         return [2 /*return*/];
                     }
+                    core.info("The payload is " + JSON.stringify(context.payload));
                     branch = head.ref;
                     return [4 /*yield*/, rtd.getTranslates(project)];
                 case 2:

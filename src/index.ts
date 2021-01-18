@@ -145,6 +145,7 @@ async function run(): Promise<void> {
     return;
   }
 
+  core.info(`The payload is ${JSON.stringify(context.payload)}`);
   const branch = head.ref; // TODO find better way to grab the HEAD ref
   const translates = await rtd.getTranslates(project);
 
