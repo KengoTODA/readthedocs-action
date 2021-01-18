@@ -2001,7 +2001,7 @@ function run() {
                         })];
                 case 1:
                     filenames = _d.sent();
-                    core.info("The payload is " + JSON.stringify(context.payload));
+                    core.debug("The payload is " + JSON.stringify(context.payload));
                     if (filenames.length === 0) {
                         core.info("No change found in the docs/ dir, skip building the RTD document.");
                         return [2 /*return*/];
