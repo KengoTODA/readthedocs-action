@@ -58,7 +58,11 @@
     "type": "git",
     "url": "https://github.com/KengoTODA/rtd-bot.git"
   },
-  "release": {},
+  "release": {
+    "branches": [
+      "main"
+    ]
+  },
   "publishConfig": {
     "access": "public"
   },

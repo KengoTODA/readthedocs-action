@@ -38,7 +38,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Deploy to the staging site
-        uses: KengoTODA/rtd-bot@master
+        uses: KengoTODA/rtd-bot@main
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           rtd-token: ${{ secrets.RTD_TOKEN }}
