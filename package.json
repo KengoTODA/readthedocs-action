@@ -2,8 +2,8 @@
   "name": "rtd-bot",
   "version": "0.0.0-development",
   "description": "An unofficial GitHub Action that helps reveiwing on Read the Docs",
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "build:action": "ncc build src/index.ts --source-map",
     "semantic-release": "semantic-release",
@@ -29,7 +29,7 @@
     "node": "^12.12"
   },
   "files": [
-    "lib"
+    "dist"
   ],
   "devDependencies": {
     "@types/isomorphic-fetch": "0.0.35",
