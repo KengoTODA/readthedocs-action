@@ -90,7 +90,6 @@
     ],
     "all": true
   },
-  "heroku-run-build-script": true,
   "husky": {
     "hooks": {
       "pre-commit": "pretty-quick --staged && npm run build:action && git add dist"
