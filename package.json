@@ -33,7 +33,7 @@
   ],
   "devDependencies": {
     "@types/isomorphic-fetch": "0.0.35",
-    "@types/node-fetch": "^2.1.2",
+    "@types/node-fetch": "^2.5.8",
     "@zeit/ncc": "^0.22.3",
     "cross-env": "^7.0.0",
     "cz-conventional-changelog": "^3.0.1",
