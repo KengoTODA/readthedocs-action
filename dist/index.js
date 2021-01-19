@@ -1873,6 +1873,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.run = void 0;
 var core = __importStar(__webpack_require__(470));
 var github = __importStar(__webpack_require__(469));
 var service = __importStar(__webpack_require__(625));
@@ -1935,6 +1936,7 @@ function run(checkUpdatedDocument, activateProject, deactivateProject) {
         });
     });
 }
+exports.run = run;
 run(service.checkUpdatedDocument, service.activateProject, service.deactivateProject);
 
 

@@ -3,7 +3,7 @@ import * as github from "@actions/github";
 import * as service from "./service";
 import RTD, { IProject } from "./rtd";
 
-async function run(
+export async function run(
   checkUpdatedDocument: (githubToken: string) => Promise<boolean>,
   activateProject: (
     translates: IProject[],

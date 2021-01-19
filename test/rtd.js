@@ -1,64 +1,74 @@
 require("dotenv").config();
 
 const assert = require("assert");
-const assuming = require("mocha-assume").assuming;
 const RTD = require("../src/rtd").default;
 
 const timeout = 15 * 1000;
 
 describe("rtd", function () {
   const configured = !!process.env.RTD_TOKEN;
-  this.timeout(timeout);
+  jest.setTimeout(timeout);
 
   describe("#enableBuild()", () => {
-    assuming(configured).it(
-      "should return false if branch is already activated",
-      async () => {
-        const rtd = new RTD(process.env.RTD_TOKEN);
-        return rtd
-          .enableBuild("your-read-the-docs-project", "master")
-          .then((enabled) => {
-            assert.ok(!enabled);
-          });
-      }
-    );
+    if (!configured) {
+      console.warn("no GITHUB_TOKEN found");
+      return;
+    }
+    it("should return false if branch is already activated", async () => {
+      const rtd = new RTD(process.env.RTD_TOKEN);
+      return rtd
+        .enableBuild("your-read-the-docs-project", "master")
+        .then((enabled) => {
+          assert.ok(!enabled);
+        });
+    });
   });
 
   describe("#disabledBuild()", () => {
-    assuming(configured).it(
-      "should return false if branch is already disabled",
-      async () => {
-        const rtd = new RTD(process.env.RTD_TOKEN);
-        return rtd
-          .disableBuild("your-read-the-docs-project", "v0.1.0")
-          .then((enabled) => {
-            assert.ok(!enabled);
-          });
-      }
-    );
+    if (!configured) {
+      console.warn("no GITHUB_TOKEN found");
+      return;
+    }
+    it("should return false if branch is already disabled", async () => {
+      const rtd = new RTD(process.env.RTD_TOKEN);
+      return rtd
+        .disableBuild("your-read-the-docs-project", "v0.1.0")
+        .then((enabled) => {
+          assert.ok(!enabled);
+        });
+    });
   });
 
   describe("#getProject()", () => {
-    assuming(configured).it("returns correct ID", async () => {
+    if (!configured) {
+      console.warn("no GITHUB_TOKEN found");
+      return;
+    }
+    it("returns correct ID", async () => {
       const rtd = new RTD(process.env.RTD_TOKEN);
       const result = await rtd.getProject("your-read-the-docs-project");
       assert.equal(result.id, 235403);
       assert.equal(result.language, "en");
     });
-    assuming(configured).it(
-      "returns rejected promise for not existing project",
-      async () => {
-        const rtd = new RTD(process.env.RTD_TOKEN);
-        return rtd.getProject("not-existing").then(
-          () => Promise.reject(new Error("Expected method to reject.")),
-          (err) => assert(err instanceof Error)
-        );
-      }
-    );
+    if (!configured) {
+      console.warn("no GITHUB_TOKEN found");
+      return;
+    }
+    it("returns rejected promise for not existing project", async () => {
+      const rtd = new RTD(process.env.RTD_TOKEN);
+      return rtd.getProject("not-existing").then(
+        () => Promise.reject(new Error("Expected method to reject.")),
+        (err) => assert(err instanceof Error)
+      );
+    });
   });
 
   describe("#getTranslates()", () => {
-    assuming(configured).it("returns single translate", async () => {
+    if (!configured) {
+      console.warn("no GITHUB_TOKEN found");
+      return;
+    }
+    it("returns single translate", async () => {
       const rtd = new RTD(process.env.RTD_TOKEN);
       const result = await rtd.getTranslates({
         id: 235403,
@@ -73,7 +83,11 @@ describe("rtd", function () {
         },
       ]);
     });
-    assuming(configured).it("returns multiple translates", async () => {
+    if (!configured) {
+      console.warn("no GITHUB_TOKEN found");
+      return;
+    }
+    it("returns multiple translates", async () => {
       const rtd = new RTD(process.env.RTD_TOKEN);
       const result = await rtd.getTranslates({
         id: 79934,

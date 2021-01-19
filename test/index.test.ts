@@ -1,25 +1,31 @@
-import { describe, it } from "mocha";
+import * as github from "@actions/github";
 
 describe("Integration Test", () => {
   describe("When a push event triggers the action", () => {
-    it("requests nothing to RTD");
-    it("changes nothing in the GitHub PR");
+    beforeEach(() => {
+      github.context.eventName = "push";
+    });
+    test.todo("requests nothing to RTD");
+    test.todo("changes nothing in the GitHub PR");
   });
   describe("When a pull_request.closed event triggers the action", () => {
-    it("marks the RTD version inactive");
+    beforeEach(() => {
+      github.context.eventName = "pull_request";
+    });
+    test.todo("marks the RTD version inactive");
   });
   describe("When other pull_request events trigger the action", () => {
     describe("If no document is updated", () => {
-      it("requests nothing to RTD");
-      it("changes nothing in the GitHub PR");
+      test.todo("requests nothing to RTD");
+      test.todo("changes nothing in the GitHub PR");
     });
     describe("If document files are updated", () => {
-      it("marks the RTD version active");
+      test.todo("marks the RTD version active");
       describe("If PR body contains links to RTD", () => {
-        it("changes nothing in the GitHub PR");
+        test.todo("changes nothing in the GitHub PR");
       });
       describe("If PR body contains no link to RTD", () => {
-        it("adds links to RTD into the PR body");
+        test.todo("adds links to RTD into the PR body");
       });
     });
   });
