@@ -33,6 +33,7 @@
   ],
   "devDependencies": {
     "@types/isomorphic-fetch": "0.0.35",
+    "@types/mocha": "^8.2.0",
     "@types/node-fetch": "^2.1.2",
     "@zeit/ncc": "^0.22.3",
     "cross-env": "^7.0.0",
@@ -67,7 +68,10 @@
     "access": "public"
   },
   "mocha": {
-    "extension": "js",
+    "extension": [
+      "js",
+      "ts"
+    ],
     "require": [
       "source-map-support/register",
       "ts-node/register"
