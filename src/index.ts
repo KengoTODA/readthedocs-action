@@ -4,6 +4,7 @@ import * as service from "./service";
 import RTD, { IProject } from "./rtd";
 
 export async function run(
+  getInput: (name: string, options?: core.InputOptions) => string,
   checkUpdatedDocument: (githubToken: string) => Promise<boolean>,
   activateProject: (
     translates: IProject[],
@@ -20,9 +21,9 @@ export async function run(
     project: string
   ) => Promise<void>
 ): Promise<void> {
-  const rtdToken = core.getInput("rtd-token", { required: true });
-  const project = core.getInput("rtd-project", { required: true });
-  const githubToken = core.getInput("github-token", { required: true });
+  const rtdToken = getInput("rtd-token", { required: true });
+  const project = getInput("rtd-project", { required: true });
+  const githubToken = getInput("github-token", { required: true });
   const rtd = new RTD(rtdToken);
 
   // Check if head repo is same with base repo
@@ -72,6 +73,7 @@ export async function run(
 }
 
 run(
+  core.getInput,
   service.checkUpdatedDocument,
   service.activateProject,
   service.deactivateProject

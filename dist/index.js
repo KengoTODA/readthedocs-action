@@ -1878,16 +1878,16 @@ var core = __importStar(__webpack_require__(470));
 var github = __importStar(__webpack_require__(469));
 var service = __importStar(__webpack_require__(625));
 var rtd_1 = __importDefault(__webpack_require__(272));
-function run(checkUpdatedDocument, activateProject, deactivateProject) {
+function run(getInput, checkUpdatedDocument, activateProject, deactivateProject) {
     var _a, _b, _c;
     return __awaiter(this, void 0, void 0, function () {
         var rtdToken, project, githubToken, rtd, context, head, isDocsUpdated, branch, translates;
         return __generator(this, function (_d) {
             switch (_d.label) {
                 case 0:
-                    rtdToken = core.getInput("rtd-token", { required: true });
-                    project = core.getInput("rtd-project", { required: true });
-                    githubToken = core.getInput("github-token", { required: true });
+                    rtdToken = getInput("rtd-token", { required: true });
+                    project = getInput("rtd-project", { required: true });
+                    githubToken = getInput("github-token", { required: true });
                     rtd = new rtd_1.default(rtdToken);
                     context = github.context;
                     if (context.eventName !== "pull_request") {
@@ -1937,7 +1937,7 @@ function run(checkUpdatedDocument, activateProject, deactivateProject) {
     });
 }
 exports.run = run;
-run(service.checkUpdatedDocument, service.activateProject, service.deactivateProject);
+run(core.getInput, service.checkUpdatedDocument, service.activateProject, service.deactivateProject);
 
 
 /***/ }),
