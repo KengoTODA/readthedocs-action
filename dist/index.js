@@ -1961,10 +1961,38 @@ function activateProject(translates, rtd, branch, githubToken, project) {
         });
     });
 }
+function checkUpdatedDocument(githubToken) {
+    return __awaiter(this, void 0, void 0, function () {
+        var context, octokit, filenames;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    context = github.context;
+                    octokit = github.getOctokit(githubToken);
+                    return [4 /*yield*/, octokit.paginate(octokit.pulls.listFiles, {
+                            owner: context.issue.owner,
+                            repo: context.issue.repo,
+                            pull_number: context.issue.number,
+                        }, function (resp, done) {
+                            var filenames = resp.data
+                                .map(function (file) { return file.filename; })
+                                .filter(function (filename) { return filename.startsWith("docs/"); });
+                            if (filenames.length > 0 && done) {
+                                done();
+                            }
+                            return filenames;
+                        })];
+                case 1:
+                    filenames = _a.sent();
+                    return [2 /*return*/, filenames.length > 0];
+            }
+        });
+    });
+}
 function run() {
     var _a, _b, _c;
     return __awaiter(this, void 0, void 0, function () {
-        var rtdToken, project, githubToken, rtd, context, head, octokit, filenames, branch, translates;
+        var rtdToken, project, githubToken, rtd, context, head, isDocsUpdated, branch, translates;
         return __generator(this, function (_d) {
             switch (_d.label) {
                 case 0:
@@ -1985,24 +2013,11 @@ function run() {
                         core.warning("PR made from another Git repo is not supported.");
                         return [2 /*return*/];
                     }
-                    octokit = github.getOctokit(githubToken);
-                    return [4 /*yield*/, octokit.paginate(octokit.pulls.listFiles, {
-                            owner: context.issue.owner,
-                            repo: context.issue.repo,
-                            pull_number: context.issue.number,
-                        }, function (resp, done) {
-                            var filenames = resp.data
-                                .map(function (file) { return file.filename; })
-                                .filter(function (filename) { return filename.startsWith("docs/"); });
-                            if (filenames.length > 0 && done) {
-                                done();
-                            }
-                            return filenames;
-                        })];
-                case 1:
-                    filenames = _d.sent();
                     core.debug("The payload is " + JSON.stringify(context.payload));
-                    if (filenames.length === 0) {
+                    return [4 /*yield*/, checkUpdatedDocument(githubToken)];
+                case 1:
+                    isDocsUpdated = _d.sent();
+                    if (!isDocsUpdated) {
                         core.info("No change found in the docs/ dir, skip building the RTD document.");
                         return [2 /*return*/];
                     }

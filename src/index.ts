@@ -94,6 +94,30 @@ async function activateProject(
   }
 }
 
+async function checkUpdatedDocument(githubToken: string): Promise<boolean> {
+  const context = github.context;
+  // https://octokit.github.io/rest.js/v18#pagination
+  const octokit = github.getOctokit(githubToken);
+  const filenames = await octokit.paginate(
+    octokit.pulls.listFiles,
+    {
+      owner: context.issue.owner,
+      repo: context.issue.repo,
+      pull_number: context.issue.number,
+    },
+    (resp, done) => {
+      const filenames = resp.data
+        .map((file) => file.filename)
+        .filter((filename) => filename.startsWith("docs/"));
+      if (filenames.length > 0 && done) {
+        done();
+      }
+      return filenames;
+    }
+  );
+  return filenames.length > 0;
+}
+
 async function run(): Promise<void> {
   const rtdToken = core.getInput("rtd-token", { required: true });
   const project = core.getInput("rtd-project", { required: true });
@@ -118,28 +142,9 @@ async function run(): Promise<void> {
     return;
   }
 
-  // Check if /docs is updated
-  // https://octokit.github.io/rest.js/v18#pagination
-  const octokit = github.getOctokit(githubToken);
-  const filenames = await octokit.paginate(
-    octokit.pulls.listFiles,
-    {
-      owner: context.issue.owner,
-      repo: context.issue.repo,
-      pull_number: context.issue.number,
-    },
-    (resp, done) => {
-      const filenames = resp.data
-        .map((file) => file.filename)
-        .filter((filename) => filename.startsWith("docs/"));
-      if (filenames.length > 0 && done) {
-        done();
-      }
-      return filenames;
-    }
-  );
   core.debug(`The payload is ${JSON.stringify(context.payload)}`);
-  if (filenames.length === 0) {
+  const isDocsUpdated = await checkUpdatedDocument(githubToken);
+  if (!isDocsUpdated) {
     core.info(
       "No change found in the docs/ dir, skip building the RTD document."
     );
