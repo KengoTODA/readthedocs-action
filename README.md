@@ -1,6 +1,6 @@
 # Get the staging document in PR
 
-![](https://github.com/KengoTODA/rtd-bot/workflows/.github/workflows/build.yml/badge.svg)
+![](https://github.com/KengoTODA/readthedocs-action/workflows/.github/workflows/build.yml/badge.svg)
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 
@@ -38,7 +38,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Deploy to the staging site
-        uses: KengoTODA/rtd-bot@master
+        uses: KengoTODA/readthedocs-action@main
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           rtd-token: ${{ secrets.RTD_TOKEN }}
@@ -57,7 +57,10 @@ Set the project slug of the root RTD project to `project` config.
 
 ## Migrating from v1 to v2
 
-`.github/config.yml` is no longer needed. Move the `rtd.project` config to `project` config of the step.
+1. Uninstall the [GitHub App](https://github.com/settings/apps/rtd-helper) from your repository.
+2. Remove the`.github/config.yml` file that is no longer needed.
+3. Set one GitHub Secrets `RTD_TOKEN`, and
+4. Create a GitHub Actions workflow file to run the Action.
 
 ## License
 
