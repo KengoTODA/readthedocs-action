@@ -10291,8 +10291,12 @@ function run(getInput, checkUpdatedDocument, activateProject, deactivateProject)
     });
 }
 exports.run = run;
-if (typeof jest === undefined) {
+if (require.main === require.cache[eval('__filename')]) {
     run(core.getInput, service.checkUpdatedDocument, service.activateProject, service.deactivateProject);
+}
+else {
+    // https://nodejs.org/api/modules.html#modules_accessing_the_main_module
+    core.info("the script is loaded as a module, so skipping the execution");
 }
 
 

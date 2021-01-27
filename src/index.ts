@@ -72,11 +72,14 @@ export async function run(
   }
 }
 
-if (typeof jest === undefined) {
+if (require.main === module) {
   run(
     core.getInput,
     service.checkUpdatedDocument,
     service.activateProject,
     service.deactivateProject
   );
+} else {
+  // https://nodejs.org/api/modules.html#modules_accessing_the_main_module
+  core.info("the script is loaded as a module, so skipping the execution");
 }
