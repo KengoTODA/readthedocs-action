@@ -72,9 +72,11 @@ export async function run(
   }
 }
 
-run(
-  core.getInput,
-  service.checkUpdatedDocument,
-  service.activateProject,
-  service.deactivateProject
-);
+if (typeof jest === undefined) {
+  run(
+    core.getInput,
+    service.checkUpdatedDocument,
+    service.activateProject,
+    service.deactivateProject
+  );
+}

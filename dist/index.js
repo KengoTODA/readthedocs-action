@@ -1937,7 +1937,9 @@ function run(getInput, checkUpdatedDocument, activateProject, deactivateProject)
     });
 }
 exports.run = run;
-run(core.getInput, service.checkUpdatedDocument, service.activateProject, service.deactivateProject);
+if (typeof jest === undefined) {
+    run(core.getInput, service.checkUpdatedDocument, service.activateProject, service.deactivateProject);
+}
 
 
 /***/ }),

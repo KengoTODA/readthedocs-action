@@ -35,25 +35,59 @@ describe("Integration Test", () => {
         pull_request: {
           number: 1,
           head: {
-            owner: "owner",
-            repo: "repo",
-            full_name: "owner/repo",
+            repo: {
+              full_name: "owner/repo",
+            },
           },
           base: {
-            owner: "owner",
-            repo: "repo",
-            full_name: "owner/repo",
+            repo: {
+              full_name: "owner/repo",
+            },
           },
         },
       };
     });
-    it("marks the RTD version inactive", async () => {
+    xit("marks the RTD version inactive", async () => {
       const f = jest.fn();
       const deactivateProject = jest.fn();
       // found a bug: better to try deactivation even though /docs has no update
       const result = await run(getInput, f, f, deactivateProject);
       expect(f).not.toBeCalled();
       expect(deactivateProject).toBeCalled();
+      return result;
+    });
+  });
+  describe("When a pull_request event from forked repo triggers the action", () => {
+    beforeEach(() => {
+      github.context.eventName = "pull_request";
+      github.context.payload = {
+        action: "opened",
+        pull_request: {
+          number: 1,
+          head: {
+            repo: {
+              full_name: "owner/repo",
+            },
+          },
+          base: {
+            repo: {
+              full_name: "forked/repo",
+            },
+          },
+        },
+      };
+    });
+    it("requests nothing to RTD", async () => {
+      const f = jest.fn();
+      const result = await run(
+        function (a: string) {
+          return "";
+        },
+        f,
+        f,
+        f
+      );
+      expect(f).not.toBeCalled();
       return result;
     });
   });
@@ -65,14 +99,14 @@ describe("Integration Test", () => {
         pull_request: {
           number: 1,
           head: {
-            owner: "owner",
-            repo: "repo",
-            full_name: "owner/repo",
+            repo: {
+              full_name: "owner/repo",
+            },
           },
           base: {
-            owner: "owner",
-            repo: "repo",
-            full_name: "owner/repo",
+            repo: {
+              full_name: "owner/repo",
+            },
           },
         },
       };
