@@ -10234,7 +10234,7 @@ var rtd_1 = __importDefault(__nccwpck_require__(937));
 function run(getInput, checkUpdatedDocument, activateProject, deactivateProject) {
     var _a, _b, _c;
     return __awaiter(this, void 0, void 0, function () {
-        var rtdToken, project, githubToken, rtd, context, head, isDocsUpdated, branch, translates;
+        var rtdToken, project, githubToken, rtd, context, head, branch, translates, isDocsUpdated;
         return __generator(this, function (_d) {
             switch (_d.label) {
                 case 0:
@@ -10256,35 +10256,36 @@ function run(getInput, checkUpdatedDocument, activateProject, deactivateProject)
                         return [2 /*return*/];
                     }
                     core.debug("The payload is " + JSON.stringify(context.payload));
-                    return [4 /*yield*/, checkUpdatedDocument(githubToken)];
-                case 1:
-                    isDocsUpdated = _d.sent();
-                    if (!isDocsUpdated) {
-                        core.info("No change found in the docs/ dir, skip building the RTD document.");
-                        return [2 /*return*/];
-                    }
                     branch = head.ref;
                     return [4 /*yield*/, rtd.getTranslates(project)];
-                case 2:
+                case 1:
                     translates = _d.sent();
-                    if (!(context.payload.action === "closed")) return [3 /*break*/, 4];
+                    if (!(context.payload.action === "closed")) return [3 /*break*/, 3];
                     if (!branch) {
                         core.warning("HEAD branch not found, impossible to specify which RTD build should be disabled.");
                         return [2 /*return*/];
                     }
                     return [4 /*yield*/, deactivateProject(translates, rtd, branch, githubToken, project)];
-                case 3:
+                case 2:
                     _d.sent();
-                    return [3 /*break*/, 7];
-                case 4:
-                    if (!(((_c = context.payload.pull_request) === null || _c === void 0 ? void 0 : _c.state) === "closed")) return [3 /*break*/, 5];
-                    core.info("The target pull request is already closed, no reaction needed.");
                     return [2 /*return*/];
-                case 5: return [4 /*yield*/, activateProject(translates, rtd, branch, githubToken, project)];
-                case 6:
+                case 3:
+                    if (((_c = context.payload.pull_request) === null || _c === void 0 ? void 0 : _c.state) === "closed") {
+                        core.info("The target pull request is already closed, no reaction needed.");
+                        return [2 /*return*/];
+                    }
+                    _d.label = 4;
+                case 4: return [4 /*yield*/, checkUpdatedDocument(githubToken)];
+                case 5:
+                    isDocsUpdated = _d.sent();
+                    if (!!isDocsUpdated) return [3 /*break*/, 6];
+                    core.info("No change found in the docs/ dir, skip building the RTD document.");
+                    return [3 /*break*/, 8];
+                case 6: return [4 /*yield*/, activateProject(translates, rtd, branch, githubToken, project)];
+                case 7:
                     _d.sent();
-                    _d.label = 7;
-                case 7: return [2 /*return*/];
+                    _d.label = 8;
+                case 8: return [2 /*return*/];
             }
         });
     });

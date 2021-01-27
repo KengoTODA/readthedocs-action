@@ -35,6 +35,7 @@ describe("Integration Test", () => {
         pull_request: {
           number: 1,
           head: {
+            ref: "changes",
             repo: {
               full_name: "owner/repo",
             },
@@ -47,10 +48,9 @@ describe("Integration Test", () => {
         },
       };
     });
-    xit("marks the RTD version inactive", async () => {
+    it("marks the RTD version inactive", async () => {
       const f = jest.fn();
       const deactivateProject = jest.fn();
-      // found a bug: better to try deactivation even though /docs has no update
       const result = await run(getInput, f, f, deactivateProject);
       expect(f).not.toBeCalled();
       expect(deactivateProject).toBeCalled();

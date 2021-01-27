@@ -45,13 +45,6 @@ export async function run(
   }
 
   core.debug(`The payload is ${JSON.stringify(context.payload)}`);
-  const isDocsUpdated = await checkUpdatedDocument(githubToken);
-  if (!isDocsUpdated) {
-    core.info(
-      "No change found in the docs/ dir, skip building the RTD document."
-    );
-    return;
-  }
 
   const branch = head.ref;
   const translates = await rtd.getTranslates(project);
@@ -64,9 +57,16 @@ export async function run(
       return;
     }
     await deactivateProject(translates, rtd, branch, githubToken, project);
+    return;
   } else if (context.payload.pull_request?.state === "closed") {
     core.info("The target pull request is already closed, no reaction needed.");
     return;
+  }
+  const isDocsUpdated = await checkUpdatedDocument(githubToken);
+  if (!isDocsUpdated) {
+    core.info(
+      "No change found in the docs/ dir, skip building the RTD document."
+    );
   } else {
     await activateProject(translates, rtd, branch, githubToken, project);
   }
