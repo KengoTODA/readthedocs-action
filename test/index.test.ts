@@ -22,7 +22,7 @@ describe("Integration Test", () => {
     });
     it("requests nothing to RTD nor GitHub", async () => {
       const f = jest.fn();
-      const result = await run(getInput, f, f, f);
+      const result = await run(getInput, f, f);
       expect(f).not.toBeCalled();
       return result;
     });
@@ -51,7 +51,7 @@ describe("Integration Test", () => {
     it("marks the RTD version inactive", async () => {
       const f = jest.fn();
       const deactivateProject = jest.fn();
-      const result = await run(getInput, f, f, deactivateProject);
+      const result = await run(getInput, f, deactivateProject);
       expect(f).not.toBeCalled();
       expect(deactivateProject).toBeCalled();
       return result;
@@ -84,7 +84,6 @@ describe("Integration Test", () => {
           return "";
         },
         f,
-        f,
         f
       );
       expect(f).not.toBeCalled();
@@ -111,39 +110,20 @@ describe("Integration Test", () => {
         },
       };
     });
-    describe("If no document is updated", () => {
-      const checkUpdatedDocument = () => Promise.resolve(false);
 
-      it("requests nothing to RTD", async () => {
-        const f = jest.fn();
-        const result = await run(getInput, checkUpdatedDocument, f, f);
-        expect(f).not.toBeCalled();
-        return result;
-      });
+    it("marks the RTD version active", async () => {
+      const f = jest.fn();
+      const activateProject = jest.fn();
+      const result = await run(getInput, activateProject, f);
+      expect(activateProject).toBeCalled();
+      expect(f).not.toBeCalled();
+      return result;
+    });
+    describe("If PR body contains links to RTD", () => {
       test.todo("changes nothing in the GitHub PR");
     });
-    describe("If document files are updated", () => {
-      const checkUpdatedDocument = () => Promise.resolve(true);
-
-      it("marks the RTD version active", async () => {
-        const f = jest.fn();
-        const activateProject = jest.fn();
-        const result = await run(
-          getInput,
-          checkUpdatedDocument,
-          activateProject,
-          f
-        );
-        expect(activateProject).toBeCalled();
-        expect(f).not.toBeCalled();
-        return result;
-      });
-      describe("If PR body contains links to RTD", () => {
-        test.todo("changes nothing in the GitHub PR");
-      });
-      describe("If PR body contains no link to RTD", () => {
-        test.todo("adds links to RTD into the PR body");
-      });
+    describe("If PR body contains no link to RTD", () => {
+      test.todo("adds links to RTD into the PR body");
     });
   });
 });

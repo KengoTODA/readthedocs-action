@@ -5,7 +5,6 @@ import RTD, { IProject } from "./rtd";
 
 export async function run(
   getInput: (name: string, options?: core.InputOptions) => string,
-  checkUpdatedDocument: (githubToken: string) => Promise<boolean>,
   activateProject: (
     translates: IProject[],
     rtd: RTD,
@@ -62,23 +61,11 @@ export async function run(
     core.info("The target pull request is already closed, no reaction needed.");
     return;
   }
-  const isDocsUpdated = await checkUpdatedDocument(githubToken);
-  if (!isDocsUpdated) {
-    core.info(
-      "No change found in the docs/ dir, skip building the RTD document."
-    );
-  } else {
-    await activateProject(translates, rtd, branch, githubToken, project);
-  }
+  await activateProject(translates, rtd, branch, githubToken, project);
 }
 
 if (require.main === module) {
-  run(
-    core.getInput,
-    service.checkUpdatedDocument,
-    service.activateProject,
-    service.deactivateProject
-  );
+  run(core.getInput, service.activateProject, service.deactivateProject);
 } else {
   // https://nodejs.org/api/modules.html#modules_accessing_the_main_module
   core.info("the script is loaded as a module, so skipping the execution");
