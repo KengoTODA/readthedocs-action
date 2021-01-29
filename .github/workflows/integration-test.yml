@@ -1,8 +1,6 @@
 name: Integration Test
 on:
   pull_request:
-    paths:
-      - "docs/**"
     types:
       - opened
       - reopened
