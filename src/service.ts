@@ -93,29 +93,3 @@ export async function activateProject(
     );
   }
 }
-
-export async function checkUpdatedDocument(
-  githubToken: string
-): Promise<boolean> {
-  const context = github.context;
-  // https://octokit.github.io/rest.js/v18#pagination
-  const octokit = github.getOctokit(githubToken);
-  const filenames = await octokit.paginate(
-    octokit.pulls.listFiles,
-    {
-      owner: context.issue.owner,
-      repo: context.issue.repo,
-      pull_number: context.issue.number,
-    },
-    (resp, done) => {
-      const filenames = resp.data
-        .map((file) => file.filename)
-        .filter((filename) => filename.startsWith("docs/"));
-      if (filenames.length > 0 && done) {
-        done();
-      }
-      return filenames;
-    }
-  );
-  return filenames.length > 0;
-}

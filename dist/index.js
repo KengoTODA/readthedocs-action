@@ -10231,10 +10231,10 @@ var core = __importStar(__nccwpck_require__(2186));
 var github = __importStar(__nccwpck_require__(5438));
 var service = __importStar(__nccwpck_require__(2115));
 var rtd_1 = __importDefault(__nccwpck_require__(937));
-function run(getInput, checkUpdatedDocument, activateProject, deactivateProject) {
+function run(getInput, activateProject, deactivateProject) {
     var _a, _b, _c;
     return __awaiter(this, void 0, void 0, function () {
-        var rtdToken, project, githubToken, rtd, context, head, branch, translates, isDocsUpdated;
+        var rtdToken, project, githubToken, rtd, context, head, branch, translates;
         return __generator(this, function (_d) {
             switch (_d.label) {
                 case 0:
@@ -10275,24 +10275,17 @@ function run(getInput, checkUpdatedDocument, activateProject, deactivateProject)
                         return [2 /*return*/];
                     }
                     _d.label = 4;
-                case 4: return [4 /*yield*/, checkUpdatedDocument(githubToken)];
+                case 4: return [4 /*yield*/, activateProject(translates, rtd, branch, githubToken, project)];
                 case 5:
-                    isDocsUpdated = _d.sent();
-                    if (!!isDocsUpdated) return [3 /*break*/, 6];
-                    core.info("No change found in the docs/ dir, skip building the RTD document.");
-                    return [3 /*break*/, 8];
-                case 6: return [4 /*yield*/, activateProject(translates, rtd, branch, githubToken, project)];
-                case 7:
                     _d.sent();
-                    _d.label = 8;
-                case 8: return [2 /*return*/];
+                    return [2 /*return*/];
             }
         });
     });
 }
 exports.run = run;
 if (require.main === require.cache[eval('__filename')]) {
-    run(core.getInput, service.checkUpdatedDocument, service.activateProject, service.deactivateProject);
+    run(core.getInput, service.activateProject, service.deactivateProject);
 }
 else {
     // https://nodejs.org/api/modules.html#modules_accessing_the_main_module
@@ -10585,7 +10578,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.checkUpdatedDocument = exports.activateProject = exports.deactivateProject = void 0;
+exports.activateProject = exports.deactivateProject = void 0;
 var core = __importStar(__nccwpck_require__(2186));
 var github = __importStar(__nccwpck_require__(5438));
 var build_body_1 = __importDefault(__nccwpck_require__(9180));
@@ -10675,35 +10668,6 @@ function activateProject(translates, rtd, branch, githubToken, project) {
     });
 }
 exports.activateProject = activateProject;
-function checkUpdatedDocument(githubToken) {
-    return __awaiter(this, void 0, void 0, function () {
-        var context, octokit, filenames;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    context = github.context;
-                    octokit = github.getOctokit(githubToken);
-                    return [4 /*yield*/, octokit.paginate(octokit.pulls.listFiles, {
-                            owner: context.issue.owner,
-                            repo: context.issue.repo,
-                            pull_number: context.issue.number,
-                        }, function (resp, done) {
-                            var filenames = resp.data
-                                .map(function (file) { return file.filename; })
-                                .filter(function (filename) { return filename.startsWith("docs/"); });
-                            if (filenames.length > 0 && done) {
-                                done();
-                            }
-                            return filenames;
-                        })];
-                case 1:
-                    filenames = _a.sent();
-                    return [2 /*return*/, filenames.length > 0];
-            }
-        });
-    });
-}
-exports.checkUpdatedDocument = checkUpdatedDocument;
 
 
 /***/ }),
