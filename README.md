@@ -32,7 +32,7 @@ on:
       - opened
       - reopened
       - synchronize
-      - closed
+      - closed # necessary to deactivate the version in Read the Docs
 jobs:
   staging:
     runs-on: ubuntu-latest
