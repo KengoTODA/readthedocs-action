@@ -21905,6 +21905,10 @@ module.exports = function (app, _a) {
                     if (token == undefined) {
                         throw new Error('RTD_TOKEN is not set');
                     }
+                    if (context.repo().owner.toLowerCase() === 'reedhhw') {
+                        log.debug('access for reedhhw org is detected, ignore it to avoid too many request problem');
+                        return [2 /*return*/];
+                    }
                     rtd = new rtd_1.default(token);
                     _a.label = 1;
                 case 1:
