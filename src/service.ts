@@ -23,7 +23,7 @@ export async function deactivateProject(
       return allResult.reduce((l, r) => l || r);
     })
     .catch((e) => {
-      octokit.issues.createComment({
+      octokit.rest.issues.createComment({
         owner: context.issue.owner,
         repo: context.issue.repo,
         issue_number: context.issue.number,
@@ -62,7 +62,7 @@ export async function activateProject(
       return allResult.reduce((l, r) => l || r);
     })
     .catch((e) => {
-      octokit.issues.createComment({
+      octokit.rest.issues.createComment({
         owner: context.issue.owner,
         repo: context.issue.repo,
         issue_number: context.issue.number,
@@ -81,7 +81,7 @@ export async function activateProject(
       branch,
       translates.map((t) => t.language)
     );
-    octokit.issues.update({
+    octokit.rest.issues.update({
       owner: context.issue.owner,
       repo: context.issue.repo,
       issue_number: context.issue.number,
