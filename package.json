@@ -65,19 +65,6 @@
   "publishConfig": {
     "access": "public"
   },
-  "nyc": {
-    "extension": [
-      ".ts"
-    ],
-    "include": "src",
-    "exclude": [
-      "**/*.d.ts"
-    ],
-    "reporter": [
-      "html"
-    ],
-    "all": true
-  },
   "husky": {
     "hooks": {
       "pre-commit": "pretty-quick --staged && npm run build:action && git add dist"
