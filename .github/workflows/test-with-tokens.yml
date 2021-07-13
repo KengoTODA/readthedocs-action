@@ -1,16 +1,16 @@
-name: Build
+name: Test with tokens
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+  workflow_run:
+    workflows:
+      - Build
+    types:
+      - completed
 
 jobs:
-  build:
+  jest:
     runs-on: ubuntu-latest
+    if: github.event.workflow_run.event == 'pull_request' && github.event.workflow_run.conclusion == 'success'
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js v12.x
@@ -22,9 +22,8 @@ jobs:
         run: |
           npm ci
           npm test
-          npm run-script prepack
-          npm run semantic-release
         env:
+          CI: true
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           RTD_TOKEN: ${{ secrets.RTD_TOKEN }}
