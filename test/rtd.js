@@ -63,10 +63,6 @@ integrationTest("rtd", function () {
         },
       ]);
     });
-    if (!configured) {
-      console.warn("no GITHUB_TOKEN found");
-      return;
-    }
     it("returns multiple translates", async () => {
       const rtd = new RTD(process.env.RTD_TOKEN);
       const result = await rtd.getTranslates({
