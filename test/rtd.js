@@ -4,16 +4,12 @@ const assert = require("assert");
 const RTD = require("../src/rtd").default;
 
 const timeout = 15 * 1000;
+const integrationTest = process.env["RTD_TOKEN"] ? describe : describe.skip;
 
-describe("rtd", function () {
-  const configured = !!process.env.RTD_TOKEN;
+integrationTest("rtd", function () {
   jest.setTimeout(timeout);
 
   describe("#enableBuild()", () => {
-    if (!configured) {
-      console.warn("no GITHUB_TOKEN found");
-      return;
-    }
     it("should return false if branch is already activated", async () => {
       const rtd = new RTD(process.env.RTD_TOKEN);
       return rtd
@@ -25,10 +21,6 @@ describe("rtd", function () {
   });
 
   describe("#disabledBuild()", () => {
-    if (!configured) {
-      console.warn("no GITHUB_TOKEN found");
-      return;
-    }
     it("should return false if branch is already disabled", async () => {
       const rtd = new RTD(process.env.RTD_TOKEN);
       return rtd
@@ -40,20 +32,12 @@ describe("rtd", function () {
   });
 
   describe("#getProject()", () => {
-    if (!configured) {
-      console.warn("no GITHUB_TOKEN found");
-      return;
-    }
     it("returns correct ID", async () => {
       const rtd = new RTD(process.env.RTD_TOKEN);
       const result = await rtd.getProject("your-read-the-docs-project");
       assert.equal(result.id, 235403);
       assert.equal(result.language, "en");
     });
-    if (!configured) {
-      console.warn("no GITHUB_TOKEN found");
-      return;
-    }
     it("returns rejected promise for not existing project", async () => {
       const rtd = new RTD(process.env.RTD_TOKEN);
       return rtd.getProject("not-existing").then(
@@ -64,10 +48,6 @@ describe("rtd", function () {
   });
 
   describe("#getTranslates()", () => {
-    if (!configured) {
-      console.warn("no GITHUB_TOKEN found");
-      return;
-    }
     it("returns single translate", async () => {
       const rtd = new RTD(process.env.RTD_TOKEN);
       const result = await rtd.getTranslates({
