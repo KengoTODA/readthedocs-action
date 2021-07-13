@@ -10,7 +10,8 @@
     "test": "jest",
     "postinstall": "npm run-script prepack",
     "prepack": "tsc",
-    "all": "npm run build:action && npm test"
+    "all": "npm run build:action && npm test",
+    "prepare": "husky install"
   },
   "keywords": [
     "github-actions",
@@ -38,7 +39,7 @@
     "@vercel/ncc": "^0.28.0",
     "cz-conventional-changelog": "^3.0.1",
     "dotenv": "^10.0.0",
-    "husky": "^6.0.0",
+    "husky": "^7.0.0",
     "jest": "^27.0.5",
     "prettier": "^2.2.1",
     "pretty-quick": "^3.1.0",
@@ -64,10 +65,5 @@
   },
   "publishConfig": {
     "access": "public"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "pretty-quick --staged && npm run build:action && git add dist"
-    }
   }
 }
