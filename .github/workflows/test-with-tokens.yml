@@ -13,6 +13,8 @@ jobs:
     if: github.event.workflow_run.event == 'pull_request' && github.event.workflow_run.conclusion == 'success'
     steps:
       - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
       - name: Use Node.js v12.x
         uses: actions/setup-node@v2
         with:
@@ -27,3 +29,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           RTD_TOKEN: ${{ secrets.RTD_TOKEN }}
+      - uses: LouisBrunner/checks-action@v1.1.2
+        if: always()
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          name: test-with-tokens
+          sha: ${{ github.event.workflow_run.head_sha }}
+          conclusion: ${{ job.status }}
+          details_url : https://github.com/${{github.repository}}/actions/runs/${{github.run_id}}
