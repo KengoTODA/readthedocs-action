@@ -14,7 +14,8 @@ function getInput(name: string, options?: core.InputOptions): string {
   }
 }
 
-describe("Integration Test", () => {
+const integrationTest = process.env["RTD_TOKEN"] ? describe : describe.skip;
+integrationTest("Integration Test", () => {
   jest.setTimeout(15 * 1000);
   describe("When a push event triggers the action", () => {
     beforeEach(() => {
