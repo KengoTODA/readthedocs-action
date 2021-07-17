@@ -3,6 +3,7 @@ on:
   pull_request_target:
     types:
       - labeled
+      - synchronize
 
 jobs:
   run-ncc:
@@ -16,7 +17,8 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 12.x
-          cache: npm
+          # It is not suggested to cache for the pull_request_target event
+          # https://docs.github.com/en/actions/reference/events-that-trigger-workflows#pull_request_target
       - name: Update the dist directory
         run: |
           npm ci
