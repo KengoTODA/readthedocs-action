@@ -1,0 +1,28 @@
+name: Update the dist dir
+on:
+  pull_request:
+    types:
+      - labeled
+
+jobs:
+  run-ncc:
+    runs-on: ubuntu-latest
+    if: contains(github.event.pull_request.labels.*.name, 'dependencies')
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js v12.x
+        uses: actions/setup-node@v2
+        with:
+          node-version: 12.x
+          cache: npm
+      - name: Update the dist directory
+        run: |
+          git checkout ${{ github.head_ref }}
+          npm ci
+          npm run build:action
+          if [[ $(git status -s -- dist | wc -l) -ge 0 ]]; then  
+            git add dist
+            git commit -m 'chore: sync dependency updates to the dist'
+            git push origin HEAD
+          fi
+
