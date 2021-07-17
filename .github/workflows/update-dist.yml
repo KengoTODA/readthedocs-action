@@ -23,6 +23,8 @@ jobs:
           npm run build:action
           if [[ $(git status -s -- dist | wc -l) -ge 0 ]]; then  
             git add dist
+            git config --local user.email "action@github.com"
+            git config --local user.name "GitHub Action"
             git commit -m 'chore: sync dependency updates to the dist'
             git push origin HEAD
           fi
