@@ -10,6 +10,8 @@ jobs:
     if: contains(github.event.pull_request.labels.*.name, 'dependencies')
     steps:
       - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }}
       - name: Use Node.js v12.x
         uses: actions/setup-node@v2
         with:
@@ -17,7 +19,6 @@ jobs:
           cache: npm
       - name: Update the dist directory
         run: |
-          git checkout ${{ github.head_ref }}
           npm ci
           npm run build:action
           if [[ $(git status -s -- dist | wc -l) -ge 0 ]]; then  
