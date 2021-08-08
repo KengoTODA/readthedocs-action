@@ -19,8 +19,9 @@ export = (app: Probot, { getRouter }: ApplicationFunctionOptions) => {
     if (token == undefined) {
       throw new Error('RTD_TOKEN is not set');
     }
-    if (context.repo().owner.toLowerCase() === 'reedhhw') {
-      log.debug('access for reedhhw org is detected, ignore it to avoid too many request problem');
+    const ownerName = context.repo().owner.toLowerCase();
+    if (ownerName === 'reedhhw' || ownerName === 'jankyboy') {
+      log.debug(`access for ${ownerName} org is detected, ignore it to avoid too many request problem`);
       return;
     }
     const rtd = new RTD(token);
