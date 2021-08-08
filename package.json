@@ -20,11 +20,11 @@
   "author": "Kengo TODA",
   "license": "Apache-2.0",
   "dependencies": {
-    "@octokit/rest": "^18.0.0",
+    "@octokit/rest": "^18.9.0",
     "dotenv": "^8.0.0",
-    "fetch-retry": "^4.0.1",
+    "fetch-retry": "^4.1.1",
     "isomorphic-fetch": "^3.0.0",
-    "probot": "^11.0.1",
+    "probot": "^11.4.1",
     "probot-actions-adapter": "^2.0.0"
   },
   "engines": {
