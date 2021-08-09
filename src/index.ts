@@ -94,7 +94,7 @@ export = (app: Probot, { getRouter }: ApplicationFunctionOptions) => {
 
       if (enabled) {
         log.debug(`Reporting document URL to GitHub PR page of ${branch} branch in ${project}.`);
-        const body = buildBody(context.payload.pull_request.body, project, branch, translates.map((t) => t.language));
+        const body = buildBody(context.payload.pull_request.body || '', project, branch, translates.map((t) => t.language));
         context.octokit.issues.update(context.issue({
           body,
         }));
