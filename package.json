@@ -6,7 +6,6 @@
   "types": "lib/index.d.ts",
   "scripts": {
     "start": "probot run ./lib/index.js",
-    "semantic-release": "semantic-release",
     "test": "cross-env TS_NODE_FILES=true nyc mocha",
     "postinstall": "npm run-script prepack",
     "prepack": "tsc"
@@ -41,7 +40,6 @@
     "mocha": "^8.0.0",
     "mocha-assume": "^1.0.0",
     "nyc": "^15.0.0",
-    "semantic-release": "^17.0.1",
     "source-map-support": "^0.5.16",
     "ts-node": "^9.0.0",
     "typescript": "^4.0.2"
@@ -53,7 +51,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/KengoTODA/rtd-bot.git"
+    "url": "https://github.com/KengoTODA/readthedocs-action.git"
   },
   "release": {},
   "publishConfig": {

@@ -23,7 +23,6 @@ jobs:
           npm ci
           npm test -- --forbid-only --forbid-pending
           npm run-script prepack
-          npm run semantic-release
         env:
           CI: true
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
