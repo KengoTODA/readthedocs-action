@@ -27,6 +27,6 @@ jobs:
           npm test
           npx semantic-release
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PAT_TO_PUSH }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           RTD_TOKEN: ${{ secrets.RTD_TOKEN }}
