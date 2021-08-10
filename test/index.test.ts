@@ -2,6 +2,7 @@ import * as core from "@actions/core";
 import * as github from "@actions/github";
 import { run } from "../src/index";
 import { config } from "dotenv";
+import { expect, jest, it, describe, beforeEach, test } from "@jest/globals";
 config();
 
 function getInput(name: string, options?: core.InputOptions): string {
@@ -22,7 +23,7 @@ integrationTest("Integration Test", () => {
       github.context.eventName = "push";
     });
     it("requests nothing to RTD nor GitHub", async () => {
-      const f = jest.fn();
+      const f: () => Promise<void> = jest.fn();
       const result = await run(getInput, f, f);
       expect(f).not.toBeCalled();
       return result;
@@ -50,8 +51,8 @@ integrationTest("Integration Test", () => {
       };
     });
     it("marks the RTD version inactive", async () => {
-      const f = jest.fn();
-      const deactivateProject = jest.fn();
+      const f: () => Promise<void> = jest.fn();
+      const deactivateProject: () => Promise<void> = jest.fn();
       const result = await run(getInput, f, deactivateProject);
       expect(f).not.toBeCalled();
       expect(deactivateProject).toBeCalled();
@@ -79,7 +80,7 @@ integrationTest("Integration Test", () => {
       };
     });
     it("requests nothing to RTD", async () => {
-      const f = jest.fn();
+      const f: () => Promise<void> = jest.fn();
       const result = await run(
         function (a: string) {
           return "";
@@ -113,8 +114,8 @@ integrationTest("Integration Test", () => {
     });
 
     it("marks the RTD version active", async () => {
-      const f = jest.fn();
-      const activateProject = jest.fn();
+      const f: () => Promise<void> = jest.fn();
+      const activateProject: () => Promise<void> = jest.fn();
       const result = await run(getInput, activateProject, f);
       expect(activateProject).toBeCalled();
       expect(f).not.toBeCalled();
