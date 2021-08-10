@@ -25,7 +25,7 @@ From v2, this system only works as a GitHub Action. v1 worked as a service (GitH
 ```yml
 name: Documentation
 on:
-  pull_request:
+  pull_request_target:
     paths:
       - "docs/**"
     types:
@@ -33,6 +33,9 @@ on:
       - reopened
       - synchronize
       - closed # necessary to deactivate the version in Read the Docs
+permissions:
+  pull-requests: write
+  checks: write
 jobs:
   staging:
     runs-on: ubuntu-latest
