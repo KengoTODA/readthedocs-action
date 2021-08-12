@@ -27,7 +27,10 @@ export async function run(
 
   // Check if head repo is same with base repo
   const context = github.context;
-  if (context.eventName !== "pull_request") {
+  if (
+    context.eventName !== "pull_request" &&
+    context.eventName !== "pull_request_target"
+  ) {
     core.warning(
       `This Action does not support the given event ${context.eventName}.`
     );

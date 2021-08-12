@@ -9573,7 +9573,8 @@ function run(getInput, activateProject, deactivateProject) {
                     githubToken = getInput("github-token", { required: true });
                     rtd = new rtd_1.default(rtdToken);
                     context = github.context;
-                    if (context.eventName !== "pull_request") {
+                    if (context.eventName !== "pull_request" &&
+                        context.eventName !== "pull_request_target") {
                         core.warning("This Action does not support the given event " + context.eventName + ".");
                         return [2 /*return*/];
                     }
