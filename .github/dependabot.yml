@@ -8,3 +8,5 @@ updates:
       prefix: fix
       prefix-development: chore
       include: scope
+    ignore:
+      - dependency-name: "@vercel/ncc"
