@@ -1,5 +1,5 @@
-name: "Read The Docs Helper"
-description: "Assists reviewing using Read The Docs (RTD)"
+name: "Read The Docs Action (Unofficial)"
+description: "Assists the document review with Read The Docs (RTD)"
 author: "Kengo TODA <skypencil@gmail.com>"
 inputs:
   github-token:
