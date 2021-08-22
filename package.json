@@ -68,7 +68,7 @@
       [
         "@semantic-release/exec",
         {
-          "prepare": "npm run-script prepack"
+          "prepare": "npm run build:action"
         }
       ],
       [
