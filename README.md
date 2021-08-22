@@ -3,6 +3,7 @@
 ![](https://github.com/KengoTODA/readthedocs-action/workflows/.github/workflows/build.yml/badge.svg)
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
+[![Gitpod ready-to-code](https://img.shields.io/badge/Gitpod-ready--to--code-908a85?logo=gitpod)](https://gitpod.io/#https://github.com/KengoTODA/readthedocs-action)
 
 Work with Read the Docs, then you'll find that PR for documentation needs additional steps like:
 

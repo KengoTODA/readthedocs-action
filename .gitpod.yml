@@ -1,0 +1,4 @@
+image: node:12
+tasks:
+  - init: npm install
+    command: npm build
