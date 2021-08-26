@@ -65,6 +65,7 @@ Set the project slug of the root RTD project to `project` config.
 2. Remove the`.github/config.yml` file that is no longer needed.
 3. Set one GitHub Secrets `RTD_TOKEN`, and
 4. Create a GitHub Actions workflow file to run the Action.
+5. Stop inviting the `rtd-bot` RTD account as maintainer.
 
 ## Alternative Solutions
 
