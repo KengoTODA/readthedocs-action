@@ -22,7 +22,7 @@
   "dependencies": {
     "@actions/core": "^1.2.6",
     "@actions/github": "^5.0.0",
-    "fetch-retry": "^4.1.1",
+    "fetch-retry": "^5.0.0",
     "isomorphic-fetch": "^3.0.0"
   },
   "engines": {
