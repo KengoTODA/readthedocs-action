@@ -16,10 +16,13 @@ jobs:
         with:
           # Make sure the release step uses its own credentials.
           persist-credentials: false
-      - name: Use Node.js v12.x
+      - name: Read .nvmrc
+        run: echo "##[set-output name=NVMRC;]$(cat .nvmrc)"
+        id: nvm
+      - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: 12.x
+          node-version: "${{ steps.nvm.outputs.NVMRC }}"
           cache: npm
       - name: Build
         run: |
