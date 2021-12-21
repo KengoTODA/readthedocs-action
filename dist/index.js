@@ -6505,24 +6505,24 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-var escape_1 = __importDefault(__nccwpck_require__(4473));
-var START = "[//]: # (rtdbot-start)\n";
-var END = "[//]: # (rtdbot-end)\n";
+const escape_1 = __importDefault(__nccwpck_require__(4473));
+const START = "[//]: # (rtdbot-start)\n";
+const END = "[//]: # (rtdbot-end)\n";
 function buildBody(existingBody, project, branch, languages) {
     if (existingBody.indexOf(START) >= 0) {
         return existingBody;
     }
-    var body = existingBody + ("\n\n" + START + "\n");
+    let body = existingBody + `\n\n${START}\n`;
     if (languages.length === 1) {
-        var url = "https://" + (0, escape_1.default)(project) + ".readthedocs.io/" + languages[0] + "/" + (0, escape_1.default)(branch) + "/";
+        const url = `https://${(0, escape_1.default)(project)}.readthedocs.io/${languages[0]}/${(0, escape_1.default)(branch)}/`;
         // https://docs.readthedocs.io/en/latest/badges.html
-        var badge = "https://readthedocs.org/projects/" + (0, escape_1.default)(project) + "/badge/?version=" + (0, escape_1.default)(branch);
-        body += "URL of RTD document: " + url + " ![Documentation Status](" + badge + ")\n";
+        const badge = `https://readthedocs.org/projects/${(0, escape_1.default)(project)}/badge/?version=${(0, escape_1.default)(branch)}`;
+        body += `URL of RTD document: ${url} ![Documentation Status](${badge})\n`;
     }
     else {
         body += "URL of RTD documents:\n";
-        languages.forEach(function (language) {
-            body += language + ": https://" + (0, escape_1.default)(project) + ".readthedocs.io/" + language + "/" + (0, escape_1.default)(branch) + "/\n";
+        languages.forEach((language) => {
+            body += `${language}: https://${(0, escape_1.default)(project)}.readthedocs.io/${language}/${(0, escape_1.default)(branch)}/\n`;
         });
     }
     return body + "\n" + END;
@@ -6543,7 +6543,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
  */
 function escape(name) {
     if (name.indexOf("?") >= 0) {
-        throw new Error("name should not contains ? mark, but it was \"" + name + "\"");
+        throw new Error(`name should not contains ? mark, but it was "${name}"`);
     }
     return name.replace(/\//g, "-");
 }
@@ -6553,9 +6553,10 @@ exports.default = escape;
 /***/ }),
 
 /***/ 6144:
-/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+/***/ (function(module, exports, __nccwpck_require__) {
 
 "use strict";
+/* module decorator */ module = __nccwpck_require__.nmd(module);
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -6576,106 +6577,54 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-var __generator = (this && this.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-    function verb(n) { return function (v) { return step([n, v]); }; }
-    function step(op) {
-        if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [op[0] & 2, t.value];
-            switch (op[0]) {
-                case 0: case 1: t = op; break;
-                case 4: _.label++; return { value: op[1], done: false };
-                case 5: _.label++; y = op[1]; op = [0]; continue;
-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                    if (t[2]) _.ops.pop();
-                    _.trys.pop(); continue;
-            }
-            op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-    }
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.run = void 0;
-var core = __importStar(__nccwpck_require__(2186));
-var github = __importStar(__nccwpck_require__(5438));
-var service = __importStar(__nccwpck_require__(2115));
-var rtd_1 = __importDefault(__nccwpck_require__(937));
-function run(getInput, activateProject, deactivateProject) {
-    var _a, _b, _c;
-    return __awaiter(this, void 0, void 0, function () {
-        var rtdToken, project, githubToken, rtd, context, head, branch, translates;
-        return __generator(this, function (_d) {
-            switch (_d.label) {
-                case 0:
-                    rtdToken = getInput("rtd-token", { required: true });
-                    project = getInput("rtd-project", { required: true });
-                    githubToken = getInput("github-token", { required: true });
-                    rtd = new rtd_1.default(rtdToken);
-                    context = github.context;
-                    if (context.eventName !== "pull_request" &&
-                        context.eventName !== "pull_request_target") {
-                        core.warning("This Action does not support the given event " + context.eventName + ".");
-                        return [2 /*return*/];
-                    }
-                    head = (_a = context.payload.pull_request) === null || _a === void 0 ? void 0 : _a.head;
-                    if (head.repo === null) {
-                        core.info("HEAD branch not found.");
-                    }
-                    else if (((_b = context.payload.pull_request) === null || _b === void 0 ? void 0 : _b.base.repo.full_name) !== head.repo.full_name) {
-                        core.warning("PR made from another Git repo is not supported.");
-                        return [2 /*return*/];
-                    }
-                    core.debug("The payload is " + JSON.stringify(context.payload));
-                    branch = head.ref;
-                    return [4 /*yield*/, rtd.getTranslates(project)];
-                case 1:
-                    translates = _d.sent();
-                    if (!(context.payload.action === "closed")) return [3 /*break*/, 3];
-                    if (!branch) {
-                        core.warning("HEAD branch not found, impossible to specify which RTD build should be disabled.");
-                        return [2 /*return*/];
-                    }
-                    return [4 /*yield*/, deactivateProject(translates, rtd, branch, githubToken, project)];
-                case 2:
-                    _d.sent();
-                    return [2 /*return*/];
-                case 3:
-                    if (((_c = context.payload.pull_request) === null || _c === void 0 ? void 0 : _c.state) === "closed") {
-                        core.info("The target pull request is already closed, no reaction needed.");
-                        return [2 /*return*/];
-                    }
-                    _d.label = 4;
-                case 4: return [4 /*yield*/, activateProject(translates, rtd, branch, githubToken, project)];
-                case 5:
-                    _d.sent();
-                    return [2 /*return*/];
-            }
-        });
-    });
+const core = __importStar(__nccwpck_require__(2186));
+const github = __importStar(__nccwpck_require__(5438));
+const service = __importStar(__nccwpck_require__(2115));
+const rtd_1 = __importDefault(__nccwpck_require__(937));
+async function run(getInput, activateProject, deactivateProject) {
+    const rtdToken = getInput("rtd-token", { required: true });
+    const project = getInput("rtd-project", { required: true });
+    const githubToken = getInput("github-token", { required: true });
+    const rtd = new rtd_1.default(rtdToken);
+    // Check if head repo is same with base repo
+    const context = github.context;
+    if (context.eventName !== "pull_request" &&
+        context.eventName !== "pull_request_target") {
+        core.warning(`This Action does not support the given event ${context.eventName}.`);
+        return;
+    }
+    const head = context.payload.pull_request?.head;
+    if (head.repo === null) {
+        core.info("HEAD branch not found.");
+    }
+    else if (context.payload.pull_request?.base.repo.full_name !== head.repo.full_name) {
+        core.warning("PR made from another Git repo is not supported.");
+        return;
+    }
+    core.debug(`The payload is ${JSON.stringify(context.payload)}`);
+    const branch = head.ref;
+    const translates = await rtd.getTranslates(project);
+    if (context.payload.action === "closed") {
+        if (!branch) {
+            core.warning("HEAD branch not found, impossible to specify which RTD build should be disabled.");
+            return;
+        }
+        await deactivateProject(translates, rtd, branch, githubToken, project);
+        return;
+    }
+    else if (context.payload.pull_request?.state === "closed") {
+        core.info("The target pull request is already closed, no reaction needed.");
+        return;
+    }
+    await activateProject(translates, rtd, branch, githubToken, project);
 }
 exports.run = run;
-if (require.main === require.cache[eval('__filename')]) {
+if (__nccwpck_require__.c[__nccwpck_require__.s] === module) {
     run(core.getInput, service.activateProject, service.deactivateProject);
 }
 else {
@@ -6691,50 +6640,14 @@ else {
 
 "use strict";
 
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-var __generator = (this && this.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-    function verb(n) { return function (v) { return step([n, v]); }; }
-    function step(op) {
-        if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [op[0] & 2, t.value];
-            switch (op[0]) {
-                case 0: case 1: t = op; break;
-                case 4: _.label++; return { value: op[1], done: false };
-                case 5: _.label++; y = op[1]; op = [0]; continue;
-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                    if (t[2]) _.ops.pop();
-                    _.trys.pop(); continue;
-            }
-            op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-    }
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-var isomorphic_fetch_1 = __importDefault(__nccwpck_require__(2340));
-var fetch_retry_1 = __importDefault(__nccwpck_require__(9068));
-var fetch = (0, fetch_retry_1.default)(isomorphic_fetch_1.default);
-var escape_1 = __importDefault(__nccwpck_require__(4473));
+const isomorphic_fetch_1 = __importDefault(__nccwpck_require__(2340));
+const fetch_retry_1 = __importDefault(__nccwpck_require__(9068));
+const fetch = (0, fetch_retry_1.default)(isomorphic_fetch_1.default);
+const escape_1 = __importDefault(__nccwpck_require__(4473));
 function convertProject(raw) {
     return {
         id: raw.id,
@@ -6742,164 +6655,117 @@ function convertProject(raw) {
         language: raw.language.code,
     };
 }
-var RTD = /** @class */ (function () {
-    function RTD(token) {
+class RTD {
+    constructor(token) {
         this.token = token;
     }
-    RTD.prototype.getProject = function (slug) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                return [2 /*return*/, fetch("https://readthedocs.org/api/v3/projects/" + (0, escape_1.default)(slug) + "/", {
-                        method: "get",
-                        headers: {
-                            "Content-Type": "application/json",
-                            Authorization: "Token " + this.token,
-                        },
-                    })
-                        .then(function (res) { return Promise.all([res.status, res.json()]); })
-                        .then(function (_a) {
-                        var status = _a[0], json = _a[1];
-                        if (status != 200) {
-                            throw new Error("Unexpected status code " + status + " with body: " + JSON.stringify(json));
-                        }
-                        return convertProject(json);
-                    })];
-            });
+    async getProject(slug) {
+        return fetch(`https://readthedocs.org/api/v3/projects/${(0, escape_1.default)(slug)}/`, {
+            method: "get",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Token ${this.token}`,
+            },
+        })
+            .then((res) => Promise.all([res.status, res.json()]))
+            .then(([status, json]) => {
+            if (status != 200) {
+                throw new Error(`Unexpected status code ${status} with body: ${JSON.stringify(json)}`);
+            }
+            return convertProject(json);
         });
-    };
-    RTD.prototype.getTranslates = function (project) {
-        return __awaiter(this, void 0, void 0, function () {
-            var projectInfo, _a;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
-                    case 0:
-                        if (!(typeof project === "string")) return [3 /*break*/, 2];
-                        return [4 /*yield*/, this.getProject(project)];
-                    case 1:
-                        _a = _b.sent();
-                        return [3 /*break*/, 3];
-                    case 2:
-                        _a = project;
-                        _b.label = 3;
-                    case 3:
-                        projectInfo = _a;
-                        return [2 /*return*/, fetch("https://readthedocs.org/api/v3/projects/" + (0, escape_1.default)(projectInfo.slug) + "/translations/", {
-                                method: "get",
-                                headers: {
-                                    "Content-Type": "application/json",
-                                    Authorization: "Token " + this.token,
-                                },
-                            })
-                                .then(function (res) {
-                                return Promise.all([res.status, res.json()]);
-                            })
-                                .then(function (_a) {
-                                var status = _a[0], json = _a[1];
-                                if (status !== 200) {
-                                    throw new Error("Unexpected status code " + status + " with body: " + JSON.stringify(json));
-                                }
-                                return json["results"];
-                            })
-                                .then(function (translations) {
-                                return translations.reduce(function (accumulator, currentValue) {
-                                    accumulator.push(convertProject(currentValue));
-                                    return accumulator;
-                                }, [projectInfo]);
-                            })];
-                }
-            });
+    }
+    async getTranslates(project) {
+        const projectInfo = typeof project === "string" ? await this.getProject(project) : project;
+        return fetch(`https://readthedocs.org/api/v3/projects/${(0, escape_1.default)(projectInfo.slug)}/translations/`, {
+            method: "get",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Token ${this.token}`,
+            },
+        })
+            .then((res) => {
+            return Promise.all([res.status, res.json()]);
+        })
+            .then(([status, json]) => {
+            if (status !== 200) {
+                throw new Error(`Unexpected status code ${status} with body: ${JSON.stringify(json)}`);
+            }
+            return json["results"];
+        })
+            .then((translations) => {
+            return translations.reduce((accumulator, currentValue) => {
+                accumulator.push(convertProject(currentValue));
+                return accumulator;
+            }, [projectInfo]);
         });
-    };
+    }
     /**
      * @see https://docs.readthedocs.io/en/stable/api/v3.html#version-detail
      */
-    RTD.prototype.getBuildActiveness = function (project, branch) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                return [2 /*return*/, fetch("https://readthedocs.org/api/v3/projects/" + project + "/versions/" + (0, escape_1.default)(branch) + "/", {
-                        method: "get",
-                        headers: {
-                            "Content-Type": "application/json",
-                            Authorization: "Token " + this.token,
-                        },
-                        retryOn: [400],
-                    })
-                        .then(function (res) {
-                        return Promise.all([res.status, res.json()]);
-                    })
-                        .then(function (_a) {
-                        var status = _a[0], json = _a[1];
-                        if (status != 200) {
-                            throw new Error("Unexpected status code " + status + " with body: " + JSON.stringify(json));
-                        }
-                        return json;
-                    })
-                        .then(function (ver) { return ver.active; })];
-            });
-        });
-    };
+    async getBuildActiveness(project, branch) {
+        return fetch(`https://readthedocs.org/api/v3/projects/${project}/versions/${(0, escape_1.default)(branch)}/`, {
+            method: "get",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Token ${this.token}`,
+            },
+            retryOn: [400],
+        })
+            .then((res) => {
+            return Promise.all([res.status, res.json()]);
+        })
+            .then(([status, json]) => {
+            if (status != 200) {
+                throw new Error(`Unexpected status code ${status} with body: ${JSON.stringify(json)}`);
+            }
+            return json;
+        })
+            .then((ver) => ver.active);
+    }
     /**
      * @see https://docs.readthedocs.io/en/stable/api/v3.html#version-update
      */
-    RTD.prototype.configureBuild = function (project, branch, flag) {
-        return __awaiter(this, void 0, void 0, function () {
-            var currentFlag;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.getBuildActiveness(project, branch)];
-                    case 1:
-                        currentFlag = _a.sent();
-                        if (currentFlag === flag) {
-                            // no need to ask for update
-                            return [2 /*return*/, false];
-                        }
-                        // this implementation doesn't care the transaction, so
-                        // the returned value could be different with expected one
-                        // if we run two procedures at the same time
-                        return [2 /*return*/, fetch("https://readthedocs.org/api/v3/projects/" + project + "/versions/" + (0, escape_1.default)(branch) + "/", {
-                                method: "patch",
-                                headers: {
-                                    "Content-Type": "application/json",
-                                    Authorization: "Token " + this.token,
-                                },
-                                body: "{\"active\": " + flag + "}",
-                            })
-                                .then(function (res) {
-                                if (res.status != 204) {
-                                    return Promise.all([res.status, res.json()]);
-                                }
-                                else {
-                                    // 204 responses empty text, so json() doesn't work
-                                    return Promise.all([res.status, res.text()]);
-                                }
-                            })
-                                .then(function (_a) {
-                                var status = _a[0], json = _a[1];
-                                if (status != 204) {
-                                    throw new Error("Unexpected status code " + status + " with body: " + JSON.stringify(json));
-                                }
-                                return true;
-                            })];
-                }
-            });
+    async configureBuild(project, branch, flag) {
+        const currentFlag = await this.getBuildActiveness(project, branch);
+        if (currentFlag === flag) {
+            // no need to ask for update
+            return false;
+        }
+        // this implementation doesn't care the transaction, so
+        // the returned value could be different with expected one
+        // if we run two procedures at the same time
+        return fetch(`https://readthedocs.org/api/v3/projects/${project}/versions/${(0, escape_1.default)(branch)}/`, {
+            method: "patch",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Token ${this.token}`,
+            },
+            body: `{"active": ${flag}}`,
+        })
+            .then((res) => {
+            if (res.status != 204) {
+                return Promise.all([res.status, res.json()]);
+            }
+            else {
+                // 204 responses empty text, so json() doesn't work
+                return Promise.all([res.status, res.text()]);
+            }
+        })
+            .then(([status, json]) => {
+            if (status != 204) {
+                throw new Error(`Unexpected status code ${status} with body: ${JSON.stringify(json)}`);
+            }
+            return true;
         });
-    };
-    RTD.prototype.enableBuild = function (project, branch) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                return [2 /*return*/, this.configureBuild(project, branch, true)];
-            });
-        });
-    };
-    RTD.prototype.disableBuild = function (project, branch) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                return [2 /*return*/, this.configureBuild(project, branch, false)];
-            });
-        });
-    };
-    return RTD;
-}());
+    }
+    async enableBuild(project, branch) {
+        return this.configureBuild(project, branch, true);
+    }
+    async disableBuild(project, branch) {
+        return this.configureBuild(project, branch, false);
+    }
+}
 exports.default = RTD;
 
 
@@ -6929,134 +6795,75 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-var __generator = (this && this.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-    function verb(n) { return function (v) { return step([n, v]); }; }
-    function step(op) {
-        if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [op[0] & 2, t.value];
-            switch (op[0]) {
-                case 0: case 1: t = op; break;
-                case 4: _.label++; return { value: op[1], done: false };
-                case 5: _.label++; y = op[1]; op = [0]; continue;
-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                    if (t[2]) _.ops.pop();
-                    _.trys.pop(); continue;
-            }
-            op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-    }
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.activateProject = exports.deactivateProject = void 0;
-var core = __importStar(__nccwpck_require__(2186));
-var github = __importStar(__nccwpck_require__(5438));
-var build_body_1 = __importDefault(__nccwpck_require__(9180));
-function deactivateProject(translates, rtd, branch, githubToken, project) {
-    return __awaiter(this, void 0, void 0, function () {
-        var context, octokit, disabled;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    context = github.context;
-                    octokit = github.getOctokit(githubToken);
-                    return [4 /*yield*/, Promise.all(translates
-                            .map(function (p) { return p.slug; })
-                            .map(function (slug) {
-                            return rtd.disableBuild(slug, branch);
-                        }))
-                            .then(function (allResult) {
-                            return allResult.reduce(function (l, r) { return l || r; });
-                        })
-                            .catch(function (e) {
-                            octokit.rest.issues.createComment({
-                                owner: context.issue.owner,
-                                repo: context.issue.repo,
-                                issue_number: context.issue.number,
-                                body: e.message,
-                            });
-                            throw e;
-                        })];
-                case 1:
-                    disabled = _a.sent();
-                    if (disabled) {
-                        core.info("Successfully disabled RTD build for " + branch + " branch in " + project + ".");
-                    }
-                    else {
-                        core.info("RTD build for " + branch + " branch in " + project + " is already disabled, so no reaction needed.");
-                    }
-                    return [2 /*return*/];
-            }
+const core = __importStar(__nccwpck_require__(2186));
+const github = __importStar(__nccwpck_require__(5438));
+const build_body_1 = __importDefault(__nccwpck_require__(9180));
+async function deactivateProject(translates, rtd, branch, githubToken, project) {
+    const context = github.context;
+    const octokit = github.getOctokit(githubToken);
+    const disabled = await Promise.all(translates
+        .map((p) => p.slug)
+        .map((slug) => {
+        return rtd.disableBuild(slug, branch);
+    }))
+        .then((allResult) => {
+        return allResult.reduce((l, r) => l || r);
+    })
+        .catch((e) => {
+        octokit.rest.issues.createComment({
+            owner: context.issue.owner,
+            repo: context.issue.repo,
+            issue_number: context.issue.number,
+            body: e.message,
         });
+        throw e;
     });
+    if (disabled) {
+        core.info(`Successfully disabled RTD build for ${branch} branch in ${project}.`);
+    }
+    else {
+        core.info(`RTD build for ${branch} branch in ${project} is already disabled, so no reaction needed.`);
+    }
 }
 exports.deactivateProject = deactivateProject;
-function activateProject(translates, rtd, branch, githubToken, project) {
-    var _a;
-    return __awaiter(this, void 0, void 0, function () {
-        var context, octokit, enabled, body;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
-                case 0:
-                    context = github.context;
-                    octokit = github.getOctokit(githubToken);
-                    return [4 /*yield*/, Promise.all(translates
-                            .map(function (p) { return p.slug; })
-                            .map(function (slug) {
-                            return rtd.enableBuild(slug, branch);
-                        }))
-                            .then(function (allResult) {
-                            return allResult.reduce(function (l, r) { return l || r; });
-                        })
-                            .catch(function (e) {
-                            octokit.rest.issues.createComment({
-                                owner: context.issue.owner,
-                                repo: context.issue.repo,
-                                issue_number: context.issue.number,
-                                body: e.message,
-                            });
-                            throw e;
-                        })];
-                case 1:
-                    enabled = _b.sent();
-                    if (enabled) {
-                        core.info("Reporting document URL to GitHub PR page of " + branch + " branch in " + project + ".");
-                        body = (0, build_body_1.default)(((_a = context.payload.pull_request) === null || _a === void 0 ? void 0 : _a.body) || "", project, branch, translates.map(function (t) { return t.language; }));
-                        octokit.rest.issues.update({
-                            owner: context.issue.owner,
-                            repo: context.issue.repo,
-                            issue_number: context.issue.number,
-                            body: body,
-                        });
-                    }
-                    else {
-                        core.info("RTD build for " + branch + " branch in " + project + " is already activated, so no reaction needed.");
-                    }
-                    return [2 /*return*/];
-            }
+async function activateProject(translates, rtd, branch, githubToken, project) {
+    const context = github.context;
+    const octokit = github.getOctokit(githubToken);
+    const enabled = await Promise.all(translates
+        .map((p) => p.slug)
+        .map((slug) => {
+        return rtd.enableBuild(slug, branch);
+    }))
+        .then((allResult) => {
+        return allResult.reduce((l, r) => l || r);
+    })
+        .catch((e) => {
+        octokit.rest.issues.createComment({
+            owner: context.issue.owner,
+            repo: context.issue.repo,
+            issue_number: context.issue.number,
+            body: e.message,
         });
+        throw e;
     });
+    if (enabled) {
+        core.info(`Reporting document URL to GitHub PR page of ${branch} branch in ${project}.`);
+        const body = (0, build_body_1.default)(context.payload.pull_request?.body || "", project, branch, translates.map((t) => t.language));
+        octokit.rest.issues.update({
+            owner: context.issue.owner,
+            repo: context.issue.repo,
+            issue_number: context.issue.number,
+            body,
+        });
+    }
+    else {
+        core.info(`RTD build for ${branch} branch in ${project} is already activated, so no reaction needed.`);
+    }
 }
 exports.activateProject = activateProject;
 
@@ -7188,8 +6995,8 @@ module.exports = require("zlib");;
 /******/ 		}
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = __webpack_module_cache__[moduleId] = {
-/******/ 			// no module.id needed
-/******/ 			// no module.loaded needed
+/******/ 			id: moduleId,
+/******/ 			loaded: false,
 /******/ 			exports: {}
 /******/ 		};
 /******/ 	
@@ -7202,18 +7009,33 @@ module.exports = require("zlib");;
 /******/ 			if(threw) delete __webpack_module_cache__[moduleId];
 /******/ 		}
 /******/ 	
+/******/ 		// Flag the module as loaded
+/******/ 		module.loaded = true;
+/******/ 	
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
 /******/ 	}
 /******/ 	
+/******/ 	// expose the module cache
+/******/ 	__nccwpck_require__.c = __webpack_module_cache__;
+/******/ 	
 /************************************************************************/
+/******/ 	/* webpack/runtime/node module decorator */
+/******/ 	(() => {
+/******/ 		__nccwpck_require__.nmd = (module) => {
+/******/ 			module.paths = [];
+/******/ 			if (!module.children) module.children = [];
+/******/ 			return module;
+/******/ 		};
+/******/ 	})();
+/******/ 	
 /******/ 	/* webpack/runtime/compat */
 /******/ 	
 /******/ 	__nccwpck_require__.ab = __dirname + "/";/************************************************************************/
-/******/ 	// module exports must be returned from runtime so entry inlining is disabled
+/******/ 	// module cache are used so entry inlining is disabled
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
-/******/ 	return __nccwpck_require__(6144);
+/******/ 	return __nccwpck_require__(__nccwpck_require__.s = 6144);
 /******/ })()
 ;
 //# sourceMappingURL=index.js.map
