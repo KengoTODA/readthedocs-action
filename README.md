@@ -73,7 +73,7 @@ From 2021 Feb, [Read the Docs officially provides the Pull Request Builders](htt
 
 ## License
 
-Copyright &copy; 2018-2021 Kengo TODA
+Copyright &copy; 2018-2022 Kengo TODA
 
 ```
 Licensed under the Apache License, Version 2.0 (the "License");
