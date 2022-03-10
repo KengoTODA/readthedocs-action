@@ -34,7 +34,7 @@
   "devDependencies": {
     "@semantic-release/exec": "^6.0.3",
     "@semantic-release/git": "^10.0.1",
-    "@types/isomorphic-fetch": "0.0.35",
+    "@types/isomorphic-fetch": "0.0.36",
     "@types/node-fetch": "^3.0.3",
     "@vercel/ncc": "^0.27.0",
     "cz-conventional-changelog": "^3.3.0",
