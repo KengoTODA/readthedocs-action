@@ -1,23 +1,24 @@
 import * as core from "@actions/core";
 import * as github from "@actions/github";
 import * as service from "./service";
-import RTD, { IProject } from "./rtd";
+import RTD from "./rtd";
+import { Project } from "./rtd";
 
 export async function run(
   getInput: (name: string, options?: core.InputOptions) => string,
   activateProject: (
-    translates: IProject[],
+    translates: Project[],
     rtd: RTD,
     branch: string,
     githubToken: string,
-    project: string
+    rootProject: string
   ) => Promise<void>,
   deactivateProject: (
-    translates: IProject[],
+    translates: Project[],
     rtd: RTD,
     branch: string,
     githubToken: string,
-    project: string
+    rootProject: string
   ) => Promise<void>
 ): Promise<void> {
   const rtdToken = getInput("rtd-token", { required: true });

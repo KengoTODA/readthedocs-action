@@ -1,11 +1,30 @@
-export interface IProject {
-    id: number;
-    language: string;
-    slug: string;
+/**
+ * RTD replaces '/' with '-' in the branch name.
+ */
+export declare function escape(name: string): string;
+/**
+ * A model representing the project in the Read The Docs.
+ */
+export declare class Project {
+    readonly id: number;
+    readonly language: string;
+    readonly slug: string;
+    constructor(id: number, language: string, slug: string);
+    /**
+     * @param branch name of the target branch
+     * @returns a URL of the Read The Docs page for the given branch
+     */
+    createUrl(branch: string): URL;
+    /**
+     * @param branch name of the target branch
+     * @returns a URL of badge which displays the status of the given branch
+     * @see https://docs.readthedocs.io/en/latest/badges.html
+     */
+    createBadge(branch: string): URL;
 }
 export default class RTD {
-    getProject(slug: string): Promise<IProject>;
-    getTranslates(project: IProject | string): Promise<IProject[]>;
+    getProject(slug: string): Promise<Project>;
+    getTranslates(project: Project | string): Promise<Project[]>;
     private token;
     constructor(token: string);
     /**

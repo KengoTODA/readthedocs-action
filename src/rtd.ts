@@ -1,12 +1,15 @@
 import originalFetch from "isomorphic-fetch";
 import fetchBuilder from "fetch-retry";
 const fetch = fetchBuilder(originalFetch);
-import escape from "./escape";
 
-export interface IProject {
-  id: number;
-  language: string;
-  slug: string;
+/**
+ * RTD replaces '/' with '-' in the branch name.
+ */
+export function escape(name: string): string {
+  if (name.indexOf("?") >= 0) {
+    throw new Error(`name should not contains ? mark, but it was "${name}"`);
+  }
+  return name.replace(/\//g, "-");
 }
 
 /**
@@ -22,12 +25,58 @@ interface IRawProject {
   slug: string;
 }
 
-function convertProject(raw: IRawProject): IProject {
-  return {
-    id: raw.id,
-    slug: raw.slug,
-    language: raw.language.code,
-  };
+/**
+ * A model representing the project in the Read The Docs.
+ */
+export class Project {
+  constructor(
+    readonly id: number,
+    readonly language: string,
+    readonly slug: string
+  ) {
+    if (id < 0) {
+      throw new Error("the project ID cannot be negative");
+    }
+    if (language.length === 0) {
+      throw new Error("The language cannot be blank");
+    }
+    if (slug.length === 0) {
+      throw new Error("The slug cannot be blank");
+    }
+  }
+
+  /**
+   * @param branch name of the target branch
+   * @returns a URL of the Read The Docs page for the given branch
+   */
+  createUrl(branch: string): URL {
+    return new URL(
+      `https://${escape(this.slug)}.readthedocs.io/${this.language}/${escape(
+        branch
+      )}/`
+    );
+  }
+
+  /**
+   * @param branch name of the target branch
+   * @returns a URL of badge which displays the status of the given branch
+   * @see https://docs.readthedocs.io/en/latest/badges.html
+   */
+  createBadge(branch: string): URL {
+    if (branch.length === 0) {
+      throw new Error("The branch cannot be blank");
+    }
+
+    return new URL(
+      `https://readthedocs.org/projects/${escape(
+        this.slug
+      )}/badge/?version=${escape(branch)}`
+    );
+  }
+}
+
+function convertProject(raw: IRawProject): Project {
+  return new Project(raw.id, raw.language.code, raw.slug);
 }
 
 /**
@@ -38,7 +87,7 @@ interface IVersion {
 }
 
 export default class RTD {
-  public async getProject(slug: string): Promise<IProject> {
+  public async getProject(slug: string): Promise<Project> {
     return fetch(`https://readthedocs.org/api/v3/projects/${escape(slug)}/`, {
       method: "get",
       headers: {
@@ -59,7 +108,7 @@ export default class RTD {
       });
   }
 
-  public async getTranslates(project: IProject | string): Promise<IProject[]> {
+  public async getTranslates(project: Project | string): Promise<Project[]> {
     const projectInfo =
       typeof project === "string" ? await this.getProject(project) : project;
     return fetch(

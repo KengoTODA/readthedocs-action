@@ -1,1 +1,2 @@
-export default function buildBody(existingBody: string, project: string, branch: string, languages: string[]): string;
+import { Project } from "./rtd";
+export default function buildBody(existingBody: string, projects: Project[], branch: string): string;
