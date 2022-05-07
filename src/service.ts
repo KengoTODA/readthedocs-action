@@ -1,14 +1,15 @@
 import * as core from "@actions/core";
 import * as github from "@actions/github";
 import buildBody from "./build_body";
-import RTD, { IProject } from "./rtd";
+import RTD from "./rtd";
+import { Project } from "./rtd";
 
 export async function deactivateProject(
-  translates: IProject[],
+  translates: Project[],
   rtd: RTD,
   branch: string,
   githubToken: string,
-  project: string
+  rootProject: string
 ): Promise<void> {
   const context = github.context;
   const octokit = github.getOctokit(githubToken);
@@ -33,21 +34,21 @@ export async function deactivateProject(
     });
   if (disabled) {
     core.info(
-      `Successfully disabled RTD build for ${branch} branch in ${project}.`
+      `Successfully disabled RTD build for ${branch} branch in ${rootProject}.`
     );
   } else {
     core.info(
-      `RTD build for ${branch} branch in ${project} is already disabled, so no reaction needed.`
+      `RTD build for ${branch} branch in ${rootProject} is already disabled, so no reaction needed.`
     );
   }
 }
 
 export async function activateProject(
-  translates: IProject[],
+  translates: Project[],
   rtd: RTD,
   branch: string,
   githubToken: string,
-  project: string
+  rootProject: string
 ): Promise<void> {
   const context = github.context;
   const octokit = github.getOctokit(githubToken);
@@ -73,13 +74,12 @@ export async function activateProject(
 
   if (enabled) {
     core.info(
-      `Reporting document URL to GitHub PR page of ${branch} branch in ${project}.`
+      `Reporting document URL to GitHub PR page of ${branch} branch in ${rootProject}.`
     );
     const body = buildBody(
       context.payload.pull_request?.body || "",
-      project,
-      branch,
-      translates.map((t) => t.language)
+      translates,
+      branch
     );
     octokit.rest.issues.update({
       owner: context.issue.owner,
@@ -89,7 +89,7 @@ export async function activateProject(
     });
   } else {
     core.info(
-      `RTD build for ${branch} branch in ${project} is already activated, so no reaction needed.`
+      `RTD build for ${branch} branch in ${rootProject} is already activated, so no reaction needed.`
     );
   }
 }

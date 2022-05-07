@@ -8766,57 +8766,33 @@ function wrappy (fn, cb) {
 /***/ }),
 
 /***/ 9180:
-/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
-
-"use strict";
-
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const escape_1 = __importDefault(__nccwpck_require__(4473));
-const START = "[//]: # (rtdbot-start)\n";
-const END = "[//]: # (rtdbot-end)\n";
-function buildBody(existingBody, project, branch, languages) {
-    if (existingBody.indexOf(START) >= 0) {
-        return existingBody;
-    }
-    let body = existingBody + `\n\n${START}\n`;
-    if (languages.length === 1) {
-        const url = `https://${(0, escape_1.default)(project)}.readthedocs.io/${languages[0]}/${(0, escape_1.default)(branch)}/`;
-        // https://docs.readthedocs.io/en/latest/badges.html
-        const badge = `https://readthedocs.org/projects/${(0, escape_1.default)(project)}/badge/?version=${(0, escape_1.default)(branch)}`;
-        body += `URL of RTD document: ${url} ![Documentation Status](${badge})\n`;
-    }
-    else {
-        body += "URL of RTD documents:\n";
-        languages.forEach((language) => {
-            body += `${language}: https://${(0, escape_1.default)(project)}.readthedocs.io/${language}/${(0, escape_1.default)(branch)}/\n`;
-        });
-    }
-    return body + "\n" + END;
-}
-exports.default = buildBody;
-
-
-/***/ }),
-
-/***/ 4473:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-/**
- * RTD replaces '/' with '-' in the branch name.
- */
-function escape(name) {
-    if (name.indexOf("?") >= 0) {
-        throw new Error(`name should not contains ? mark, but it was "${name}"`);
+const START = "[//]: # (rtdbot-start)\n";
+const END = "[//]: # (rtdbot-end)\n";
+function buildBody(existingBody, projects, branch) {
+    if (existingBody.indexOf(START) >= 0) {
+        return existingBody;
     }
-    return name.replace(/\//g, "-");
+    let body = existingBody + `\n\n${START}\n`;
+    if (projects.length === 1) {
+        const url = projects[0].createUrl(branch);
+        const badge = projects[0].createBadge(branch);
+        body += `URL of RTD document: ${url} ![Documentation Status](${badge})\n`;
+    }
+    else if (projects.length > 1) {
+        body += "URL of RTD documents:\n";
+        projects.forEach((p) => {
+            const url = p.createUrl(branch);
+            body += `${p.language}: ${url}\n`;
+        });
+    }
+    return body + "\n" + END;
 }
-exports.default = escape;
+exports.default = buildBody;
 
 
 /***/ }),
@@ -8917,23 +8893,67 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.Project = exports.escape = void 0;
 const isomorphic_fetch_1 = __importDefault(__nccwpck_require__(2340));
 const fetch_retry_1 = __importDefault(__nccwpck_require__(9068));
 const fetch = (0, fetch_retry_1.default)(isomorphic_fetch_1.default);
-const escape_1 = __importDefault(__nccwpck_require__(4473));
+/**
+ * RTD replaces '/' with '-' in the branch name.
+ */
+function escape(name) {
+    if (name.indexOf("?") >= 0) {
+        throw new Error(`name should not contains ? mark, but it was "${name}"`);
+    }
+    return name.replace(/\//g, "-");
+}
+exports.escape = escape;
+/**
+ * A model representing the project in the Read The Docs.
+ */
+class Project {
+    constructor(id, language, slug) {
+        this.id = id;
+        this.language = language;
+        this.slug = slug;
+        if (id < 0) {
+            throw new Error("the project ID cannot be negative");
+        }
+        if (language.length === 0) {
+            throw new Error("The language cannot be blank");
+        }
+        if (slug.length === 0) {
+            throw new Error("The slug cannot be blank");
+        }
+    }
+    /**
+     * @param branch name of the target branch
+     * @returns a URL of the Read The Docs page for the given branch
+     */
+    createUrl(branch) {
+        return new URL(`https://${escape(this.slug)}.readthedocs.io/${this.language}/${escape(branch)}/`);
+    }
+    /**
+     * @param branch name of the target branch
+     * @returns a URL of badge which displays the status of the given branch
+     * @see https://docs.readthedocs.io/en/latest/badges.html
+     */
+    createBadge(branch) {
+        if (branch.length === 0) {
+            throw new Error("The branch cannot be blank");
+        }
+        return new URL(`https://readthedocs.org/projects/${escape(this.slug)}/badge/?version=${escape(branch)}`);
+    }
+}
+exports.Project = Project;
 function convertProject(raw) {
-    return {
-        id: raw.id,
-        slug: raw.slug,
-        language: raw.language.code,
-    };
+    return new Project(raw.id, raw.language.code, raw.slug);
 }
 class RTD {
     constructor(token) {
         this.token = token;
     }
     async getProject(slug) {
-        return fetch(`https://readthedocs.org/api/v3/projects/${(0, escape_1.default)(slug)}/`, {
+        return fetch(`https://readthedocs.org/api/v3/projects/${escape(slug)}/`, {
             method: "get",
             headers: {
                 "Content-Type": "application/json",
@@ -8950,7 +8970,7 @@ class RTD {
     }
     async getTranslates(project) {
         const projectInfo = typeof project === "string" ? await this.getProject(project) : project;
-        return fetch(`https://readthedocs.org/api/v3/projects/${(0, escape_1.default)(projectInfo.slug)}/translations/`, {
+        return fetch(`https://readthedocs.org/api/v3/projects/${escape(projectInfo.slug)}/translations/`, {
             method: "get",
             headers: {
                 "Content-Type": "application/json",
@@ -8977,7 +8997,7 @@ class RTD {
      * @see https://docs.readthedocs.io/en/stable/api/v3.html#version-detail
      */
     async getBuildActiveness(project, branch) {
-        return fetch(`https://readthedocs.org/api/v3/projects/${project}/versions/${(0, escape_1.default)(branch)}/`, {
+        return fetch(`https://readthedocs.org/api/v3/projects/${project}/versions/${escape(branch)}/`, {
             method: "get",
             headers: {
                 "Content-Type": "application/json",
@@ -9008,7 +9028,7 @@ class RTD {
         // this implementation doesn't care the transaction, so
         // the returned value could be different with expected one
         // if we run two procedures at the same time
-        return fetch(`https://readthedocs.org/api/v3/projects/${project}/versions/${(0, escape_1.default)(branch)}/`, {
+        return fetch(`https://readthedocs.org/api/v3/projects/${project}/versions/${escape(branch)}/`, {
             method: "patch",
             headers: {
                 "Content-Type": "application/json",
@@ -9080,7 +9100,7 @@ exports.activateProject = exports.deactivateProject = void 0;
 const core = __importStar(__nccwpck_require__(2186));
 const github = __importStar(__nccwpck_require__(5438));
 const build_body_1 = __importDefault(__nccwpck_require__(9180));
-async function deactivateProject(translates, rtd, branch, githubToken, project) {
+async function deactivateProject(translates, rtd, branch, githubToken, rootProject) {
     const context = github.context;
     const octokit = github.getOctokit(githubToken);
     const disabled = await Promise.all(translates
@@ -9101,14 +9121,14 @@ async function deactivateProject(translates, rtd, branch, githubToken, project) 
         throw e;
     });
     if (disabled) {
-        core.info(`Successfully disabled RTD build for ${branch} branch in ${project}.`);
+        core.info(`Successfully disabled RTD build for ${branch} branch in ${rootProject}.`);
     }
     else {
-        core.info(`RTD build for ${branch} branch in ${project} is already disabled, so no reaction needed.`);
+        core.info(`RTD build for ${branch} branch in ${rootProject} is already disabled, so no reaction needed.`);
     }
 }
 exports.deactivateProject = deactivateProject;
-async function activateProject(translates, rtd, branch, githubToken, project) {
+async function activateProject(translates, rtd, branch, githubToken, rootProject) {
     const context = github.context;
     const octokit = github.getOctokit(githubToken);
     const enabled = await Promise.all(translates
@@ -9129,8 +9149,8 @@ async function activateProject(translates, rtd, branch, githubToken, project) {
         throw e;
     });
     if (enabled) {
-        core.info(`Reporting document URL to GitHub PR page of ${branch} branch in ${project}.`);
-        const body = (0, build_body_1.default)(context.payload.pull_request?.body || "", project, branch, translates.map((t) => t.language));
+        core.info(`Reporting document URL to GitHub PR page of ${branch} branch in ${rootProject}.`);
+        const body = (0, build_body_1.default)(context.payload.pull_request?.body || "", translates, branch);
         octokit.rest.issues.update({
             owner: context.issue.owner,
             repo: context.issue.repo,
@@ -9139,7 +9159,7 @@ async function activateProject(translates, rtd, branch, githubToken, project) {
         });
     }
     else {
-        core.info(`RTD build for ${branch} branch in ${project} is already activated, so no reaction needed.`);
+        core.info(`RTD build for ${branch} branch in ${rootProject} is already activated, so no reaction needed.`);
     }
 }
 exports.activateProject = activateProject;
