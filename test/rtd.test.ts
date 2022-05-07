@@ -65,7 +65,12 @@ integrationTest("rtd", function () {
       );
       expect(result).toStrictEqual([
         new Project(79934, "en", "spotbugs-in-kengo-toda"),
-        new Project(79941, "ja", "spotbugs-in-kengo-toda-ja"),
+        new Project(
+          79941,
+          "ja",
+          "spotbugs-in-kengo-toda-ja",
+          new Project(79934, "en", "spotbugs-in-kengo-toda")
+        ),
       ]);
     });
   });

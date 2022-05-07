@@ -9,7 +9,8 @@ export declare class Project {
     readonly id: number;
     readonly language: string;
     readonly slug: string;
-    constructor(id: number, language: string, slug: string);
+    readonly translationOf?: Project | undefined;
+    constructor(id: number, language: string, slug: string, translationOf?: Project | undefined);
     /**
      * @param branch name of the target branch
      * @returns a URL of the Read The Docs page for the given branch
