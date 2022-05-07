@@ -23,6 +23,7 @@ interface IRawProject {
     name: string;
   };
   slug: string;
+  translation_of?: IRawProject;
 }
 
 /**
@@ -32,7 +33,8 @@ export class Project {
   constructor(
     readonly id: number,
     readonly language: string,
-    readonly slug: string
+    readonly slug: string,
+    readonly translationOf?: Project
   ) {
     if (id < 0) {
       throw new Error("the project ID cannot be negative");
@@ -50,8 +52,9 @@ export class Project {
    * @returns a URL of the Read The Docs page for the given branch
    */
   createUrl(branch: string): URL {
+    const slug = this.translationOf?.slug ?? this.slug;
     return new URL(
-      `https://${escape(this.slug)}.readthedocs.io/${this.language}/${escape(
+      `https://${escape(slug)}.readthedocs.io/${this.language}/${escape(
         branch
       )}/`
     );
@@ -76,7 +79,10 @@ export class Project {
 }
 
 function convertProject(raw: IRawProject): Project {
-  return new Project(raw.id, raw.language.code, raw.slug);
+  const translationOf = raw.translation_of
+    ? convertProject(raw.translation_of)
+    : undefined;
+  return new Project(raw.id, raw.language.code, raw.slug, translationOf);
 }
 
 /**

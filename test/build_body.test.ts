@@ -18,12 +18,22 @@ describe("#buildBody()", () => {
   it("adds multiple URLs for project with treanslation", () => {
     const result = buildBody(
       "body",
-      [new Project(1, "en", "project"), new Project(2, "ja", "project")],
+      [
+        new Project(1, "en", "project"),
+        new Project(2, "ja", "project-ja", new Project(1, "en", "project")),
+      ],
       "branch"
     );
-    expect(result).toBe(
-      "body\n\n[//]: # (rtdbot-start)\n\nURL of RTD documents:\nen: https://project.readthedocs.io/en/branch/\nja: https://project.readthedocs.io/ja/branch/\n\n[//]: # (rtdbot-end)\n"
-    );
+    expect(result).toBe(`body
+
+[//]: # (rtdbot-start)
+
+URL of RTD documents:
+en: https://project.readthedocs.io/en/branch/ ![Documentation Status](https://readthedocs.org/projects/project/badge/?version=branch)
+ja: https://project.readthedocs.io/ja/branch/ ![Documentation Status](https://readthedocs.org/projects/project-ja/badge/?version=branch)
+
+[//]: # (rtdbot-end)
+`);
   });
   it("does not add URL if given body already contains it", () => {
     const prev = buildBody("body", [new Project(1, "en", "project")], "branch");

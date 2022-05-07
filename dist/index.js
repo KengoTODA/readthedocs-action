@@ -8787,7 +8787,8 @@ function buildBody(existingBody, projects, branch) {
         body += "URL of RTD documents:\n";
         projects.forEach((p) => {
             const url = p.createUrl(branch);
-            body += `${p.language}: ${url}\n`;
+            const badge = p.createBadge(branch);
+            body += `${p.language}: ${url} ![Documentation Status](${badge})\n`;
         });
     }
     return body + "\n" + END;
@@ -8911,10 +8912,11 @@ exports.escape = escape;
  * A model representing the project in the Read The Docs.
  */
 class Project {
-    constructor(id, language, slug) {
+    constructor(id, language, slug, translationOf) {
         this.id = id;
         this.language = language;
         this.slug = slug;
+        this.translationOf = translationOf;
         if (id < 0) {
             throw new Error("the project ID cannot be negative");
         }
@@ -8930,7 +8932,8 @@ class Project {
      * @returns a URL of the Read The Docs page for the given branch
      */
     createUrl(branch) {
-        return new URL(`https://${escape(this.slug)}.readthedocs.io/${this.language}/${escape(branch)}/`);
+        const slug = this.translationOf?.slug ?? this.slug;
+        return new URL(`https://${escape(slug)}.readthedocs.io/${this.language}/${escape(branch)}/`);
     }
     /**
      * @param branch name of the target branch
@@ -8946,7 +8949,10 @@ class Project {
 }
 exports.Project = Project;
 function convertProject(raw) {
-    return new Project(raw.id, raw.language.code, raw.slug);
+    const translationOf = raw.translation_of
+        ? convertProject(raw.translation_of)
+        : undefined;
+    return new Project(raw.id, raw.language.code, raw.slug, translationOf);
 }
 class RTD {
     constructor(token) {

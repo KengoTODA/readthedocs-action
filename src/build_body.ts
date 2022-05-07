@@ -21,7 +21,8 @@ export default function buildBody(
     body += "URL of RTD documents:\n";
     projects.forEach((p) => {
       const url = p.createUrl(branch);
-      body += `${p.language}: ${url}\n`;
+      const badge = p.createBadge(branch);
+      body += `${p.language}: ${url} ![Documentation Status](${badge})\n`;
     });
   }
   return body + "\n" + END;
