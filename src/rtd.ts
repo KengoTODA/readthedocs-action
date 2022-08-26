@@ -1,3 +1,4 @@
+import { debug } from "@actions/core";
 import originalFetch from "isomorphic-fetch";
 import fetchBuilder from "fetch-retry";
 const fetch = fetchBuilder(originalFetch);
@@ -94,7 +95,9 @@ interface IVersion {
 
 export default class RTD {
   public async getProject(slug: string): Promise<Project> {
-    return fetch(`https://readthedocs.org/api/v3/projects/${escape(slug)}/`, {
+    const url = `https://readthedocs.org/api/v3/projects/${escape(slug)}/`;
+    debug(`Fetching data of project ${slug} from ${url}`);
+    return fetch(url, {
       method: "get",
       headers: {
         "Content-Type": "application/json",

@@ -9431,6 +9431,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Project = exports.escape = void 0;
+const core_1 = __nccwpck_require__(2186);
 const isomorphic_fetch_1 = __importDefault(__nccwpck_require__(2340));
 const fetch_retry_1 = __importDefault(__nccwpck_require__(9068));
 const fetch = (0, fetch_retry_1.default)(isomorphic_fetch_1.default);
@@ -9495,7 +9496,9 @@ class RTD {
         this.token = token;
     }
     async getProject(slug) {
-        return fetch(`https://readthedocs.org/api/v3/projects/${escape(slug)}/`, {
+        const url = `https://readthedocs.org/api/v3/projects/${escape(slug)}/`;
+        (0, core_1.debug)(`Fetching data of project ${slug} from ${url}`);
+        return fetch(url, {
             method: "get",
             headers: {
                 "Content-Type": "application/json",
