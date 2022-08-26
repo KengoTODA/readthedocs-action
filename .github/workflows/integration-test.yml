@@ -9,6 +9,8 @@ on:
 jobs:
   staging:
     runs-on: ubuntu-latest
+    permissions:
+      issues: write
     steps:
       - uses: actions/checkout@v2
       - name: Deploy to the staging site
