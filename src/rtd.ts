@@ -168,19 +168,18 @@ export default class RTD {
     project: string,
     branch: string
   ): Promise<boolean> {
-    return fetch(
-      `https://readthedocs.org/api/v3/projects/${project}/versions/${escape(
-        branch
-      )}/`,
-      {
-        method: "get",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Token ${this.token}`,
-        },
-        retryOn: [400],
-      }
-    )
+    const url = `https://readthedocs.org/api/v3/projects/${project}/versions/${escape(
+      branch
+    )}/`;
+    debug(`Fetchong build activeness of ${project} from ${url}`);
+    return fetch(url, {
+      method: "get",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Token ${this.token}`,
+      },
+      retryOn: [400],
+    })
       .then((res) => {
         return Promise.all([res.status, res.json()]);
       })

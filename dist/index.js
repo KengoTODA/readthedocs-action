@@ -9544,7 +9544,9 @@ class RTD {
      * @see https://docs.readthedocs.io/en/stable/api/v3.html#version-detail
      */
     async getBuildActiveness(project, branch) {
-        return fetch(`https://readthedocs.org/api/v3/projects/${project}/versions/${escape(branch)}/`, {
+        const url = `https://readthedocs.org/api/v3/projects/${project}/versions/${escape(branch)}/`;
+        (0, core_1.debug)(`Fetchong build activeness of ${project} from ${url}`);
+        return fetch(url, {
             method: "get",
             headers: {
                 "Content-Type": "application/json",
