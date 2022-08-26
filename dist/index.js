@@ -9431,6 +9431,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Project = exports.escape = void 0;
+const core_1 = __nccwpck_require__(2186);
 const isomorphic_fetch_1 = __importDefault(__nccwpck_require__(2340));
 const fetch_retry_1 = __importDefault(__nccwpck_require__(9068));
 const fetch = (0, fetch_retry_1.default)(isomorphic_fetch_1.default);
@@ -9441,7 +9442,7 @@ function escape(name) {
     if (name.indexOf("?") >= 0) {
         throw new Error(`name should not contains ? mark, but it was "${name}"`);
     }
-    return name.replace(/\//g, "-");
+    return name.replace(/\//g, "-").toLocaleLowerCase();
 }
 exports.escape = escape;
 /**
@@ -9495,7 +9496,9 @@ class RTD {
         this.token = token;
     }
     async getProject(slug) {
-        return fetch(`https://readthedocs.org/api/v3/projects/${escape(slug)}/`, {
+        const url = `https://readthedocs.org/api/v3/projects/${escape(slug)}/`;
+        (0, core_1.debug)(`Fetching data of project ${slug} from ${url}`);
+        return fetch(url, {
             method: "get",
             headers: {
                 "Content-Type": "application/json",
@@ -9512,7 +9515,9 @@ class RTD {
     }
     async getTranslates(project) {
         const projectInfo = typeof project === "string" ? await this.getProject(project) : project;
-        return fetch(`https://readthedocs.org/api/v3/projects/${escape(projectInfo.slug)}/translations/`, {
+        const url = `https://readthedocs.org/api/v3/projects/${escape(projectInfo.slug)}/translations/`;
+        (0, core_1.debug)(`Fetching data about traslates of ${project} from ${url}`);
+        return fetch(url, {
             method: "get",
             headers: {
                 "Content-Type": "application/json",
@@ -9539,7 +9544,9 @@ class RTD {
      * @see https://docs.readthedocs.io/en/stable/api/v3.html#version-detail
      */
     async getBuildActiveness(project, branch) {
-        return fetch(`https://readthedocs.org/api/v3/projects/${project}/versions/${escape(branch)}/`, {
+        const url = `https://readthedocs.org/api/v3/projects/${project}/versions/${escape(branch)}/`;
+        (0, core_1.debug)(`Fetchong build activeness of ${project} from ${url}`);
+        return fetch(url, {
             method: "get",
             headers: {
                 "Content-Type": "application/json",

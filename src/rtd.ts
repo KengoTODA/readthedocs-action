@@ -1,3 +1,4 @@
+import { debug } from "@actions/core";
 import originalFetch from "isomorphic-fetch";
 import fetchBuilder from "fetch-retry";
 const fetch = fetchBuilder(originalFetch);
@@ -9,7 +10,7 @@ export function escape(name: string): string {
   if (name.indexOf("?") >= 0) {
     throw new Error(`name should not contains ? mark, but it was "${name}"`);
   }
-  return name.replace(/\//g, "-");
+  return name.replace(/\//g, "-").toLocaleLowerCase();
 }
 
 /**
@@ -94,7 +95,9 @@ interface IVersion {
 
 export default class RTD {
   public async getProject(slug: string): Promise<Project> {
-    return fetch(`https://readthedocs.org/api/v3/projects/${escape(slug)}/`, {
+    const url = `https://readthedocs.org/api/v3/projects/${escape(slug)}/`;
+    debug(`Fetching data of project ${slug} from ${url}`);
+    return fetch(url, {
       method: "get",
       headers: {
         "Content-Type": "application/json",
@@ -117,18 +120,17 @@ export default class RTD {
   public async getTranslates(project: Project | string): Promise<Project[]> {
     const projectInfo =
       typeof project === "string" ? await this.getProject(project) : project;
-    return fetch(
-      `https://readthedocs.org/api/v3/projects/${escape(
-        projectInfo.slug
-      )}/translations/`,
-      {
-        method: "get",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Token ${this.token}`,
-        },
-      }
-    )
+    const url = `https://readthedocs.org/api/v3/projects/${escape(
+      projectInfo.slug
+    )}/translations/`;
+    debug(`Fetching data about traslates of ${project} from ${url}`);
+    return fetch(url, {
+      method: "get",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Token ${this.token}`,
+      },
+    })
       .then((res) => {
         return Promise.all([res.status, res.json()]);
       })
@@ -166,19 +168,18 @@ export default class RTD {
     project: string,
     branch: string
   ): Promise<boolean> {
-    return fetch(
-      `https://readthedocs.org/api/v3/projects/${project}/versions/${escape(
-        branch
-      )}/`,
-      {
-        method: "get",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Token ${this.token}`,
-        },
-        retryOn: [400],
-      }
-    )
+    const url = `https://readthedocs.org/api/v3/projects/${project}/versions/${escape(
+      branch
+    )}/`;
+    debug(`Fetchong build activeness of ${project} from ${url}`);
+    return fetch(url, {
+      method: "get",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Token ${this.token}`,
+      },
+      retryOn: [400],
+    })
       .then((res) => {
         return Promise.all([res.status, res.json()]);
       })
