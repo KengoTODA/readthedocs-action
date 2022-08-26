@@ -1,6 +1,6 @@
 {
   "name": "rtd-bot",
-  "version": "2.0.25",
+  "version": "2.0.26",
   "description": "An unofficial GitHub Action that helps reveiwing on Read the Docs",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
