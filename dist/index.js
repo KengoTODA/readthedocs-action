@@ -9515,7 +9515,9 @@ class RTD {
     }
     async getTranslates(project) {
         const projectInfo = typeof project === "string" ? await this.getProject(project) : project;
-        return fetch(`https://readthedocs.org/api/v3/projects/${escape(projectInfo.slug)}/translations/`, {
+        const url = `https://readthedocs.org/api/v3/projects/${escape(projectInfo.slug)}/translations/`;
+        (0, core_1.debug)(`Fetching data about traslates of ${project} from ${url}`);
+        return fetch(url, {
             method: "get",
             headers: {
                 "Content-Type": "application/json",

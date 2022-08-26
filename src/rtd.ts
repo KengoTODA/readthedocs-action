@@ -120,18 +120,17 @@ export default class RTD {
   public async getTranslates(project: Project | string): Promise<Project[]> {
     const projectInfo =
       typeof project === "string" ? await this.getProject(project) : project;
-    return fetch(
-      `https://readthedocs.org/api/v3/projects/${escape(
-        projectInfo.slug
-      )}/translations/`,
-      {
-        method: "get",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Token ${this.token}`,
-        },
-      }
-    )
+    const url = `https://readthedocs.org/api/v3/projects/${escape(
+      projectInfo.slug
+    )}/translations/`;
+    debug(`Fetching data about traslates of ${project} from ${url}`);
+    return fetch(url, {
+      method: "get",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Token ${this.token}`,
+      },
+    })
       .then((res) => {
         return Promise.all([res.status, res.json()]);
       })
